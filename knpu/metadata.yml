@@ -2,7 +2,7 @@ title: Ansible for Automation!
 summary: |
     TODO
 
-illustration: ~
+illustration: ansible.png
 
 # todo - fill these in later
 tuts_hero:
@@ -10,4 +10,3 @@ tuts_hero:
     finish_step: start
 
 chapters: []
-
