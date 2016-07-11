@@ -2,12 +2,34 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}MooTube - Bovine Fitness!{% endblock %}</title>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+            <link rel="stylesheet" href="{{ asset('css/styles.css') }}" type="text/css" media="screen">
+        {% endblock %}
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <header data-source="https://www.flickr.com/photos/ag-energy-extension/6795788608">
+                <nav class="nav">
+                    <h1 class="logo">MooTube <span class="logo-sub">Bovine Fitness</span></h1>
+                    <div class="btn btn-login"><a href="#login">Log in</a></div>
+                    <div class="btn btn-upload"><a href="#upload">Upload</a></div>
+                </nav>
+
+                <h2 class="headline"></h2>
+            </header>
+
+            {% block content %}{% endblock %}
+
+            <footer>
+                <p>Made with <i class="fa fa-heart"></i> by KnpUniversity</p>
+            </footer>
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
