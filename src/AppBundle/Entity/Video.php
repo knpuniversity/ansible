@@ -22,13 +22,6 @@ class Video
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=11)
-     */
-    private $youtubeId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -46,22 +39,6 @@ class Video
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getYoutubeId()
-    {
-        return $this->youtubeId;
-    }
-
-    /**
-     * @param string $youtubeId
-     */
-    public function setYoutubeId($youtubeId)
-    {
-        $this->youtubeId = $youtubeId;
     }
 
     /**

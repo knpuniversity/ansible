@@ -1,0 +1,16 @@
+AppBundle\Entity\Video:
+    video_1:
+        title: Calf Stretches
+        image: images/cowbell.png
+    video_2:
+        title: 3 Best Dandelion Recipes
+        image: images/dandelion.png
+    video_3:
+        title: Beef Tender Loins
+        image: images/bovine1.png
+    video_4:
+        title: Moooove it yoga
+        image: images/bovine2.png
+    video_5:
+        title: Milking it! 5 minute workout
+        image: images/milkjug.png

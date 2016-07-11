@@ -33,38 +33,19 @@
             </ul>
         </div>
         <div class="video-box">
-            <h3 class="video-box-header">Over 20,000 Bovine Fitness Routines</h3>
-            <a href="#">
-                <div class="video-container">
-                    <img class="video-image" src="images/cowbell.png"/>
-                    <div class="video-title"><i class="fa fa-play-circle-o"></i> Calf Stretches</div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="video-container">
-                    <img class="video-image" src="images/dandelion.png"/>
-                    <div class="video-title"><i class="fa fa-play-circle-o"></i> 3 Best Dandelion Recipes</div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="video-container">
-                    <img class="video-image" src="images/bovine1.png"/>
-                    <div class="video-title"><i class="fa fa-play-circle-o"></i> Beef Tender Loins</div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="video-container">
-                    <img class="video-image" src="images/bovine2.png"/>
-                    <div class="video-title"><i class="fa fa-play-circle-o"></i> Moooove it yoga</div>
-                </div>
-            </a>
-            <a href="#">
-                <div class="video-container">
-                    <img class="video-image" src="images/milkjug.png"/>
-                    <div class="video-title"><i class="fa fa-play-circle-o"></i> Milking it: 5 minute workout</div>
-                </div>
-            </a>
-            <a href="#">
+            <h3 class="video-box-header">Over {{ videos|length }} Bovine Fitness Routines</h3>
+            {% for video in videos %}
+                <a href="#video-{{ video.id }}">
+                    <div class="video-container">
+                        <img class="video-image" src="{{ video.image }}">
+                        <div class="video-title">
+                            <i class="fa fa-play-circle-o"></i>
+                            {{ video.title }}
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+            <a href="#more">
                 <div class="video-container">
                     <img class="video-image" src="images/more.png"/>
                 </div>
