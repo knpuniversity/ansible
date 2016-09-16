@@ -1,7 +1,7 @@
-diff --git a/hosts.ini b/hosts.ini
+diff --git a/ansible/hosts.ini b/ansible/hosts.ini
 index 2fbb50c..2302eda 100644
---- a/hosts.ini
-+++ b/hosts.ini
+--- a/ansible/hosts.ini
++++ b/ansible/hosts.ini
 @@ -1 +1 @@
 -localhost
 +localhost ansible_connection=local

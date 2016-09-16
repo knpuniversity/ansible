@@ -1,7 +1,7 @@
-diff --git a/hosts.ini b/hosts.ini
+diff --git a/ansible/hosts.ini b/ansible/hosts.ini
 new file mode 100644
 index 0000000..2fbb50c
 --- /dev/null
-+++ b/hosts.ini
++++ b/ansible/hosts.ini
 @@ -0,0 +1 @@
 +localhost
