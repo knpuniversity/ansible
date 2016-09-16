@@ -19,7 +19,22 @@
             "id": "inventory-add-localhost-to-group",
             "name": "Inventory: Add localhost to group",
             "description": null
+        },
+        {
+            "id": "vagrant-init-vagrantfile-based-on-ubuntu-image",
+            "name": "Vagrant: Init Vagrantfile based on Ubuntu image",
+            "description": null
+        },
+        {
+            "id": "vagrant-use-private-network-ip-in-hosts-ini",
+            "name": "Vagrant: Use private network IP in hosts.ini",
+            "description": null
+        },
+        {
+            "id": "vagrant-specify-ssh-user-and-password-in-hosts",
+            "name": "Vagrant: Specify SSH user and password in hosts",
+            "description": null
         }
     ],
-    "sha": "a9930d7239f62b072a5f1ae5f1c64f7fcb8e7094"
+    "sha": "56a950bb87ac02ee42e5f895ea9e518e38162894"
 }
