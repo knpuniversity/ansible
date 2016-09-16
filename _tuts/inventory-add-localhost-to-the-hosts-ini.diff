@@ -1,0 +1,7 @@
+diff --git a/hosts.ini b/hosts.ini
+new file mode 100644
+index 0000000..2fbb50c
+--- /dev/null
++++ b/hosts.ini
+@@ -0,0 +1 @@
++localhost

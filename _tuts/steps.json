@@ -4,7 +4,22 @@
             "id": "start",
             "name": "start",
             "description": null
+        },
+        {
+            "id": "inventory-add-localhost-to-the-hosts-ini",
+            "name": "Inventory: Add localhost to the hosts.ini",
+            "description": null
+        },
+        {
+            "id": "inventory-specify-connection-type-for-localhost",
+            "name": "Inventory: Specify connection type for localhost",
+            "description": null
+        },
+        {
+            "id": "inventory-add-localhost-to-group",
+            "name": "Inventory: Add localhost to group",
+            "description": null
         }
     ],
-    "sha": "57cdab8882069d1895cf90de8fd8ee63d1017cf9"
+    "sha": "dfbe6caa106150ab4b119c52aad499fb8742a73e"
 }
