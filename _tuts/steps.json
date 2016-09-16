@@ -34,7 +34,37 @@
             "id": "vagrant-specify-ssh-user-and-password-in-hosts",
             "name": "Vagrant: Specify SSH user and password in hosts",
             "description": null
+        },
+        {
+            "id": "playbook-add-task-to-ping-all-hosts",
+            "name": "Playbook: Add task to ping all hosts",
+            "description": null
+        },
+        {
+            "id": "playbook-update-cache-and-upgrade-packages-with-apt",
+            "name": "Playbook: Update cache and upgrade packages with APT",
+            "description": null
+        },
+        {
+            "id": "playbook-add-task-to-install-git",
+            "name": "Playbook: Add task to install Git",
+            "description": null
+        },
+        {
+            "id": "playbook-add-task-to-install-php-cli",
+            "name": "Playbook: Add task to install PHP CLI",
+            "description": null
+        },
+        {
+            "id": "playbook-add-task-to-install-nginx-and-expose-80-port",
+            "name": "Playbook: Add task to install Nginx and expose 80 port",
+            "description": null
+        },
+        {
+            "id": "playbook-add-task-to-install-mysql",
+            "name": "Playbook: Add task to install MySQL",
+            "description": null
         }
     ],
-    "sha": "56a950bb87ac02ee42e5f895ea9e518e38162894"
+    "sha": "e2c41d82c5ffbd750f84e4a70dc5889f1907087f"
 }

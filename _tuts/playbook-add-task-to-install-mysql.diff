@@ -1,0 +1,15 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 28757dd..2cd85a9 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -20,6 +20,10 @@
+       become: yes
+       apt: name=nginx state=latest
+ 
++    - name: Install MySQL DB server
++      become: yes
++      apt: name=mysql-server state=latest
++
+     - name: Install PHP CLI
+       become: yes
+       apt: name=php5-cli state=latest

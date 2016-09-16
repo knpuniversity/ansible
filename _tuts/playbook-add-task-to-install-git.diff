@@ -1,0 +1,12 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 04870b2..5901a34 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -11,3 +11,7 @@
+     - name: Upgrade installed packages
+       become: yes
+       apt: upgrade=yes
++
++    - name: Install Git VCS
++      become: yes
++      apt: name=git state=latest
