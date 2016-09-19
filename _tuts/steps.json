@@ -119,7 +119,12 @@
             "id": "handlers-notify-restart-nginx-and-fpm",
             "name": "Handlers: Notify restart Nginx and FPM",
             "description": null
+        },
+        {
+            "id": "use-project-repo-url",
+            "name": "Use project repo URL",
+            "description": null
         }
     ],
-    "sha": "1caee96410856811b8f10c405a43d9830dad33db"
+    "sha": "e1a7ddf0257ab2edec1582bf412c270ad92b4902"
 }

@@ -1,0 +1,13 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index e7ff118..1cfb988 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -69,7 +69,7 @@
+       file: path="{{ symfony_root_dir }}" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes
+ 
+     - name: Checkout Git repository
+-      git: repo=https://github.com/symfony/symfony-standard.git dest="{{ symfony_root_dir }}" force=yes
++      git: repo=https://github.com/knpuniversity/ansible.git dest="{{ symfony_root_dir }}" force=yes
+ 
+     - name: Install Composer
+       become: yes
