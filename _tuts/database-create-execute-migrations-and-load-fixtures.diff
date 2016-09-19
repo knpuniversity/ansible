@@ -1,0 +1,29 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 1cfb988..ee768a6 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -5,6 +5,7 @@
+     server_name: mootube.l
+     symfony_root_dir: /var/www/project
+     symfony_web_dir: "{{ symfony_root_dir }}/web"
++    symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+ 
+   tasks:
+     - ping: ~
+@@ -87,6 +88,16 @@
+       file: path="{{ symfony_root_dir }}" owner=www-data group=www-data recurse=yes
+       changed_when: False
+ 
++    # Symfony console commands
++    - name: Create DB if not exist
++      command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
++
++    - name: Execute migrations
++      command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
++
++    - name: Load data fixtures
++      command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
++
+   handlers:
+     - name: Restart Nginx
+       become: yes

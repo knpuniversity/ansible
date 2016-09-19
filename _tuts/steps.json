@@ -124,7 +124,12 @@
             "id": "use-project-repo-url",
             "name": "Use project repo URL",
             "description": null
+        },
+        {
+            "id": "database-create-execute-migrations-and-load-fixtures",
+            "name": "Database: Create, execute migrations and load fixtures",
+            "description": null
         }
     ],
-    "sha": "e1a7ddf0257ab2edec1582bf412c270ad92b4902"
+    "sha": "08073bd490d83f4b726174fc9cd545a19f3df42b"
 }
