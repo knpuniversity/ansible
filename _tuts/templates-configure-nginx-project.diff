@@ -1,0 +1,55 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 860b7dd..6d4e633 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -2,7 +2,9 @@
+ - hosts: all
+ 
+   vars:
++    server_name: mootube.l
+     symfony_root_dir: /var/www/project
++    symfony_web_dir: "{{ symfony_root_dir }}/web"
+ 
+   tasks:
+     - ping: ~
+@@ -23,6 +25,18 @@
+       become: yes
+       apt: name=nginx state=latest
+ 
++    - name: Add Symfony config template to the Nginx available sites
++      become: yes
++      template: src=templates/symfony.conf dest="/etc/nginx/sites-available/{{ server_name }}.conf"
++
++    - name: Enable Symfony config template from Nginx available sites
++      become: yes
++      file: src="/etc/nginx/sites-available/{{ server_name }}.conf" dest="/etc/nginx/sites-enabled/{{ server_name }}.conf" state=link
++
++    - name: Add enabled Nginx site to /etc/hosts
++      become: yes
++      lineinfile: dest=/etc/hosts regexp="{{ server_name }}" line="127.0.0.1 {{ server_name }}"
++
+     - name: Install MySQL DB server
+       become: yes
+       apt: name=mysql-server state=latest
+diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
+index 99aee5b..a1421b8 100644
+--- a/ansible/templates/symfony.conf
++++ b/ansible/templates/symfony.conf
+@@ -1,6 +1,6 @@
+ server {
+-    server_name domain.tld www.domain.tld;
+-    root /var/www/project/web;
++    server_name {{ server_name }};
++    root {{ symfony_web_dir }};
+ 
+     location / {
+         # try to serve file directly, fallback to app.php
+@@ -49,6 +49,6 @@ server {
+       return 404;
+     }
+ 
+-    error_log /var/log/nginx/project_error.log;
+-    access_log /var/log/nginx/project_access.log;
++    error_log /var/log/nginx/{{ server_name }}_error.log;
++    access_log /var/log/nginx/{{ server_name }}_access.log;
+ }

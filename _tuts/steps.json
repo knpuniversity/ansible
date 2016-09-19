@@ -104,7 +104,22 @@
             "id": "variables-use-www-data",
             "name": "Variables: Use www-data",
             "description": null
+        },
+        {
+            "id": "templates-create-nginx-symfony-template",
+            "name": "Templates: Create Nginx Symfony template",
+            "description": null
+        },
+        {
+            "id": "templates-configure-nginx-project",
+            "name": "Templates: Configure Nginx project",
+            "description": null
+        },
+        {
+            "id": "handlers-notify-restart-nginx-and-fpm",
+            "name": "Handlers: Notify restart Nginx and FPM",
+            "description": null
         }
     ],
-    "sha": "f6f24f4c954ced846a5154ca9bdb7b423b2ed7e8"
+    "sha": "1caee96410856811b8f10c405a43d9830dad33db"
 }
