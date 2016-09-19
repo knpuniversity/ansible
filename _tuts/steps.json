@@ -64,7 +64,37 @@
             "id": "playbook-add-task-to-install-mysql",
             "name": "Playbook: Add task to install MySQL",
             "description": null
+        },
+        {
+            "id": "playbook-install-symfony-related-php-extensions",
+            "name": "Playbook: Install Symfony related PHP extensions",
+            "description": null
+        },
+        {
+            "id": "playbook-setup-timezone-for-cli-and-fpm",
+            "name": "Playbook: Setup timezone for CLI and FPM",
+            "description": null
+        },
+        {
+            "id": "playbook-create-project-dir",
+            "name": "Playbook: Create project dir",
+            "description": null
+        },
+        {
+            "id": "variables-use-dynamic-ansible-ssh-user",
+            "name": "Variables: Use dynamic Ansible SSH user",
+            "description": null
+        },
+        {
+            "id": "variables-clone-checkout-git-repo",
+            "name": "Variables: Clone\/checkout Git repo",
+            "description": null
+        },
+        {
+            "id": "variables-replace-root-dir-with-variable",
+            "name": "Variables: Replace root dir with variable",
+            "description": null
         }
     ],
-    "sha": "693935b25d9062256139d0de14f14d11b6633cce"
+    "sha": "6e40e54f5e107dcdb0b8ffcf0830a03e597975a5"
 }

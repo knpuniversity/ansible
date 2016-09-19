@@ -1,0 +1,10 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index b061d9b..ad87daa 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -43,4 +43,4 @@
+ 
+     - name: Create project directory and set its permissions
+       become: yes
+-      file: path="/var/www/project" state=directory owner="vagrant" group="vagrant" recurse=yes
++      file: path="/var/www/project" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes

@@ -1,0 +1,18 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 2cd85a9..afaf0d2 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -24,6 +24,11 @@
+       become: yes
+       apt: name=mysql-server state=latest
+ 
+-    - name: Install PHP CLI
++    - name: Install PHP packages
+       become: yes
+-      apt: name=php5-cli state=latest
++      apt: name="{{ item }}" state=latest
++      with_items:
++        - php5-cli
++        - php5-fpm
++        - php5-intl
++        - php5-mysql

@@ -1,0 +1,24 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 5ca0587..a71c7d5 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -1,6 +1,9 @@
+ ---
+ - hosts: all
+ 
++  vars:
++    symfony_root_dir: /var/www/project
++
+   tasks:
+     - ping: ~
+ 
+@@ -43,7 +46,7 @@
+ 
+     - name: Create project directory and set its permissions
+       become: yes
+-      file: path="/var/www/project" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes
++      file: path="{{ symfony_root_dir }}" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes
+ 
+     - name: Checkout Git repository
+-      git: repo=https://github.com/symfony/symfony-standard.git dest="/var/www/project" force=yes
++      git: repo=https://github.com/symfony/symfony-standard.git dest="{{ symfony_root_dir }}" force=yes
