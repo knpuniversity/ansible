@@ -94,7 +94,17 @@
             "id": "variables-replace-root-dir-with-variable",
             "name": "Variables: Replace root dir with variable",
             "description": null
+        },
+        {
+            "id": "variables-install-composer-and-project-dependencies",
+            "name": "Variables: Install Composer and project dependencies",
+            "description": null
+        },
+        {
+            "id": "variables-use-www-data",
+            "name": "Variables: Use www-data",
+            "description": null
         }
     ],
-    "sha": "6e40e54f5e107dcdb0b8ffcf0830a03e597975a5"
+    "sha": "f6f24f4c954ced846a5154ca9bdb7b423b2ed7e8"
 }

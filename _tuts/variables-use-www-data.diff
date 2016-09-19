@@ -1,0 +1,19 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 4f58505..860b7dd 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -56,4 +56,13 @@
+       get_url: url=https://getcomposer.org/composer.phar dest=/usr/local/bin/composer mode="a+x"
+ 
+     - name: Install Composer's dependencies
+-      composer: working_dir="{{ symfony_root_dir }}"
++      composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
++
++    - name: Add vagrant user to the www-data group
++      become: yes
++      user: name="{{ ansible_ssh_user }}" group=www-data
++
++    - name: Set owner and group to www-data
++      become: yes
++      file: path="{{ symfony_root_dir }}" owner=www-data group=www-data recurse=yes
++      changed_when: False
