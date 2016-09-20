@@ -101,8 +101,8 @@
             "description": null
         },
         {
-            "id": "variables-use-www-data",
-            "name": "Variables: Use www-data",
+            "id": "variables-install-dev-dependencies",
+            "name": "Variables: Install dev dependencies",
             "description": null
         },
         {
@@ -121,6 +121,11 @@
             "description": null
         },
         {
+            "id": "fix-file-permissions-with-umask",
+            "name": "Fix file permissions with umask",
+            "description": null
+        },
+        {
             "id": "use-project-repo-url",
             "name": "Use project repo URL",
             "description": null
@@ -131,5 +136,5 @@
             "description": null
         }
     ],
-    "sha": "08073bd490d83f4b726174fc9cd545a19f3df42b"
+    "sha": "f55366acfdfb62a44d4b1f0bf8ce6ea229503563"
 }
