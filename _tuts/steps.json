@@ -121,8 +121,8 @@
             "description": null
         },
         {
-            "id": "fix-file-permissions-with-umask",
-            "name": "Fix file permissions with umask",
+            "id": "fix-cache-and-logs-permissions",
+            "name": "Fix cache and logs permissions",
             "description": null
         },
         {
@@ -136,5 +136,5 @@
             "description": null
         }
     ],
-    "sha": "c143b5e40cc6f22b5024186e5c219f1762eada24"
+    "sha": "fa52414890d88adaa2990a79bd3da58cd2e7bd8b"
 }

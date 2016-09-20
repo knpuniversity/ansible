@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ca98b9a..6fea499 100644
+index 65b6ecb..8a484eb 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -69,7 +69,7 @@
+@@ -70,7 +70,7 @@
        file: path="{{ symfony_root_dir }}" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes
  
      - name: Checkout Git repository

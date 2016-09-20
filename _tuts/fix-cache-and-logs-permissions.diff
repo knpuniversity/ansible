@@ -1,3 +1,25 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index ca98b9a..65b6ecb 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -5,6 +5,7 @@
+     server_name: mootube.l
+     symfony_root_dir: /var/www/project
+     symfony_web_dir: "{{ symfony_root_dir }}/web"
++    symfony_var_dir: "{{ symfony_root_dir }}/var"
+ 
+   tasks:
+     - ping: ~
+@@ -78,6 +79,9 @@
+     - name: Install Composer's dependencies
+       composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
+ 
++    - name: Fix var directory permissions
++      file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
++
+   handlers:
+     - name: Restart Nginx
+       become: yes
 diff --git a/web/app.php b/web/app.php
 index 4c2c465..737673b 100644
 --- a/web/app.php
