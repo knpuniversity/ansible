@@ -1,0 +1,17 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index b8a2591..b2059f3 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -98,9 +98,12 @@
+     # Symfony console commands
+     - name: Create DB if not exist
+       command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
++      register: result
+       tags:
+         - deploy
+ 
++    - debug: var=result
++
+     - name: Execute migrations
+       command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
+       tags:

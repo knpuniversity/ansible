@@ -1,0 +1,26 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index b2059f3..32bd527 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -99,18 +99,19 @@
+     - name: Create DB if not exist
+       command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+       register: result
++      changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
+       tags:
+         - deploy
+ 
+-    - debug: var=result
+-
+     - name: Execute migrations
+       command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
++      changed_when: "{{ result.stdout|match('No migrations to execute') }}"
+       tags:
+         - deploy
+ 
+     - name: Load data fixtures
+       command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
++      changed_when: "{{ result.stdout|match('fixtures loaded') }}"
+       tags:
+         - deploy
+ 
