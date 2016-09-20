@@ -154,7 +154,32 @@
             "id": "rename-suppress-changes-status-based-on-command-output",
             "name": "Rename Suppress changes status based on command output",
             "description": null
+        },
+        {
+            "id": "clear-prod-cache",
+            "name": "Clear prod cache",
+            "description": null
+        },
+        {
+            "id": "prompt-request-app-environment-from-user",
+            "name": "Prompt: Request app environment from user",
+            "description": null
+        },
+        {
+            "id": "prompt-add-pre-tesk-to-lowercase-symfony-environment",
+            "name": "Prompt: Add pre-tesk to lowercase symfony environment",
+            "description": null
+        },
+        {
+            "id": "prompt-remove-debug-statement",
+            "name": "Prompt: Remove debug statement",
+            "description": null
+        },
+        {
+            "id": "prompt-use-symfony-environment-in-console-commands",
+            "name": "Prompt: Use Symfony environment in console commands",
+            "description": null
         }
     ],
-    "sha": "98bf16020433fa48053a5659fabcd9f1dc117c26"
+    "sha": "24b2993c4f008523ec776c50ac25cbdbbb8d4cc6"
 }

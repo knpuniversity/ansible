@@ -1,0 +1,13 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index c6da793..0337176 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -24,8 +24,6 @@
+         - always
+ 
+   tasks:
+-    - debug: var=ansible_env.SYMFONY_ENV
+-
+     - ping: ~
+ 
+     - name: Update APT package manager repositories cache

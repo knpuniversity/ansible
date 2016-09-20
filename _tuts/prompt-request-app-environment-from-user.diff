@@ -1,0 +1,23 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 93605e6..e624f76 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -8,7 +8,18 @@
+     symfony_var_dir: "{{ symfony_root_dir }}/var"
+     symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+ 
++  vars_prompt:
++    - name: symfony_env
++      prompt: "Enter environment for Symfony application (prod|dev|test)"
++      default: prod
++      private: no
++
++  environment:
++    SYMFONY_ENV: "{{ symfony_env|lower }}"
++
+   tasks:
++    - debug: var=ansible_env.SYMFONY_ENV
++
+     - ping: ~
+ 
+     - name: Update APT package manager repositories cache
