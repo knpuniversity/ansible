@@ -1,20 +1,16 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 8a484eb..8e064af 100644
+index 8a484eb..07312bd 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -5,7 +5,11 @@
-     server_name: mootube.l
+@@ -6,6 +6,7 @@
      symfony_root_dir: /var/www/project
      symfony_web_dir: "{{ symfony_root_dir }}/web"
-+<<<<<<< HEAD
-+    symfony_console_path: "{{ symfony_root_dir }}/bin/console"
-+=======
      symfony_var_dir: "{{ symfony_root_dir }}/var"
-+>>>>>>> _tuts/master/use-project-repo-url
++    symfony_console_path: "{{ symfony_root_dir }}/bin/console"
  
    tasks:
      - ping: ~
-@@ -82,6 +86,16 @@
+@@ -82,6 +83,16 @@
      - name: Fix var directory permissions
        file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
  
