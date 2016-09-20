@@ -121,6 +121,11 @@
             "description": null
         },
         {
+            "id": "fix-file-permissions-with-umask",
+            "name": "Fix file permissions with umask",
+            "description": null
+        },
+        {
             "id": "use-project-repo-url",
             "name": "Use project repo URL",
             "description": null
