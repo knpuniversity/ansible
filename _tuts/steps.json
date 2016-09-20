@@ -101,8 +101,8 @@
             "description": null
         },
         {
-            "id": "variables-use-www-data",
-            "name": "Variables: Use www-data",
+            "id": "variables-install-dev-dependencies",
+            "name": "Variables: Install dev dependencies",
             "description": null
         },
         {
@@ -131,5 +131,5 @@
             "description": null
         }
     ],
-    "sha": "08073bd490d83f4b726174fc9cd545a19f3df42b"
+    "sha": "f999529e78785cf8757faa1155b5b7e33b6b8f30"
 }

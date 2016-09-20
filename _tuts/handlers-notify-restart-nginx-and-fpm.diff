@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 6d4e633..e7ff118 100644
+index 7d569ad..ca98b9a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -24,18 +24,22 @@
@@ -41,10 +41,10 @@ index 6d4e633..e7ff118 100644
  
      - name: Create project directory and set its permissions
        become: yes
-@@ -80,3 +86,12 @@
-       become: yes
-       file: path="{{ symfony_root_dir }}" owner=www-data group=www-data recurse=yes
-       changed_when: False
+@@ -71,3 +77,12 @@
+ 
+     - name: Install Composer's dependencies
+       composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
 +
 +  handlers:
 +    - name: Restart Nginx
