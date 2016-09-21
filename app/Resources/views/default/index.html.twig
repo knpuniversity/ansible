@@ -21,7 +21,7 @@
             {% endif %}
         </div>
         <div class="video-box">
-            <h3 class="video-box-header">Over {{ videos|length }} Bovine Fitness Routines</h3>
+            <h3 class="video-box-header">Over {{ (videos|length * 1000000)|number_format }} Bovine Fitness Routines</h3>
             {% if tags %}
                 {% for video in videos %}
                     <a href="#video-{{ video.id }}">
