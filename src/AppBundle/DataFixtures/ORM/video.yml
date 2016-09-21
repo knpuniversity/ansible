@@ -2,15 +2,30 @@ AppBundle\Entity\Video:
     video_1:
         title: Calf Stretches
         image: images/cowbell.png
+        tags:
+            - Cardio
+            - Accessories
     video_2:
         title: 3 Best Dandelion Recipes
         image: images/dandelion.png
+        tags:
+            - Milk Production
+            - Strength
     video_3:
         title: Beef Tender Loins
         image: images/bovine1.png
+        tags:
+            - Diet
+            - Strength
     video_4:
         title: Moooove it yoga
         image: images/bovine2.png
+        tags:
+            - Cardio
+            - Flexibility
     video_5:
         title: Milking it! 5 minute workout
         image: images/milkjug.png
+        tags:
+            - Milk Production
+            - Speed

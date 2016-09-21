@@ -15,10 +15,34 @@ class DefaultController extends Controller
     {
         $videos = $this->getVideoRepository()
             ->findAll();
+        $tags = $this->getUniqueOrderedTags($videos);
 
         return $this->render('default/index.html.twig', [
             'videos' => $videos,
+            'tags' => $tags,
         ]);
+    }
+
+    /**
+     * @param Video[] $videos
+     *
+     * @return array
+     */
+    private function getUniqueOrderedTags(array $videos)
+    {
+        $tags = [];
+
+        foreach ($videos as $video) {
+            foreach ($video->getTags() as $tag) {
+                if (!in_array($tag, $tags)) {
+                    $tags[] = $tag;
+                }
+            }
+        }
+
+        sort($tags);
+
+        return $tags;
     }
 
     /**

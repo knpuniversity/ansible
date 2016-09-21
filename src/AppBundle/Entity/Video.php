@@ -34,6 +34,13 @@ class Video
     private $image;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="simple_array")
+     */
+    private $tags;
+
+    /**
      * @return int
      */
     public function getId()
@@ -71,5 +78,21 @@ class Video
     public function setImage($image)
     {
         $this->image = $image;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param array $tags
+     */
+    public function setTags(array $tags)
+    {
+        $this->tags = $tags;
     }
 }

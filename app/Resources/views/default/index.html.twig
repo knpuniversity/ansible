@@ -5,51 +5,45 @@
         <div class="filter-container">
             <h3 class="filter-header">Filter by Tag</h3>
             <hr>
-            <ul class="filter-list unstyled-list">
-                <li>
-                    <input type="checkbox" id="cardio_check" class="check-box">
-                    <label for="cardio_check" name="filter_checkbox"><span>Cardio</span></label>
-                </li>
-                <li>
-                    <input type="checkbox" id="strength_check" class="check-box">
-                    <label for="strength_check" name="filter_checkbox"><span>Strength</span></label>
-                </li>
-                <li>
-                    <input type="checkbox" id="speed_check" class="check-box">
-                    <label for="speed_check" name="filter_checkbox"><span>Speed</span></label>
-                </li>
-                <li>
-                    <input type="checkbox" id="flexibility_check" class="check-box">
-                    <label for="flexibility_check" name="filter_checkbox"><span>Flexibility</span></label>
-                </li>
-                <li>
-                    <input type="checkbox" id="milkproduction_check" class="check-box">
-                    <label for="milkproduction_check" name="filter_checkbox"><span>Milk Production</span></label>
-                </li>
-                <li>
-                    <input type="checkbox" id="diet_check" class="check-box">
-                    <label for="diet_check" name="filter_checkbox"><span>Diet</span></label>
-                </li>
-            </ul>
+            {% if tags %}
+                <ul class="filter-list unstyled-list">
+                    {% for index, tag in tags %}
+                        <li>
+                            <input type="checkbox" id="tag-{{ index }}" class="check-box">
+                            <label for="tag-{{ index }}"><span>{{ tag }}</span></label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="well">
+                    No any tags
+                </div>
+            {% endif %}
         </div>
         <div class="video-box">
             <h3 class="video-box-header">Over {{ videos|length }} Bovine Fitness Routines</h3>
-            {% for video in videos %}
-                <a href="#video-{{ video.id }}">
-                    <div class="video-container">
-                        <img class="video-image" src="{{ video.image }}">
-                        <div class="video-title">
-                            <i class="fa fa-play-circle-o"></i>
-                            {{ video.title }}
+            {% if tags %}
+                {% for video in videos %}
+                    <a href="#video-{{ video.id }}">
+                        <div class="video-container">
+                            <img class="video-image" src="{{ video.image }}">
+                            <div class="video-title">
+                                <i class="fa fa-play-circle-o"></i>
+                                {{ video.title }}
+                            </div>
                         </div>
+                    </a>
+                {% endfor %}
+                <a href="#more">
+                    <div class="video-container">
+                        <img class="video-image" src="images/more.png"/>
                     </div>
                 </a>
-            {% endfor %}
-            <a href="#more">
-                <div class="video-container">
-                    <img class="video-image" src="images/more.png"/>
+            {% else %}
+                <div class="well">
+                    No any videos
                 </div>
-            </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
