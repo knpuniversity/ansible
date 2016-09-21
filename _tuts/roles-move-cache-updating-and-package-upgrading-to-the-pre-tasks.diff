@@ -1,0 +1,30 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 7eaf332..9305b41 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -22,12 +22,6 @@
+       tags:
+         - always
+ 
+-  roles:
+-    - nginx
+-
+-  tasks:
+-    - ping: ~
+-
+     - name: Update APT package manager repositories cache
+       become: yes
+       apt: update_cache=yes
+@@ -36,6 +30,12 @@
+       become: yes
+       apt: upgrade=yes
+ 
++  roles:
++    - nginx
++
++  tasks:
++    - ping: ~
++
+     - name: Install Git VCS
+       become: yes
+       apt: name=git state=latest

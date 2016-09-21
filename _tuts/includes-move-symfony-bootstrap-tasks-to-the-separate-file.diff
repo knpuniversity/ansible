@@ -1,0 +1,96 @@
+diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
+new file mode 100644
+index 0000000..cd23b5f
+--- /dev/null
++++ b/ansible/includes/symfony-bootstrap.yml
+@@ -0,0 +1,39 @@
++---
++- name: Install Composer's dependencies
++  composer: working_dir="{{ symfony_root_dir }}" no_dev="{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
++  tags:
++    - deploy
++
++- name: Fix var directory permissions
++  file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
++  changed_when: False
++  tags:
++    - permissions
++    - deploy
++
++# Symfony console commands
++- name: Create DB if not exist
++  command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
++  register: result
++  changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
++  tags:
++    - deploy
++
++- name: Execute migrations
++  command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
++  changed_when: "{{ result.stdout|match('No migrations to execute') }}"
++  tags:
++    - deploy
++
++- name: Load data fixtures
++  command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
++  when: symfony_env != "prod"
++  changed_when: "{{ result.stdout|match('fixtures loaded') }}"
++  tags:
++    - deploy
++
++- name: Clear cache
++  command: '{{ symfony_console_path }} cache:clear --env {{ symfony_env }}'
++  changed_when: "{{ result.stdout|match('was successfully cleared') }}"
++  tags:
++    - deploy
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 68e937a..f08d141 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -98,44 +98,8 @@
+       tags:
+         - deploy
+ 
+-    - name: Install Composer's dependencies
+-      composer: working_dir="{{ symfony_root_dir }}" no_dev="{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+-      tags:
+-        - deploy
+-
+-    - name: Fix var directory permissions
+-      file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
+-      changed_when: False
+-      tags:
+-        - permissions
+-        - deploy
+-
+-    # Symfony console commands
+-    - name: Create DB if not exist
+-      command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+-      register: result
+-      changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
+-      tags:
+-        - deploy
+-
+-    - name: Execute migrations
+-      command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
+-      changed_when: "{{ result.stdout|match('No migrations to execute') }}"
+-      tags:
+-        - deploy
+-
+-    - name: Load data fixtures
+-      command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
+-      when: symfony_env != "prod"
+-      changed_when: "{{ result.stdout|match('fixtures loaded') }}"
+-      tags:
+-        - deploy
+-
+-    - name: Clear cache
+-      command: '{{ symfony_console_path }} cache:clear --env {{ symfony_env }}'
+-      changed_when: "{{ result.stdout|match('was successfully cleared') }}"
+-      tags:
+-        - deploy
++    # Bootstrap Symfony app
++    - include: ./includes/symfony-bootstrap.yml
+ 
+   handlers:
+     - name: Restart Nginx

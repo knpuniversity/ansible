@@ -179,7 +179,22 @@
             "id": "prompt-use-symfony-environment-in-console-commands",
             "name": "Prompt: Use Symfony environment in console commands",
             "description": null
+        },
+        {
+            "id": "includes-move-symfony-bootstrap-tasks-to-the-separate-file",
+            "name": "Includes: Move Symfony bootstrap tasks to the separate file",
+            "description": null
+        },
+        {
+            "id": "roles-move-nginx-installation-to-the-separate-role",
+            "name": "Roles: Move Nginx installation to the separate role",
+            "description": null
+        },
+        {
+            "id": "roles-move-cache-updating-and-package-upgrading-to-the-pre-tasks",
+            "name": "Roles: Move cache updating and package upgrading to the pre_tasks",
+            "description": null
         }
     ],
-    "sha": "24b2993c4f008523ec776c50ac25cbdbbb8d4cc6"
+    "sha": "1516872426b877f5a568b6688f02f52d55623281"
 }
