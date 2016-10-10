@@ -1,0 +1,19 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 9d6c389..94fd216 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -8,9 +8,13 @@
+       become: yes
+       apt: update_cache=yes
+ 
++    - name: Install aptitude for more apt options
++      become: yes
++      apt: name=aptitude
++
+     - name: Upgrade installed packages
+       become: yes
+-      apt: upgrade=dist
++      apt: upgrade=safe
+ 
+     - name: Install cowsay - it's probably important
+       become: yes

@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 49cca78..b8a2591 100644
+index bb00b09..043c400 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -90,6 +90,7 @@
+@@ -99,6 +99,7 @@
  
      - name: Fix var directory permissions
        file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes

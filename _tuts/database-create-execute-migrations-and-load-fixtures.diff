@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 8a484eb..07312bd 100644
+index bda2bf9..fd684ed 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -6,6 +6,7 @@
@@ -10,7 +10,7 @@ index 8a484eb..07312bd 100644
  
    tasks:
      - ping: ~
-@@ -82,6 +83,16 @@
+@@ -91,6 +92,16 @@
      - name: Fix var directory permissions
        file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
  

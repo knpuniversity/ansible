@@ -1,0 +1,10 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 92f3da3..b28f96b 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -22,4 +22,4 @@
+ 
+     - name: Install Git VCS
+       become: yes
+-      apt: name=git
++      apt: name=git state=latest

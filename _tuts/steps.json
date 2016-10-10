@@ -41,13 +41,33 @@
             "description": null
         },
         {
+            "id": "playbook-install-cowsay",
+            "name": "Playbook: Install cowsay",
+            "description": null
+        },
+        {
+            "id": "playbook-use-become",
+            "name": "Playbook: Use become",
+            "description": null
+        },
+        {
             "id": "playbook-update-cache-and-upgrade-packages-with-apt",
             "name": "Playbook: Update cache and upgrade packages with APT",
             "description": null
         },
         {
+            "id": "playbook-install-aptitude",
+            "name": "Playbook: Install aptitude",
+            "description": null
+        },
+        {
             "id": "playbook-add-task-to-install-git",
             "name": "Playbook: Add task to install Git",
+            "description": null
+        },
+        {
+            "id": "playbook-pass-state-latest-option",
+            "name": "Playbook: Pass state=latest option",
             "description": null
         },
         {
@@ -103,6 +123,11 @@
         {
             "id": "variables-install-dev-dependencies",
             "name": "Variables: Install dev dependencies",
+            "description": null
+        },
+        {
+            "id": "variables-install-missing-extensions",
+            "name": "Variables: Install missing extensions",
             "description": null
         },
         {
@@ -196,5 +221,5 @@
             "description": null
         }
     ],
-    "sha": "2004846e07cbcfbdab804d3989b23db7ed79c807"
+    "sha": "27ba9bf7e8d459d6e74f9b09a8af2e18888cb1b9"
 }

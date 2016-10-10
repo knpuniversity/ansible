@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index b2059f3..32bd527 100644
+index 92b4958..4c18eff 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -99,18 +99,19 @@
+@@ -108,18 +108,19 @@
      - name: Create DB if not exist
        command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
        register: result

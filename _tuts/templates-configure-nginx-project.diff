@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 3037ba2..7d569ad 100644
+index a5d3f5d..c668a08 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,9 @@
@@ -12,7 +12,7 @@ index 3037ba2..7d569ad 100644
  
    tasks:
      - ping: ~
-@@ -23,6 +25,18 @@
+@@ -31,6 +33,18 @@
        become: yes
        apt: name=nginx state=latest
  

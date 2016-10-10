@@ -1,16 +1,16 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index afaf0d2..10a491a 100644
+index 1147dac..690ce81 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -32,3 +32,11 @@
-         - php5-fpm
-         - php5-intl
-         - php5-mysql
+@@ -40,3 +40,11 @@
+         - php7.0-fpm
+         - php7.0-intl
+         - php7.0-mysql
 +
 +    - name: Set date.timezone for CLI
 +      become: yes
-+      lineinfile: dest=/etc/php5/cli/php.ini regexp="date.timezone =" line="date.timezone = UTC"
++      lineinfile: dest=/etc/php/7.0/cli/php.ini regexp="date.timezone =" line="date.timezone = UTC"
 +
 +    - name: Set date.timezone for FPM
 +      become: yes
-+      lineinfile: dest=/etc/php5/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"
++      lineinfile: dest=/etc/php/7.0/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"

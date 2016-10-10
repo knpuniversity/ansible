@@ -1,16 +1,19 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ca850c4..04870b2 100644
+index 4b1a3bc..9d6c389 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -3,3 +3,11 @@
- 
+@@ -4,6 +4,14 @@
    tasks:
      - ping: ~
-+
+ 
 +    - name: Update APT package manager repositories cache
 +      become: yes
 +      apt: update_cache=yes
 +
 +    - name: Upgrade installed packages
 +      become: yes
-+      apt: upgrade=yes
++      apt: upgrade=dist
++
+     - name: Install cowsay - it's probably important
+       become: yes
+       apt: name=cowsay

@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 7d569ad..ca98b9a 100644
+index c668a08..96a4941 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -24,18 +24,22 @@
+@@ -32,18 +32,22 @@
      - name: Install Nginx web server
        become: yes
        apt: name=nginx state=latest
@@ -25,23 +25,25 @@ index 7d569ad..ca98b9a 100644
  
      - name: Install MySQL DB server
        become: yes
-@@ -49,6 +53,7 @@
-         - php5-fpm
-         - php5-intl
-         - php5-mysql
+@@ -58,6 +62,7 @@
+         - php7.0-intl
+         - php7.0-mysql
+         - php7.0-xml
 +      notify: Restart PHP-FPM
  
      - name: Set date.timezone for CLI
        become: yes
-@@ -57,6 +62,7 @@
+@@ -65,7 +70,8 @@
+ 
      - name: Set date.timezone for FPM
        become: yes
-       lineinfile: dest=/etc/php5/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"
+-      lineinfile: dest=/etc/php/7.0/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"
++      lineinfile: dest=/etc/php7.0/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"
 +      notify: Restart PHP-FPM
  
      - name: Create project directory and set its permissions
        become: yes
-@@ -71,3 +77,12 @@
+@@ -80,3 +86,12 @@
  
      - name: Install Composer's dependencies
        composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
