@@ -219,7 +219,12 @@
             "id": "roles-move-cache-updating-and-package-upgrading-to-the-pre-tasks",
             "name": "Roles: Move cache updating and package upgrading to the pre_tasks",
             "description": null
+        },
+        {
+            "id": "roles-install-redis-role",
+            "name": "Roles: Install Redis role",
+            "description": null
         }
     ],
-    "sha": "27ba9bf7e8d459d6e74f9b09a8af2e18888cb1b9"
+    "sha": "2a0c19997730c0a18bbae4701e4cccc4f47183dc"
 }

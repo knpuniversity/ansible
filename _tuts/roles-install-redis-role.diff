@@ -1,0 +1,2040 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 0748789..aeadecb 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -40,6 +40,8 @@
+ 
+   roles:
+     - nginx
++    - role: DavidWittman.redis
++      become: yes
+ 
+   tasks:
+     - ping: ~
+diff --git a/ansible/roles/DavidWittman.redis/.gitignore b/ansible/roles/DavidWittman.redis/.gitignore
+new file mode 100644
+index 0000000..10dda51
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/.gitignore
+@@ -0,0 +1,4 @@
++*.swp
++.kitchen/
++.bundle
++.vagrant
+diff --git a/ansible/roles/DavidWittman.redis/.kitchen.yml b/ansible/roles/DavidWittman.redis/.kitchen.yml
+new file mode 100644
+index 0000000..6d6e897
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/.kitchen.yml
+@@ -0,0 +1,26 @@
++---
++driver:
++  name: vagrant
++
++provisioner:
++  name: ansible_playbook
++  ansible_verbose: true
++  ansible_verbosity: 2
++  require_ruby_for_busser: false
++  require_chef_for_busser: true
++  hosts: all
++
++platforms:
++  - name: ubuntu-14.04
++  - name: centos-6.7
++    driver_config:
++      box: wittman/centos-6.7-ansible
++  - name: centos-7.2
++    driver_config:
++      box: wittman/centos-7.2-ansible
++
++suites:
++  - name: default
++  - name: logfile
++  - name: sentinel
++  - name: checksum
+diff --git a/ansible/roles/DavidWittman.redis/.travis.yml b/ansible/roles/DavidWittman.redis/.travis.yml
+new file mode 100644
+index 0000000..a8f06db
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/.travis.yml
+@@ -0,0 +1,47 @@
++---
++language: python
++python: "2.7"
++
++env:
++  - ANSIBLE_VERSION=1.9.4
++  - ANSIBLE_VERSION=latest
++
++before_install:
++  - sudo apt-get update -qq
++
++install:
++  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
++  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
++
++script:
++  # Syntax check
++  - "ansible-playbook -i localhost, test/test_server.yml --syntax-check"
++  - "ansible-playbook -i localhost, test/test_sentinel.yml --syntax-check"
++  # Test Redis Server
++  - "ansible-playbook -i localhost, test/test_server.yml --connection=local --sudo"
++  # Idempotency check
++  - >
++    ansible-playbook -i localhost, test/test_server.yml --connection=local --sudo
++    | grep -q 'changed=0.*failed=0'
++    && (echo 'Idempotency: PASS' && exit 0)
++    || (echo 'Idempotency: FAIL' && exit 1)
++  # Test Redis Sentinel
++  - "ansible-playbook -i localhost, test/test_sentinel.yml --connection=local --sudo"
++  - >
++    ansible-playbook -i localhost, test/test_sentinel.yml --connection=local --sudo
++    | grep -q 'changed=0.*failed=0'
++    && (echo 'Idempotency: PASS' && exit 0)
++    || (echo 'Idempotency: FAIL' && exit 1)
++  # Connection test
++  - "/opt/redis/bin/redis-cli PING"
++  - "/opt/redis/bin/redis-cli -p 26379 PING"
++  # Facts syntax check
++  - >
++    sudo cat /etc/ansible/facts.d/redis.fact
++    | python -m json.tool
++    && (echo 'Facts syntax: PASS' && exit 0)
++    || (echo 'Facts syntax: FAIL' && exit 1)
++  # Test all replication components (server, slave, sentinel)
++  # No idempotency check here (yet) because the sentinel config writes to itself
++  # after a config is discovered from the Redis server.
++  - ansible-playbook -i localhost, test/test_all.yml --connection=local --sudo
+diff --git a/ansible/roles/DavidWittman.redis/Gemfile b/ansible/roles/DavidWittman.redis/Gemfile
+new file mode 100644
+index 0000000..ed2daf2
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/Gemfile
+@@ -0,0 +1,5 @@
++source "https://rubygems.org"
++
++gem "test-kitchen"
++gem "kitchen-ansible"
++gem "kitchen-vagrant"
+diff --git a/ansible/roles/DavidWittman.redis/Gemfile.lock b/ansible/roles/DavidWittman.redis/Gemfile.lock
+new file mode 100644
+index 0000000..602af4c
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/Gemfile.lock
+@@ -0,0 +1,40 @@
++GEM
++  remote: https://rubygems.org/
++  specs:
++    faraday (0.9.2)
++      multipart-post (>= 1.2, < 3)
++    highline (1.7.8)
++    kitchen-ansible (0.0.39)
++      librarian-ansible
++      test-kitchen (~> 1.4)
++    kitchen-vagrant (0.19.0)
++      test-kitchen (~> 1.4)
++    librarian (0.1.2)
++      highline
++      thor (~> 0.15)
++    librarian-ansible (3.0.0)
++      faraday
++      librarian (~> 0.1.0)
++    mixlib-install (0.7.1)
++    mixlib-shellout (2.2.6)
++    multipart-post (2.0.0)
++    net-scp (1.2.1)
++      net-ssh (>= 2.6.5)
++    net-ssh (3.1.0)
++    safe_yaml (1.0.4)
++    test-kitchen (1.6.0)
++      mixlib-install (~> 0.7)
++      mixlib-shellout (>= 1.2, < 3.0)
++      net-scp (~> 1.1)
++      net-ssh (>= 2.9, < 4.0)
++      safe_yaml (~> 1.0)
++      thor (~> 0.18)
++    thor (0.19.1)
++
++PLATFORMS
++  ruby
++
++DEPENDENCIES
++  kitchen-ansible
++  kitchen-vagrant
++  test-kitchen
+diff --git a/ansible/roles/DavidWittman.redis/LICENSE b/ansible/roles/DavidWittman.redis/LICENSE
+new file mode 100644
+index 0000000..21bd84c
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/LICENSE
+@@ -0,0 +1,21 @@
++The MIT License (MIT)
++
++Copyright (c) 2014 David Wittman
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is 
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++THE SOFTWARE.
+diff --git a/ansible/roles/DavidWittman.redis/README.md b/ansible/roles/DavidWittman.redis/README.md
+new file mode 100644
+index 0000000..2d61820
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/README.md
+@@ -0,0 +1,308 @@
++# ansible-redis
++
++[![Build Status](https://travis-ci.org/DavidWittman/ansible-redis.svg?branch=master)](https://travis-ci.org/DavidWittman/ansible-redis) [![Ansible Galaxy](https://img.shields.io/badge/galaxy-DavidWittman.redis-blue.svg?style=flat)](https://galaxy.ansible.com/detail#/role/730)
++
++ - Requires Ansible 1.6.3+
++ - Compatible with most versions of Ubuntu/Debian and RHEL/CentOS 6.x
++
++## Contents
++
++ 1. [Installation](#installation)
++ 2. [Getting Started](#getting-started)
++  1. [Single Redis node](#single-redis-node)
++  2. [Master-Slave Replication](#master-slave-replication)
++  3. [Redis Sentinel](#redis-sentinel)
++ 3. [Installing redis from a source file in the ansible role](#installing-redis-from-a-source-file-in-the-ansible-role)
++ 4. [Verifying checksums](#verifying-checksums)
++ 5. [Role Variables](#role-variables)
++
++## Installation
++
++``` bash
++$ ansible-galaxy install DavidWittman.redis
++```
++
++## Getting started
++
++Below are a few example playbooks and configurations for deploying a variety of Redis architectures.
++
++This role expects to be run as root or as a user with sudo privileges.
++
++### Single Redis node
++
++Deploying a single Redis server node is pretty trivial; just add the role to your playbook and go. Here's an example which we'll make a little more exciting by setting the bind address to 127.0.0.1:
++
++``` yml
++---
++- hosts: redis01.example.com
++  vars:
++    - redis_bind: 127.0.0.1
++  roles:
++    - DavidWittman.redis
++```
++
++``` bash
++$ ansible-playbook -i redis01.example.com, redis.yml
++```
++
++**Note:** You may have noticed above that I just passed a hostname in as the Ansible inventory file. This is an easy way to run Ansible without first having to create an inventory file, you just need to suffix the hostname with a comma so Ansible knows what to do with it.
++
++That's it! You'll now have a Redis server listening on 127.0.0.1 on redis01.example.com. By default, the Redis binaries are installed under /opt/redis, though this can be overridden by setting the `redis_install_dir` variable.
++
++### Master-Slave replication
++
++Configuring [replication](http://redis.io/topics/replication) in Redis is accomplished by deploying multiple nodes, and setting the `redis_slaveof` variable on the slave nodes, just as you would in the redis.conf. In the example that follows, we'll deploy a Redis master with three slaves.
++
++In this example, we're going to use groups to separate the master and slave nodes. Let's start with the inventory file:
++
++``` ini
++[redis-master]
++redis-master.example.com
++
++[redis-slave]
++redis-slave0[1:3].example.com
++```
++
++And here's the playbook:
++
++``` yml
++---
++- name: configure the master redis server
++  hosts: redis-master
++  roles:
++    - DavidWittman.redis
++
++- name: configure redis slaves
++  hosts: redis-slave
++  vars:
++    - redis_slaveof: redis-master.example.com 6379
++  roles:
++    - DavidWittman.redis
++```
++
++In this case, I'm assuming you have DNS records set up for redis-master.example.com, but that's not always the case. You can pretty much go crazy with whatever you need this to be set to. In many cases, I tell Ansible to use the eth1 IP address for the master. Here's a more flexible value for the sake of posterity:
++
++``` yml
++redis_slaveof: "{{ hostvars['redis-master.example.com'].ansible_eth1.ipv4.address }} {{ redis_port }}"
++```
++
++Now you're cooking with gas! Running this playbook should have you ready to go with a Redis master and three slaves.
++
++### Redis Sentinel
++
++#### Introduction
++
++Using Master-Slave replication is great for durability and distributing reads and writes, but not so much for high availability. If the master node fails, a slave must be manually promoted to master, and connections will need to be redirected to the new master. The solution for this problem is [Redis Sentinel](http://redis.io/topics/sentinel), a distributed system which uses Redis itself to communicate and handle automatic failover in a Redis cluster.
++
++Sentinel itself uses the same redis-server binary that Redis uses, but runs with the `--sentinel` flag and with a different configuration file. All of this, of course, is abstracted with this Ansible role, but it's still good to know.
++
++#### Configuration
++
++To add a Sentinel node to an existing deployment, assign this same `redis` role to it, and set the variable `redis_sentinel` to True on that particular host. This can be done in any number of ways, and for the purposes of this example I'll extend on the inventory file used above in the Master/Slave configuration:
++
++``` ini
++[redis-master]
++redis-master.example.com
++
++[redis-slave]
++redis-slave0[1:3].example.com
++
++[redis-sentinel]
++redis-sentinel0[1:3].example.com redis_sentinel=True
++```
++
++Above, we've added three more hosts in the **redis-sentinel** group (though this group serves no purpose within the role, it's merely an identifier), and set the `redis_sentinel` variable inline within the inventory file.
++
++Now, all we need to do is set the `redis_sentinel_monitors` variable to define the Redis masters which Sentinel should monitor. In this case, I'm going to do this within the playbook:
++
++``` yml
++- name: configure the master redis server
++  hosts: redis-master
++  roles:
++    - DavidWittman.redis
++
++- name: configure redis slaves
++  hosts: redis-slave
++  vars:
++    - redis_slaveof: redis-master.example.com 6379
++  roles:
++    - DavidWittman.redis
++
++- name: configure redis sentinel nodes
++  hosts: redis-sentinel
++  vars:
++    - redis_sentinel_monitors:
++      - name: master01
++        host: redis-master.example.com
++        port: 6379
++  roles:
++    - DavidWittman.redis
++```
++
++This will configure the Sentinel nodes to monitor the master we created above using the identifier `master01`. By default, Sentinel will use a quorum of 2, which means that at least 2 Sentinels must agree that a master is down in order for a failover to take place. This value can be overridden by setting the `quorum` key within your monitor definition. See the [Sentinel docs](http://redis.io/topics/sentinel) for more details.
++
++Along with the variables listed above, Sentinel has a number of its own configurables just as Redis server does. These are prefixed with `redis_sentinel_`, and are enumerated in the **Role Variables** section below.
++
++
++## Installing redis from a source file in the ansible role
++
++If the environment your server resides in does not allow downloads (i.e. if the machine is sitting in a dmz) set the variable `redis_tarball` to the path of a locally downloaded tar.gz file to prevent a http download from redis.io.  
++Do not forget to set the version variable to the same version of the tar.gz. to avoid confusion !
++
++For example (file was stored in same folder as the playbook that included the redis role):
++```yml
++vars:
++  - redis_version: 2.8.14
++  - redis_tarball: redis-2.8.14.tar.gz
++```
++In this case the source archive is copied towards the server over ssh rather than downloaded.
++
++## Verifying checksums
++
++Set the `redis_verify_checksum` variable to true to use the checksum verification option for `get_url`. Note that this will only verify checksums when Redis is downloaded from a URL, not when one is provided in a tarball with `redis_tarball`. Due to differences in the `get_url` module in Ansible 1.x and Ansible 2.x, this feature behaves differently depending on the version of Ansible which you are using.
++
++### Ansible 1.x
++
++In Ansible 1.x, the `get_url` module only support verifying sha256 checksums, which are not provided by default. If you wish to set `redis_verify_checksum`, you must also define a sha256 checksum with the `redis_checksum` variable.
++
++``` yaml
++- name: install redis on ansible 1.x and verify checksums
++  hosts: all
++  roles:
++    - role: DavidWittman.redis
++      redis_version: 3.0.7
++      redis_verify_checksum: true
++      redis_checksum: b2a791c4ea3bb7268795c45c6321ea5abcc24457178373e6a6e3be6372737f23
++```
++
++### Ansible 2.x
++
++When using Ansible 2.x, this role will verify the sha1 checksum of the download against checksums defined in the `redis_checksums` variable in `vars/main.yml`. If your version is not defined in here or you wish to override the checksum with one of your own, simply set the `redis_checksum` variable. As in the example below, you will need to prefix the checksum with the type of hash which you are using.
++
++``` yaml
++- name: install redis on ansible 1.x and verify checksums
++  hosts: all
++  roles:
++    - role: DavidWittman.redis
++      redis_version: 3.0.7
++      redis_verify_checksum: true
++      redis_checksum: "sha256:b2a791c4ea3bb7268795c45c6321ea5abcc24457178373e6a6e3be6372737f23"
++```
++
++## Role Variables
++
++Here is a list of all the default variables for this role, which are also available in defaults/main.yml. One of these days I'll format these into a table or something.
++
++``` yml
++---
++## Installation options
++redis_version: 2.8.9
++redis_install_dir: /opt/redis
++redis_user: redis
++redis_group: "{{ redis_user }}"
++redis_dir: /var/lib/redis/{{ redis_port }}
++redis_download_url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
++redis_verify_checksum: false
++redis_tarball: false
++# The open file limit for Redis/Sentinel
++redis_nofile_limit: 16384
++
++## Role options
++# Configure Redis as a service
++# This creates the init scripts for Redis and ensures the process is running
++# Also applies for Redis Sentinel
++redis_as_service: true
++# Add local facts to /etc/ansible/facts.d for Redis
++redis_local_facts: true
++
++## Networking/connection options
++redis_bind: 0.0.0.0
++redis_port: 6379
++redis_password: false
++redis_tcp_backlog: 511
++redis_tcp_keepalive: 0
++# Max connected clients at a time
++redis_maxclients: 10000
++redis_timeout: 0
++# Socket options
++# Set socket_path to the desired path to the socket. E.g. /var/run/redis/{{ redis_port }}.sock
++redis_socket_path: false
++redis_socket_perm: 755
++
++## Replication options
++# Set slaveof just as you would in redis.conf. (e.g. "redis01 6379")
++redis_slaveof: false
++# Make slaves read-only. "yes" or "no"
++redis_slave_read_only: "yes"
++redis_slave_priority: 100
++redis_repl_backlog_size: false
++
++## Logging
++redis_logfile: '""'                                                             
++# Enable syslog. "yes" or "no"                                                  
++redis_syslog_enabled: "yes"                                                     
++redis_syslog_ident: redis_{{ redis_port }}                                      
++# Syslog facility. Must be USER or LOCAL0-LOCAL7                                
++redis_syslog_facility: USER   
++
++## General configuration
++redis_daemonize: "yes"                                                          
++redis_pidfile: /var/run/redis/{{ redis_port }}.pid
++# Number of databases to allow
++redis_databases: 16
++redis_loglevel: notice
++# Log queries slower than this many milliseconds. -1 to disable
++redis_slowlog_log_slower_than: 10000
++# Maximum number of slow queries to save
++redis_slowlog_max_len: 128
++# Redis memory limit (e.g. 4294967296, 4096mb, 4gb)
++redis_maxmemory: false
++redis_maxmemory_policy: noeviction
++redis_rename_commands: []
++# How frequently to snapshot the database to disk
++# e.g. "900 1" => 900 seconds if at least 1 key changed
++redis_save:
++  - 900 1
++  - 300 10
++  - 60 10000
++redis_appendonly: "no"
++redis_appendfilename: "appendonly.aof"
++redis_appendfsync: "everysec"
++redis_no_appendfsync_on_rewrite: "no"
++redis_auto_aof_rewrite_percentage: "100"
++redis_auto_aof_rewrite_min_size: "64mb"
++
++## Redis sentinel configs
++# Set this to true on a host to configure it as a Sentinel
++redis_sentinel: false
++redis_sentinel_dir: /var/lib/redis/sentinel_{{ redis_sentinel_port }}
++redis_sentinel_bind: 0.0.0.0
++redis_sentinel_port: 26379
++redis_sentinel_pidfile: /var/run/redis/sentinel_{{ redis_sentinel_port }}.pid
++redis_sentinel_logfile: '""'
++redis_sentinel_syslog_ident: sentinel_{{ redis_sentinel_port }}
++redis_sentinel_monitors:
++  - name: master01
++    host: localhost
++    port: 6379
++    quorum: 2
++    auth_pass: ant1r3z
++    down_after_milliseconds: 30000
++    parallel_syncs: 1
++    failover_timeout: 180000
++    notification_script: false
++    client_reconfig_script: false
++
++```
++
++## Facts
++
++The following facts are accessible in your inventory or tasks outside of this role.
++
++- `{{ ansible_local.redis.bind }}`
++- `{{ ansible_local.redis.port }}`
++- `{{ ansible_local.redis.sentinel_bind }}`
++- `{{ ansible_local.redis.sentinel_port }}`
++- `{{ ansible_local.redis.sentinel_monitors }}`
++
++To disable these facts, set `redis_local_facts` to a false value.
+diff --git a/ansible/roles/DavidWittman.redis/defaults/main.yml b/ansible/roles/DavidWittman.redis/defaults/main.yml
+new file mode 100644
+index 0000000..8b8e0da
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/defaults/main.yml
+@@ -0,0 +1,101 @@
++---
++## Installation options
++redis_version: 2.8.9
++redis_install_dir: /opt/redis
++redis_user: redis
++redis_group: "{{ redis_user }}"
++redis_dir: /var/lib/redis/{{ redis_port }}
++redis_download_url: "http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz"
++redis_verify_checksum: false
++redis_tarball: false
++# The open file limit for Redis/Sentinel
++redis_nofile_limit: 16384
++
++## Role options
++# Configure Redis as a service
++# This creates the init scripts for Redis and ensures the process is running
++# Also applies for Redis Sentinel
++redis_as_service: true
++# Add local facts to /etc/ansible/facts.d for Redis
++redis_local_facts: true
++
++## Networking/connection options
++redis_bind: 0.0.0.0
++redis_port: 6379
++redis_password: false
++# Slave replication options
++redis_min_slaves_to_write: 0
++redis_min_slaves_max_lag: 10
++redis_tcp_backlog: 511
++redis_tcp_keepalive: 0
++# Max connected clients at a time
++redis_maxclients: 10000
++redis_timeout: 0
++# Socket options
++# Set socket_path to the desired path to the socket. E.g. /var/run/redis/{{ redis_port }}.sock
++redis_socket_path: false
++redis_socket_perm: 755
++
++## Replication options
++# Set slaveof just as you would in redis.conf. (e.g. "redis01 6379")
++redis_slaveof: false
++# Make slaves read-only. "yes" or "no"
++redis_slave_read_only: "yes"
++redis_slave_priority: 100
++redis_repl_backlog_size: false
++
++## Logging
++redis_logfile: '""'                                                             
++# Enable syslog. "yes" or "no"                                                  
++redis_syslog_enabled: "yes"                                                     
++redis_syslog_ident: redis_{{ redis_port }}                                      
++# Syslog facility. Must be USER or LOCAL0-LOCAL7                                
++redis_syslog_facility: USER   
++
++## General configuration
++redis_daemonize: "yes"                                                          
++redis_pidfile: /var/run/redis/{{ redis_port }}.pid
++# Number of databases to allow
++redis_databases: 16
++redis_loglevel: notice
++# Log queries slower than this many milliseconds. -1 to disable
++redis_slowlog_log_slower_than: 10000
++# Maximum number of slow queries to save
++redis_slowlog_max_len: 128
++# Redis memory limit (e.g. 4294967296, 4096mb, 4gb)
++redis_maxmemory: false
++redis_maxmemory_policy: noeviction
++redis_rename_commands: []
++# How frequently to snapshot the database to disk
++# e.g. "900 1" => 900 seconds if at least 1 key changed
++redis_save:
++  - 900 1
++  - 300 10
++  - 60 10000
++redis_appendonly: "no"
++redis_appendfilename: "appendonly.aof"
++redis_appendfsync: "everysec"
++redis_no_appendfsync_on_rewrite: "no"
++redis_auto_aof_rewrite_percentage: "100"
++redis_auto_aof_rewrite_min_size: "64mb"
++
++## Redis sentinel configs
++# Set this to true on a host to configure it as a Sentinel
++redis_sentinel: false
++redis_sentinel_dir: /var/lib/redis/sentinel_{{ redis_sentinel_port }}
++redis_sentinel_bind: 0.0.0.0
++redis_sentinel_port: 26379
++redis_sentinel_pidfile: /var/run/redis/sentinel_{{ redis_sentinel_port }}.pid
++redis_sentinel_logfile: '""'
++redis_sentinel_syslog_ident: sentinel_{{ redis_sentinel_port }}
++redis_sentinel_monitors:
++  - name: master01
++    host: localhost
++    port: 6379
++    quorum: 2
++    auth_pass: ant1r3z
++    down_after_milliseconds: 30000
++    parallel_syncs: 1
++    failover_timeout: 180000
++    notification_script: false
++    client_reconfig_script: false
+diff --git a/ansible/roles/DavidWittman.redis/handlers/main.yml b/ansible/roles/DavidWittman.redis/handlers/main.yml
+new file mode 100644
+index 0000000..c55f701
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/handlers/main.yml
+@@ -0,0 +1,12 @@
++---
++- name: restart redis
++  service:
++    name: redis_{{ redis_port }}
++    state: restarted
++  when: redis_as_service
++
++- name: restart sentinel
++  service:
++    name: sentinel_{{ redis_sentinel_port }}
++    state: restarted
++  when: redis_as_service
+diff --git a/ansible/roles/DavidWittman.redis/meta/.galaxy_install_info b/ansible/roles/DavidWittman.redis/meta/.galaxy_install_info
+new file mode 100644
+index 0000000..1461cec
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/meta/.galaxy_install_info
+@@ -0,0 +1 @@
++{install_date: 'Fri Oct 14 15:43:12 2016', version: 1.1.0}
+diff --git a/ansible/roles/DavidWittman.redis/meta/main.yml b/ansible/roles/DavidWittman.redis/meta/main.yml
+new file mode 100644
+index 0000000..95062ce
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/meta/main.yml
+@@ -0,0 +1,21 @@
++---
++galaxy_info:
++  author: David Wittman
++  description: Highly configurable role to install Redis and Redis Sentinel from source
++  min_ansible_version: 1.6.3
++  license: MIT
++  platforms:
++    - name: Ubuntu
++      versions:
++        - all
++    - name: Debian
++      versions:
++        - all
++    - name: EL
++      versions:
++        - 6
++  categories:
++    - database
++    - database:nosql
++
++dependencies: []
+diff --git a/ansible/roles/DavidWittman.redis/tasks/check_vars.yml b/ansible/roles/DavidWittman.redis/tasks/check_vars.yml
+new file mode 100644
+index 0000000..4cc56f3
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/check_vars.yml
+@@ -0,0 +1,23 @@
++---
++# Checksums for Ansible 1.x must be sha256
++- name: check for checksum (ansible 1.x)
++  fail:
++    msg: >
++      A sha256 checksum must be provided for Ansible 1.x when
++      redis_verify_checksum is set to true.
++  when:
++    - ansible_version.major < 2
++    - redis_verify_checksum|bool
++    - redis_checksum is not defined or redis_checksum|length != 64
++
++- name: check for checksum (ansible 2.x)
++  fail:
++    msg: >
++      There is no sha1 checksum defined for version {{ redis_version }} in
++      vars/main.yml. Set redis_checksum manually or submit a PR to add this
++      version.
++  when:
++    - ansible_version.major >= 2
++    - redis_verify_checksum|bool
++    - redis_checksum is not defined
++    - redis_version not in redis_checksums
+diff --git a/ansible/roles/DavidWittman.redis/tasks/install.yml b/ansible/roles/DavidWittman.redis/tasks/install.yml
+new file mode 100644
+index 0000000..5ed3792
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/install.yml
+@@ -0,0 +1,117 @@
++---
++- name: install dependencies
++  apt:
++    pkg: "{{ item }}"
++    update_cache: yes
++    cache_valid_time: 86400
++    state: present
++  with_items:
++    - gcc
++    - make
++    - libc6-dev
++  when: ansible_os_family == "Debian"
++
++- name: install dependencies
++  yum:
++    name: "{{ item }}"
++    state: present
++  with_items:
++    - gcc
++    - make
++  when: ansible_os_family == "RedHat"
++
++- name: install dependencies
++  zypper:
++    name: "{{ item }}"
++    state: present
++  with_items:
++    - gcc
++    - make
++  when: ansible_os_family == 'Suse'
++
++- name: enable overcommit in sysctl
++  sysctl:
++    name: vm.overcommit_memory
++    value: 1
++    state: present
++    reload: yes
++    ignoreerrors: yes
++  when: redis_travis_ci is not defined
++
++# get_url on Ansible 1.x only supports sha256 checksumming, so we're only
++# using `redis_checksums` on Ansible 2.x because they're sha1.
++- name: set redis checksum
++  set_fact:
++    redis_checksum: "sha1:{{ redis_checksums[redis_version] }}"
++  when:
++    - redis_verify_checksum|bool
++    - redis_checksum is not defined
++    - redis_version in redis_checksums
++    - ansible_version.major >= 2
++
++- name: download redis (ansible 1.x)
++  get_url:
++    url: "{{ redis_download_url }}"
++    dest: /usr/local/src/redis-{{ redis_version }}.tar.gz
++    sha256sum: "{{ redis_checksum|default(omit) }}"
++  when:
++    - not redis_tarball
++    - ansible_version.major < 2
++
++- name: download redis (ansible 2.x)
++  get_url:
++    url: "{{ redis_download_url }}"
++    dest: /usr/local/src/redis-{{ redis_version }}.tar.gz
++    checksum: "{{ redis_checksum|default(omit) }}"
++  when:
++    - not redis_tarball
++    - ansible_version.major >= 2
++
++- name: upload redis
++  copy:
++    src: "{{ redis_tarball }}"
++    dest: /usr/local/src/redis-{{ redis_version }}.tar.gz
++  when: redis_tarball
++
++- name: extract redis tarball
++  unarchive:
++    src: /usr/local/src/redis-{{ redis_version }}.tar.gz
++    dest: /usr/local/src
++    creates: /usr/local/src/redis-{{ redis_version }}/Makefile
++    copy: no
++
++- name: compile redis
++  command: make -j{{ ansible_processor_cores + 1 }}
++  args:
++    chdir: /usr/local/src/redis-{{ redis_version }}
++    creates: /usr/local/src/redis-{{ redis_version }}/src/redis-server
++
++- name: create redis install directory
++  file:
++    path: "{{ redis_install_dir }}"
++    state: directory
++
++- name: create /etc/redis
++  file:
++    path: /etc/redis
++    state: directory
++
++- name: add redis user
++  user:
++    name: "{{ redis_user }}"
++    comment: "Redis"
++    home: "{{ redis_install_dir }}"
++    shell: /bin/false
++    system: yes
++
++- name: create /var/run/redis
++  file:
++    path: /var/run/redis
++    state: directory
++    owner: "{{ redis_user }}"
++
++- name: install redis
++  command: make PREFIX={{ redis_install_dir }} install
++  args:
++    chdir: /usr/local/src/redis-{{ redis_version }}
++    creates: "{{ redis_install_dir }}/bin/redis-server"
+diff --git a/ansible/roles/DavidWittman.redis/tasks/local_facts.yml b/ansible/roles/DavidWittman.redis/tasks/local_facts.yml
+new file mode 100644
+index 0000000..0020d28
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/local_facts.yml
+@@ -0,0 +1,9 @@
++- name: create facts directory
++  file:
++    path: /etc/ansible/facts.d
++    state: directory
++
++- name: create redis facts
++  template:
++    src: etc/ansible/facts.d/redis.fact.j2
++    dest: /etc/ansible/facts.d/redis.fact
+diff --git a/ansible/roles/DavidWittman.redis/tasks/main.yml b/ansible/roles/DavidWittman.redis/tasks/main.yml
+new file mode 100644
+index 0000000..0e6db24
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/main.yml
+@@ -0,0 +1,17 @@
++---
++- include: check_vars.yml
++
++- include: install.yml
++
++- include: server.yml
++  when: not redis_sentinel
++  tags:
++    - config
++
++- include: sentinel.yml
++  when: redis_sentinel
++  tags:
++    - config
++
++- include: local_facts.yml
++  when: redis_local_facts|bool
+diff --git a/ansible/roles/DavidWittman.redis/tasks/sentinel.yml b/ansible/roles/DavidWittman.redis/tasks/sentinel.yml
+new file mode 100644
+index 0000000..cb65bf5
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/sentinel.yml
+@@ -0,0 +1,103 @@
++---
++- name: create sentinel working directory
++  file:
++    path: "{{ redis_sentinel_dir }}"
++    state: directory
++    recurse: yes
++    owner: "{{ redis_user }}"
++
++- name: create sentinel init script
++  template:
++    src: "{{ item }}"
++    dest: /etc/init.d/sentinel_{{ redis_sentinel_port }}
++    mode: 0755
++  # Choose the distro-specific template. We must specify the templates
++  # path here because with_first_found tries to find files in files/
++  with_first_found:
++    - files:
++      - "{{ ansible_os_family }}/redis_sentinel.init.j2"
++      - default/redis_sentinel.init.j2
++      paths:
++        - ../templates
++  when: redis_as_service
++
++- name: set sentinel to start at boot
++  service:
++    name: sentinel_{{ redis_sentinel_port }}
++    enabled: yes
++  when: redis_as_service
++
++# Check then create log dir to prevent aggressively overwriting permissions
++- name: check if sentinel log directory exists
++  stat:
++    path: "{{ redis_sentinel_logfile|dirname }}"
++  register: sentinel_logdir
++  changed_when: false
++  when: redis_sentinel_logfile != '""'
++
++- name: create sentinel log directory if it does not exist
++  file:
++    state: directory
++    path: "{{ redis_sentinel_logfile|dirname }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when:
++    - redis_sentinel_logfile != '""'
++    - not sentinel_logdir.stat.exists
++
++- name: touch the sentinel log file
++  file:
++    state: touch
++    path: "{{ redis_sentinel_logfile }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when: redis_sentinel_logfile != '""'
++
++- name: check if sentinel pid directory exists
++  stat:
++    path: "{{ redis_sentinel_pidfile|dirname }}"
++  register: sentinel_piddir
++  changed_when: false
++  when: redis_sentinel_pidfile != '""'
++
++- name: create sentinel pid directory if it does not exist
++  file:
++    state: directory
++    path: "{{ redis_sentinel_pidfile|dirname }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when:
++    - redis_sentinel_pidfile != '""'
++    - not sentinel_piddir.stat.exists
++
++- name: create sentinel config file
++  template:
++    src: redis_sentinel.conf.j2
++    dest: /etc/redis/sentinel_{{ redis_sentinel_port }}.conf
++    owner: "{{ redis_user }}"
++  notify: restart sentinel
++
++- name: add sentinel init config file
++  template:
++    dest: /etc/sysconfig/sentinel_{{ redis_sentinel_port }}
++    src: redis.init.conf.j2
++  when: ansible_os_family == "RedHat"
++  notify: restart sentinel
++
++- name: add sentinel init config file
++  template:
++    dest: /etc/default/sentinel_{{ redis_sentinel_port }}
++    src: redis.init.conf.j2
++  when: ansible_os_family == "Debian"
++  notify: restart sentinel
++
++# Flush handlers before ensuring the service is started to prevent
++# a start and then restart
++- name: flush handlers to apply config changes
++  meta: flush_handlers
++
++- name: ensure sentinel is running
++  service:
++    name: sentinel_{{ redis_sentinel_port }}
++    state: started
++  when: redis_as_service
+diff --git a/ansible/roles/DavidWittman.redis/tasks/server.yml b/ansible/roles/DavidWittman.redis/tasks/server.yml
+new file mode 100644
+index 0000000..500483b
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/tasks/server.yml
+@@ -0,0 +1,105 @@
++---
++- name: create redis working directory
++  file:
++    path: "{{ redis_dir }}"
++    state: directory
++    recurse: yes
++    owner: "{{ redis_user }}"
++
++- name: create redis init script
++  template:
++    src: "{{ item }}"
++    dest: /etc/init.d/redis_{{ redis_port }}
++    mode: 0755
++  # Choose the distro-specific template. We must specify the templates
++  # path here because with_first_found tries to find files in files/
++  with_first_found:
++    - files:
++      - "{{ ansible_os_family }}/redis.init.j2"
++      - default/redis.init.j2
++      paths:
++        - ../templates
++  when: redis_as_service
++ 
++- name: set redis to start at boot
++  service:
++    name: redis_{{ redis_port }}
++    enabled: yes
++  when: redis_as_service
++   
++# Check then create log dir to prevent aggressively overwriting permissions
++- name: check if log directory exists
++  stat:
++    path: "{{ redis_logfile|dirname }}"
++  register: logdir
++  changed_when: false
++  when: redis_logfile != '""'
++
++- name: create log directory if it does not exist
++  file:
++    state: directory
++    path: "{{ redis_logfile|dirname }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when:
++    - redis_logfile != '""'
++    - not logdir.stat.exists
++
++- name: touch the log file
++  file:
++    state: touch
++    path: "{{ redis_logfile }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when: redis_logfile != '""'
++
++- name: check if pid directory exists
++  stat:
++    path: "{{ redis_pidfile|dirname }}"
++  register: piddir
++  changed_when: false
++  when: redis_pidfile != '""'
++
++- name: create pid directory if it does not exist
++  file:
++    state: directory
++    path: "{{ redis_pidfile|dirname }}"
++    owner: "{{ redis_user }}"
++    group: "{{ redis_group }}"
++  when:
++    - redis_pidfile != '""'
++    - not piddir.stat.exists
++
++- name: create redis config file
++  template:
++    src: redis.conf.j2
++    dest: /etc/redis/{{ redis_port }}.conf
++    owner: "{{ redis_user }}"
++  notify: restart redis
++
++- name: add redis init config file
++  template:
++    dest: /etc/sysconfig/redis_{{ redis_port }}
++    src: redis.init.conf.j2
++    mode: 0600
++  when: ansible_os_family == "RedHat"
++  notify: restart redis
++
++- name: add redis init config file
++  template:
++    dest: /etc/default/redis_{{ redis_port }}
++    src: redis.init.conf.j2
++    mode: 0600
++  when: ansible_os_family == "Debian"
++  notify: restart redis
++
++# Flush handlers before ensuring the service is started to prevent
++# a start and then restart
++- name: flush handlers to apply config changes
++  meta: flush_handlers
++
++- name: ensure redis is running
++  service:
++    name: redis_{{ redis_port }}
++    state: started
++  when: redis_as_service
+diff --git a/ansible/roles/DavidWittman.redis/templates/Debian/redis.init.j2 b/ansible/roles/DavidWittman.redis/templates/Debian/redis.init.j2
+new file mode 100644
+index 0000000..dd34995
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/Debian/redis.init.j2
+@@ -0,0 +1,94 @@
++#!/bin/sh
++#
++# Redis init script for Debian-based distros
++#
++#
++### BEGIN INIT INFO
++# Provides:          redis_{{ redis_port }}
++# Required-Start:    $network $local_fs $remote_fs
++# Required-Stop:     $network $local_fs $remote_fs
++# Default-Start:     2 3 4 5
++# Default-Stop:      0 1 6
++# Should-Start:      $syslog $named
++# Should-Stop:       $syslog $named
++# Short-Description: Start and stop redis_{{ redis_port }}
++# Description:       Redis key-value store
++### END INIT INFO
++
++# Source the Linux Standard Base functions
++. /lib/lsb/init-functions
++
++REDIS_PORT={{ redis_port }}
++NAME=redis_${REDIS_PORT}
++DAEMON={{ redis_install_dir }}/bin/redis-server
++PIDFILE={{ redis_pidfile }}
++PIDFILE_DIR=$(dirname "${PIDFILE}")
++
++REDIS_USER={{ redis_user }}
++CONF="/etc/redis/${REDIS_PORT}.conf"
++CLIEXEC="{{ redis_install_dir }}/bin/redis-cli -p ${REDIS_PORT}"
++
++if [ -r /etc/default/redis_${REDIS_PORT} ]; then
++    . /etc/default/redis_${REDIS_PORT}
++fi
++
++if [ -n "$REDIS_PASSWORD" ]; then
++    CLIEXEC="${CLIEXEC} -a ${REDIS_PASSWORD}"
++fi
++
++if [ -n "$BIND_ADDRESS" ]; then
++    CLIEXEC="${CLIEXEC} -h ${BIND_ADDRESS}"
++fi
++
++case "$1" in
++    start)
++        if [ -f "$PIDFILE" ]; then
++            status_of_proc -p "$PIDFILE" $DAEMON "$NAME process" && return 0
++        fi
++
++        if [ -n "$NOFILE_LIMIT" ]; then
++            ulimit -n $NOFILE_LIMIT
++        fi
++
++        if [ ! -d "$PIDFILE_DIR" ]; then
++            mkdir "$PIDFILE_DIR"
++            chown ${REDIS_USER}:${REDIS_USER} "$PIDFILE_DIR"
++            chmod 0755 "$PIDFILE_DIR"
++        fi
++
++        log_daemon_msg "Starting $NAME..."
++        if start-stop-daemon --start -q --oknodo -p "$PIDFILE" -c $REDIS_USER --exec $DAEMON -- $CONF; then
++            log_end_msg 0
++        else
++            log_end_msg 1
++        fi
++        ;;
++    stop)
++        if [ -f "$PIDFILE" ]; then
++            PID=$(cat "$PIDFILE")
++            log_daemon_msg "Stopping $NAME..."
++            $CLIEXEC shutdown
++            while [ -x /proc/${PID} ]; do
++                log_daemon_msg "Waiting for Redis to shutdown ..."
++                sleep 1
++            done
++            log_end_msg 0
++        else
++            log_daemon_msg "$NAME is not running"
++            log_end_msg 0
++        fi
++        ;;
++    status)
++        status_of_proc -p "$PIDFILE" $DAEMON "$NAME" && exit 0 || exit $?
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|status|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/Debian/redis_sentinel.init.j2 b/ansible/roles/DavidWittman.redis/templates/Debian/redis_sentinel.init.j2
+new file mode 100644
+index 0000000..9ee1b15
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/Debian/redis_sentinel.init.j2
+@@ -0,0 +1,94 @@
++#!/bin/sh
++#
++# Redis init script for Debian-based distros
++#
++#
++### BEGIN INIT INFO
++# Provides:          sentinel_{{ redis_sentinel_port }}
++# Required-Start:    $network $local_fs $remote_fs
++# Required-Stop:     $network $local_fs $remote_fs
++# Default-Start:     2 3 4 5
++# Default-Stop:      0 1 6
++# Should-Start:      $syslog $named
++# Should-Stop:       $syslog $named
++# Short-Description: Start and stop sentinel_{{ redis_sentinel_port }}
++# Description:       Redis Sentinel monitor
++### END INIT INFO
++
++# Source the Linux Standard Base functions
++. /lib/lsb/init-functions
++
++SENTINEL_PORT={{ redis_sentinel_port }}
++NAME="sentinel_${SENTINEL_PORT}"
++DAEMON={{ redis_install_dir }}/bin/redis-server
++PIDFILE={{ redis_sentinel_pidfile }}
++PIDFILE_DIR=$(dirname "${PIDFILE}")
++
++REDIS_USER={{ redis_user }}
++CONF="/etc/redis/sentinel_${SENTINEL_PORT}.conf"
++CLIEXEC="{{ redis_install_dir }}/bin/redis-cli -p ${SENTINEL_PORT}"
++
++if [ -r /etc/default/sentinel_${SENTINEL_PORT} ]; then
++    . /etc/default/sentinel_${SENTINEL_PORT}
++fi
++
++if [ -n "$REDIS_PASSWORD" ]; then
++    CLIEXEC="${CLIEXEC} -a ${REDIS_PASSWORD}"
++fi
++
++if [ -n "$BIND_ADDRESS" ]; then
++    CLIEXEC="${CLIEXEC} -h ${BIND_ADDRESS}"
++fi
++
++case "$1" in
++    start)
++        if [ -f "$PIDFILE" ]; then
++            status_of_proc -p "$PIDFILE" $DAEMON "$NAME process" && return 0
++        fi
++
++        if [ -n "$NOFILE_LIMIT" ]; then
++            ulimit -n $NOFILE_LIMIT
++        fi
++
++        if [ ! -d "$PIDFILE_DIR" ]; then
++            mkdir "$PIDFILE_DIR"
++            chown ${REDIS_USER}:${REDIS_USER} "$PIDFILE_DIR"
++            chmod 0755 "$PIDFILE_DIR"
++        fi
++
++        log_daemon_msg "Starting $NAME..."
++        if start-stop-daemon --start -q --oknodo -p "$PIDFILE" -c $REDIS_USER --exec $DAEMON -- $CONF --sentinel; then
++            log_end_msg 0
++        else
++            log_end_msg 1
++        fi
++        ;;
++    stop)
++        if [ -f "$PIDFILE" ]; then
++            PID=$(cat "$PIDFILE")
++            log_daemon_msg "Stopping $NAME..."
++            $CLIEXEC shutdown
++            while [ -x /proc/${PID} ]; do
++                log_daemon_msg "Waiting for Redis Sentinel to shutdown ..."
++                sleep 1
++            done
++            log_end_msg 0
++        else
++            log_daemon_msg "$NAME is not running"
++            log_end_msg 0
++        fi
++        ;;
++    status)
++        status_of_proc -p "$PIDFILE" $DAEMON "$NAME" && exit 0 || exit $?
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|status|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/RedHat/redis.init.j2 b/ansible/roles/DavidWittman.redis/templates/RedHat/redis.init.j2
+new file mode 100644
+index 0000000..2b34d7a
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/RedHat/redis.init.j2
+@@ -0,0 +1,74 @@
++#!/bin/sh
++#
++# Simple Redis init.d script for RHEL-based distros
++#
++# chkconfig: - 58 74
++# description: Redis key-value store
++#
++# Source function library
++. /etc/init.d/functions
++
++REDIS_PORT={{ redis_port }}
++NAME="redis_${REDIS_PORT}"
++
++if [ -r /etc/sysconfig/redis_${REDIS_PORT} ]; then
++    . /etc/sysconfig/redis_${REDIS_PORT}
++fi
++
++REDIS_USER={{ redis_user }}
++PIDFILE={{ redis_pidfile }}
++CONF="/etc/redis/${REDIS_PORT}.conf"
++EXEC={{ redis_install_dir }}/bin/redis-server
++CLIEXEC="{{ redis_install_dir }}/bin/redis-cli -p ${REDIS_PORT}"
++
++if [ -n "$REDIS_PASSWORD" ]; then
++    CLIEXEC="${CLIEXEC} -a ${REDIS_PASSWORD}"
++fi
++
++if [ -n "$BIND_ADDRESS" ]; then
++    CLIEXEC="${CLIEXEC} -h ${BIND_ADDRESS}"
++fi
++
++case "$1" in
++    start)
++        if [ -f $PIDFILE ]
++        then
++                echo "$PIDFILE exists, process is already running or crashed"
++        else
++                if [ -n "$NOFILE_LIMIT" ]; then
++                    ulimit -n $NOFILE_LIMIT
++                fi
++                echo "Starting Redis server..."
++                daemon --user $REDIS_USER $EXEC $CONF
++        fi
++        ;;
++    stop)
++        if [ ! -f $PIDFILE ]
++        then
++                echo "$PIDFILE does not exist, process is not running"
++        else
++                PID=$(cat $PIDFILE)
++                echo "Stopping ..."
++                $CLIEXEC shutdown
++                while [ -x /proc/${PID} ]
++                do
++                    echo "Waiting for Redis to shutdown ..."
++                    sleep 1
++                done
++                echo "Redis stopped"
++        fi
++        ;;
++    status)
++        status -p "${PIDFILE}" "redis_${REDIS_PORT}"
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|status|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/RedHat/redis_sentinel.init.j2 b/ansible/roles/DavidWittman.redis/templates/RedHat/redis_sentinel.init.j2
+new file mode 100644
+index 0000000..a6f8754
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/RedHat/redis_sentinel.init.j2
+@@ -0,0 +1,75 @@
++#!/bin/sh
++#
++# Redis Sentinel init script for RHEL-based distros
++#
++# chkconfig: - 58 74
++# description: Redis Sentinel monitor
++#
++# Source function library
++. /etc/init.d/functions
++
++SENTINEL_PORT={{ redis_sentinel_port }}
++NAME="sentinel_${SENTINEL_PORT}"
++
++if [ -r /etc/sysconfig/sentinel_${SENTINEL_PORT} ]; then
++    . /etc/sysconfig/sentinel_${SENTINEL_PORT}
++fi
++
++REDIS_USER={{ redis_user }}
++BIND_ADDRESS={{ redis_sentinel_bind }}
++PIDFILE={{ redis_sentinel_pidfile }}
++CONF="/etc/redis/sentinel_${SENTINEL_PORT}.conf"
++EXEC={{ redis_install_dir }}/bin/redis-server
++CLIEXEC="{{ redis_install_dir }}/bin/redis-cli -p ${SENTINEL_PORT}"
++
++if [ -n "$REDIS_PASSWORD" ]; then
++    CLIEXEC="${CLIEXEC} -a ${REDIS_PASSWORD}"
++fi
++
++if [ -n "$BIND_ADDRESS" ]; then
++    CLIEXEC="${CLIEXEC} -h ${BIND_ADDRESS}"
++fi
++
++case "$1" in
++    start)
++        if [ -f $PIDFILE ]
++        then
++                echo "$PIDFILE exists, process is already running or crashed"
++        else
++                if [ -n "$NOFILE_LIMIT" ]; then
++                    ulimit -n $NOFILE_LIMIT
++                fi
++                echo "Starting Redis Sentinel..."
++                daemon --user $REDIS_USER $EXEC $CONF --sentinel
++        fi
++        ;;
++    stop)
++        if [ ! -f $PIDFILE ]
++        then
++                echo "$PIDFILE does not exist, process is not running"
++        else
++                PID=$(cat $PIDFILE)
++                echo "Stopping ..."
++                $CLIEXEC shutdown
++                while [ -x /proc/${PID} ]
++                do
++                    echo "Waiting for Redis Sentinel to shutdown ..."
++                    sleep 1
++                done
++                echo "Redis stopped"
++        fi
++        ;;
++    status)
++        status -p "${PIDFILE}" "sentinel_${SENTINEL_PORT}"
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|status|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/default/redis.init.j2 b/ansible/roles/DavidWittman.redis/templates/default/redis.init.j2
+new file mode 100644
+index 0000000..9090cb1
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/default/redis.init.j2
+@@ -0,0 +1,55 @@
++#!/bin/sh
++#
++# Simple Redis init.d script conceived to work on Linux systems
++# as it does use of the /proc filesystem.
++
++REDIS_PORT={{ redis_port }}
++REDIS_USER={{ redis_user }}
++EXEC={{ redis_install_dir }}/bin/redis-server
++{% if redis_password -%}
++CLIEXEC='{{ redis_install_dir }}/bin/redis-cli -a {{ redis_password }}'
++{% else -%}
++CLIEXEC={{ redis_install_dir }}/bin/redis-cli
++{% endif %}
++
++PIDFILE={{ redis_pidfile }}
++CONF="/etc/redis/${REDIS_PORT}.conf"
++
++case "$1" in
++    start)
++        if [ -f $PIDFILE ]
++        then
++                echo "$PIDFILE exists, process is already running or crashed"
++        else
++                ulimit -n {{ redis_nofile_limit }}
++                echo "Starting Redis server..."
++                su $REDIS_USER -c "$EXEC $CONF"
++        fi
++        ;;
++    stop)
++        if [ ! -f $PIDFILE ]
++        then
++                echo "$PIDFILE does not exist, process is not running"
++        else
++                PID=$(cat $PIDFILE)
++                echo "Stopping ..."
++                $CLIEXEC -p $REDIS_PORT shutdown
++                while [ -x /proc/${PID} ]
++                do
++                    echo "Waiting for Redis to shutdown ..."
++                    sleep 1
++                done
++                echo "Redis stopped"
++        fi
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/default/redis_sentinel.init.j2 b/ansible/roles/DavidWittman.redis/templates/default/redis_sentinel.init.j2
+new file mode 100644
+index 0000000..9008889
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/default/redis_sentinel.init.j2
+@@ -0,0 +1,56 @@
++#!/bin/sh
++#
++# Simple Redis Sentinel init.d script conceived to work on
++# Linux systems as it does use of the /proc filesystem.
++
++SENTINEL_PORT={{ redis_sentinel_port }}
++REDIS_USER={{ redis_user }}
++BIND_ADDRESS={{ redis_sentinel_bind }}
++EXEC={{ redis_install_dir }}/bin/redis-server
++{% if redis_password -%}
++CLIEXEC='{{ redis_install_dir }}/bin/redis-cli -a {{ redis_password }}'
++{% else -%}
++CLIEXEC={{ redis_install_dir }}/bin/redis-cli
++{% endif %}
++
++PIDFILE={{ redis_sentinel_pidfile }}
++CONF="/etc/redis/sentinel_${SENTINEL_PORT}.conf"
++
++case "$1" in
++    start)
++        if [ -f $PIDFILE ]
++        then
++                echo "$PIDFILE exists, process is already running or crashed"
++        else
++                ulimit -n {{ redis_nofile_limit }}
++                echo "Starting Redis Sentinel..."
++                su $REDIS_USER -c "$EXEC $CONF --sentinel"
++        fi
++        ;;
++    stop)
++        if [ ! -f $PIDFILE ]
++        then
++                echo "$PIDFILE does not exist, process is not running"
++        else
++                PID=$(cat $PIDFILE)
++                echo "Stopping ..."
++                $CLIEXEC -p $SENTINEL_PORT -h $BIND_ADDRESS shutdown
++                while [ -x /proc/${PID} ]
++                do
++                    echo "Waiting for Redis Sentinel to shutdown ..."
++                    sleep 1
++                done
++                echo "Redis stopped"
++        fi
++        ;;
++    restart|force-reload)
++        ${0} stop
++        ${0} start
++        ;;
++    *)
++        echo "Usage: /etc/init.d/$NAME {start|stop|restart|force-reload}" >&2
++        exit 1
++        ;;
++esac
++
++exit 0
+diff --git a/ansible/roles/DavidWittman.redis/templates/etc/ansible/facts.d/redis.fact.j2 b/ansible/roles/DavidWittman.redis/templates/etc/ansible/facts.d/redis.fact.j2
+new file mode 100644
+index 0000000..a22aa17
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/etc/ansible/facts.d/redis.fact.j2
+@@ -0,0 +1,7 @@
++{
++  "bind": "{{ redis_bind }}",
++  "port": "{{ redis_port }}",
++  "sentinel_bind": "{{ redis_sentinel_bind }}",
++  "sentinel_port": "{{ redis_sentinel_port }}",
++  "sentinel_monitors": {{ redis_sentinel_monitors | to_json }}
++}
+\ No newline at end of file
+diff --git a/ansible/roles/DavidWittman.redis/templates/redis.conf.j2 b/ansible/roles/DavidWittman.redis/templates/redis.conf.j2
+new file mode 100644
+index 0000000..b54220f
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/redis.conf.j2
+@@ -0,0 +1,99 @@
++# {{ ansible_managed }}
++
++# General
++daemonize {{ redis_daemonize }}
++pidfile {{ redis_pidfile }}
++dir {{ redis_dir }}
++port {{ redis_port }}
++bind {{ redis_bind }}
++{% if redis_socket_path -%}
++unixsocket {{ redis_socket_path }}
++unixsocketperm {{ redis_socket_perm }}
++{% endif -%}
++timeout {{ redis_timeout }}
++tcp-keepalive {{ redis_tcp_keepalive }}
++tcp-backlog {{ redis_tcp_backlog }}
++loglevel {{ redis_loglevel }}
++logfile {{ redis_logfile }}
++syslog-enabled {{ redis_syslog_enabled }}
++syslog-ident {{ redis_syslog_ident }}
++syslog-facility {{ redis_syslog_facility }}
++databases {{ redis_databases }}
++
++# Snapshotting
++{% for save in redis_save -%}
++save {{ save }}
++{% endfor -%}
++stop-writes-on-bgsave-error yes
++rdbcompression yes
++rdbchecksum yes
++dbfilename dump.rdb
++
++# Replication
++{% if redis_slaveof -%}
++slaveof {{ redis_slaveof }}
++{% endif -%}
++slave-serve-stale-data yes
++slave-read-only {{ redis_slave_read_only }}
++repl-disable-tcp-nodelay no
++{% if redis_repl_backlog_size -%}
++repl-backlog-size {{ redis_repl_backlog_size }}
++{% endif -%}
++slave-priority {{ redis_slave_priority }}
++{% if redis_min_slaves_to_write -%}
++min-slaves-to-write {{ redis_min_slaves_to_write }}
++{% endif -%}
++{% if redis_min_slaves_max_lag -%}
++min-slaves-max-lag {{ redis_min_slaves_max_lag }}
++{% endif -%}
++{% if redis_password -%}
++masterauth {{ redis_password }}
++{% endif -%}
++
++# Security
++{% if redis_password -%}
++requirepass {{ redis_password }}
++{% endif -%}
++{% for command in redis_rename_commands -%}
++rename-command {{ command }}
++{% endfor -%}
++
++# Limits
++maxclients {{ redis_maxclients }}
++{% if redis_maxmemory -%}
++maxmemory {{ redis_maxmemory }}
++{% endif -%}
++maxmemory-policy {{ redis_maxmemory_policy }}
++
++# Append Only Mode
++appendonly {{ redis_appendonly }}
++appendfilename "{{ redis_appendfilename }}"
++appendfsync {{ redis_appendfsync }}
++no-appendfsync-on-rewrite {{ redis_no_appendfsync_on_rewrite }}
++auto-aof-rewrite-percentage {{ redis_auto_aof_rewrite_percentage }}
++auto-aof-rewrite-min-size {{ redis_auto_aof_rewrite_min_size }}
++
++# Lua
++lua-time-limit 5000
++
++# Slow Log
++slowlog-log-slower-than {{ redis_slowlog_log_slower_than }}
++slowlog-max-len {{ redis_slowlog_max_len }}
++
++# Event Notification
++notify-keyspace-events ""
++
++# Advanced
++hash-max-ziplist-entries 512
++hash-max-ziplist-value 64
++list-max-ziplist-entries 512
++list-max-ziplist-value 64
++set-max-intset-entries 512
++zset-max-ziplist-entries 128
++zset-max-ziplist-value 64
++activerehashing yes
++client-output-buffer-limit normal 0 0 0
++client-output-buffer-limit slave 256mb 64mb 60
++client-output-buffer-limit pubsub 32mb 8mb 60
++hz 10
++aof-rewrite-incremental-fsync yes
+diff --git a/ansible/roles/DavidWittman.redis/templates/redis.init.conf.j2 b/ansible/roles/DavidWittman.redis/templates/redis.init.conf.j2
+new file mode 100644
+index 0000000..80a56b6
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/redis.init.conf.j2
+@@ -0,0 +1,12 @@
++# Init script variables for Redis and Redis Sentinel
++# Stored in /etc/{sysconfig,default}/{redis,sentinel}_$port
++
++{% if redis_password %}
++REDIS_PASSWORD='{{ redis_password }}'
++{% endif %}
++NOFILE_LIMIT='{{ redis_nofile_limit }}'
++{% if redis_sentinel %}
++BIND_ADDRESS='{{ redis_sentinel_bind.split()[0] }}'
++{% else %}
++BIND_ADDRESS='{{ redis_bind.split()[0] }}'
++{% endif %}
+diff --git a/ansible/roles/DavidWittman.redis/templates/redis_sentinel.conf.j2 b/ansible/roles/DavidWittman.redis/templates/redis_sentinel.conf.j2
+new file mode 100644
+index 0000000..624e5b1
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/templates/redis_sentinel.conf.j2
+@@ -0,0 +1,23 @@
++# redis-sentinel {{ redis_version }} configuration file
++# sentinel_{{ redis_sentinel_port }}.conf
++
++daemonize {{ redis_daemonize }}
++dir {{ redis_sentinel_dir }}
++pidfile {{ redis_sentinel_pidfile }}
++port {{ redis_sentinel_port }}
++bind {{ redis_sentinel_bind }}
++
++{% for master in redis_sentinel_monitors -%}
++sentinel monitor {{ master.name }} {{ master.host }} {{ master.port }} {{ master.quorum|d('2') }}
++{% for option in ('auth_pass', 'down_after_milliseconds', 'parallel_syncs', 'failover_timeout', 'notification_script', 'client_reconfig_script') -%}
++{% if master[option] is defined and master[option] -%}
++sentinel {{ option|replace('_', '-') }} {{ master.name }} {{ master[option] }}
++{% endif %}
++{% endfor -%}
++
++{% endfor -%}
++
++logfile {{ redis_sentinel_logfile }}
++syslog-enabled {{ redis_syslog_enabled }}
++syslog-ident {{ redis_sentinel_syslog_ident }}
++syslog-facility {{ redis_syslog_facility }}
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/checksum/default.yml b/ansible/roles/DavidWittman.redis/test/integration/checksum/default.yml
+new file mode 100644
+index 0000000..6571f5f
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/checksum/default.yml
+@@ -0,0 +1,12 @@
++---
++- hosts: localhost
++  vars:
++    redis_verify_checksum: true
++    redis_version: 3.0.7
++  pre_tasks:
++    - name: set checksum value for Ansible 1.x
++      set_fact:
++        redis_checksum: b2a791c4ea3bb7268795c45c6321ea5abcc24457178373e6a6e3be6372737f23
++      when: ansible_version.major < 2
++  roles:
++    - ansible-redis
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/redis_spec.rb b/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/redis_spec.rb
+new file mode 100644
+index 0000000..3d78028
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/redis_spec.rb
+@@ -0,0 +1,24 @@
++require 'spec_helper'
++
++describe 'Redis' do
++  describe service('redis_6379') do
++    it { should be_enabled }
++    it { should be_running }
++  end
++
++  describe port(6379) do
++    it { should be_listening.on('0.0.0.0').with('tcp') }
++  end
++
++  describe file('/etc/redis/6379.conf') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:content) { should match /port 6379/ }
++  end
++
++  describe file('/var/run/redis/6379.pid') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:size) { should > 0 }
++  end
++end
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/spec_helper.rb b/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/spec_helper.rb
+new file mode 100644
+index 0000000..590c2fa
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/checksum/serverspec/spec_helper.rb
+@@ -0,0 +1,2 @@
++require 'serverspec'
++set :backend, :exec
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/default/default.yml b/ansible/roles/DavidWittman.redis/test/integration/default/default.yml
+new file mode 100644
+index 0000000..a60a9f5
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/default/default.yml
+@@ -0,0 +1,4 @@
++---
++- hosts: localhost
++  roles:
++    - ansible-redis
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/redis_spec.rb b/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/redis_spec.rb
+new file mode 100644
+index 0000000..ad159b6
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/redis_spec.rb
+@@ -0,0 +1,29 @@
++require 'spec_helper'
++
++describe 'Redis' do
++  describe service('redis_6379') do
++    it { should be_enabled }
++    it { should be_running }
++  end
++
++  describe port(6379) do
++    it { should be_listening.on('0.0.0.0').with('tcp') }
++  end
++
++  describe file('/etc/redis/6379.conf') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:content) { should match /port 6379/ }
++  end
++
++  describe file('/var/run/redis/6379.pid') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:size) { should > 0 }
++  end
++
++  describe file('/proc/sys/vm/overcommit_memory') do
++    it { should be_file }
++    it { should contain '1' }
++  end
++end
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/spec_helper.rb b/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/spec_helper.rb
+new file mode 100644
+index 0000000..590c2fa
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/default/serverspec/spec_helper.rb
+@@ -0,0 +1,2 @@
++require 'serverspec'
++set :backend, :exec
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/logfile/default.yml b/ansible/roles/DavidWittman.redis/test/integration/logfile/default.yml
+new file mode 100644
+index 0000000..585a126
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/logfile/default.yml
+@@ -0,0 +1,5 @@
++---
++- hosts: localhost
++  roles:
++    - role: ansible-redis
++      redis_logfile: "/var/log/redis.log"
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/log_spec.rb b/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/log_spec.rb
+new file mode 100644
+index 0000000..981f9e8
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/log_spec.rb
+@@ -0,0 +1,23 @@
++require 'spec_helper'
++
++describe 'Redis' do
++  describe service('redis_6379') do
++    it { should be_enabled }
++    it { should be_running }
++  end
++
++  describe port(6379) do
++    it { should be_listening.with('tcp') }
++  end
++
++  describe file('/var/log/redis.log') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:size) { should > 0 }
++  end
++
++  describe file('/var/log') do
++    it { should be_directory }
++    it { should_not be_owned_by('redis') }
++  end
++end
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/spec_helper.rb b/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/spec_helper.rb
+new file mode 100644
+index 0000000..590c2fa
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/logfile/serverspec/spec_helper.rb
+@@ -0,0 +1,2 @@
++require 'serverspec'
++set :backend, :exec
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/sentinel/default.yml b/ansible/roles/DavidWittman.redis/test/integration/sentinel/default.yml
+new file mode 100644
+index 0000000..8d76bb5
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/sentinel/default.yml
+@@ -0,0 +1,6 @@
++---
++- hosts: localhost
++  roles:
++    - role: ansible-redis
++      redis_sentinel: true
++      redis_sentinel_logfile: "/var/log/redis_sentinel.log"
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/sentinel_spec.rb b/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/sentinel_spec.rb
+new file mode 100644
+index 0000000..ff9d7da
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/sentinel_spec.rb
+@@ -0,0 +1,24 @@
++require 'spec_helper'
++
++describe 'Redis' do
++  describe service('sentinel_26379') do
++    it { should be_enabled }
++    it { should be_running }
++  end
++
++  describe port(26379) do
++    it { should be_listening.on('0.0.0.0').with('tcp') }
++  end
++
++  describe file('/etc/redis/sentinel_26379.conf') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:content) { should match /port 26379/ }
++  end
++
++  describe file('/var/run/redis/sentinel_26379.pid') do
++    it { should be_file }
++    it { should be_owned_by 'redis' }
++    its(:size) { should > 0 }
++  end
++end
+diff --git a/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/spec_helper.rb b/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/spec_helper.rb
+new file mode 100644
+index 0000000..590c2fa
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/integration/sentinel/serverspec/spec_helper.rb
+@@ -0,0 +1,2 @@
++require 'serverspec'
++set :backend, :exec
+diff --git a/ansible/roles/DavidWittman.redis/test/test_all.yml b/ansible/roles/DavidWittman.redis/test/test_all.yml
+new file mode 100644
+index 0000000..6ac929f
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/test_all.yml
+@@ -0,0 +1,27 @@
++---
++# Test for all replication components of Redis
++# We're using non-standard ports here so they don't conflict with other
++# tests on Travis.
++- hosts: all
++  remote_user: root
++  vars:
++    redis_version: 3.0.7
++    redis_password: ant1r3z
++    redis_travis_ci: true
++  roles:
++    - role: ../../ansible-redis
++      redis_port: 7379
++    - role: ../../ansible-redis
++      redis_port: 8379
++      redis_slaveof: 127.0.0.1 6379
++      redis_local_facts: false
++    - role: ../../ansible-redis
++      redis_sentinel: true
++      redis_sentinel_port: 27379
++      redis_sentinel_monitors:
++        - name: master01
++          host: 127.0.0.1
++          port: 7379
++          quorum: 1
++          auth_pass: "{{ redis_password }}"
++      redis_local_facts: false
+diff --git a/ansible/roles/DavidWittman.redis/test/test_sentinel.yml b/ansible/roles/DavidWittman.redis/test/test_sentinel.yml
+new file mode 100644
+index 0000000..cadd14e
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/test_sentinel.yml
+@@ -0,0 +1,12 @@
++---
++- hosts: all
++  remote_user: root
++  vars:
++    redis_travis_ci: true
++    redis_sentinel: true
++    redis_sentinel_monitors:
++      - name: master01
++        host: localhost
++        port: 6379
++  roles:
++    - ../../ansible-redis
+diff --git a/ansible/roles/DavidWittman.redis/test/test_server.yml b/ansible/roles/DavidWittman.redis/test/test_server.yml
+new file mode 100644
+index 0000000..cf608b5
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/test/test_server.yml
+@@ -0,0 +1,7 @@
++---
++- hosts: all
++  remote_user: root
++  vars:
++    redis_travis_ci: true
++  roles:
++    - ../../ansible-redis
+diff --git a/ansible/roles/DavidWittman.redis/vars/main.yml b/ansible/roles/DavidWittman.redis/vars/main.yml
+new file mode 100644
+index 0000000..be193a6
+--- /dev/null
++++ b/ansible/roles/DavidWittman.redis/vars/main.yml
+@@ -0,0 +1,38 @@
++# From https://github.com/antirez/redis-hashes
++redis_checksums:
++  2.8.0-rc5: bd27589b71a0b406b982485051f32b7c40c9d2c1
++  2.8.0-rc6: d13db76145a9844e2a3302f561e907056f9e21a0
++  2.8.0: 41fd86128995f06502954dd6d6269c22f5e389f7
++  2.8.1: 1bb493318ff6c0c87334eb95640b89a16e4357d8
++  2.8.2: 3be038b9d095ce3dece7918aae810d14fe770400
++  2.6.17: b5423e1c423d502074cbd0b21bd4e820409d2003
++  2.8.3: a751371eeed5f5f02965eb34d989c1963dd8d8c7
++  2.8.4: 79b156cc9d8bff5a022fdc6d28d5c42999ddcb4f
++  2.8.5: f0eb48609ff66ead3c7f06bbe8a8dd1aa7341b73
++  2.8.6: 8680046580c75987961241f2e1e417c242b91a49
++  2.8.7: acc369093ec74223e6da207921595187f7e64998
++  2.8.8: aa811f399db58c92c8ec5e48271d307e9ab8eb81
++  2.8.9: 003ccdc175816e0a751919cf508f1318e54aac1e
++  2.8.10: 339ddf82e01a16ad912d1c1d59b02f3fab58d9d9
++  2.8.11: 3e3a4603781514f239f040287d3ef1097eb02a76
++  2.8.12: 56c86a4f9eccaf29f934433c7c67a175e404b2f6
++  2.8.13: a72925a35849eb2d38a1ea076a3db82072d4ee43
++  2.8.14: fd0edc045f2b53057d7f6ab38e2fe99086c87e8d
++  2.8.15: afc0d753cea68a26038775df2dea75a76e3d0e1d
++  2.8.16: 198045c8291dd832788ac8a17d2e565752499942
++  2.8.17: 913479f9d2a283bfaadd1444e17e7bab560e5d1e
++  3.0.0-rc1: f0934db86791e32053f8b21ddec5965793edff19
++  2.8.18: 129629262fea2bc60daa542f52457e65e6aa7fd5
++  2.8.19: 3e362f4770ac2fdbdce58a5aa951c1967e0facc8
++  3.0.0: c75fd32900187a7c9f9d07c412ea3b3315691c65
++  2.8.20: 45f134113fb3d75b8c37f7968e46565a70800091
++  3.0.1: fe1d06599042bfe6a0e738542f302ce9533dde88
++  2.8.21: 52f619d3d301fc7ae498a1d4cb4d44ecebc5b0f9
++  3.0.2: a38755fe9a669896f7c5d8cd3ebbf76d59712002
++  3.0.3: 0e2d7707327986ae652df717059354b358b83358
++  3.0.4: cccc58b2b8643930840870f17280fcae57ed7675
++  2.8.22: 78a70b32cdd3a4ccc58880d1821fb828d091bb36
++  2.8.23: 828fc5d4011e6141fabb2ad6ebc193e8f0d08cfa
++  3.0.5: ad3ee178c42bfcfd310c72bbddffbbe35db9b4a6
++  3.0.6: 4b1c7b1201984bca8f7f9c6c58862f6928cf0a25
++  3.0.7: e56b4b7e033ae8dbf311f9191cf6fdf3ae974d1c
