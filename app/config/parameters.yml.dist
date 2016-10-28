@@ -19,3 +19,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     redis_host:        localhost
+    loggly_token:      ~

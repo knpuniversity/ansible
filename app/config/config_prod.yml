@@ -19,3 +19,7 @@ monolog:
             level: debug
         console:
             type:  console
+        loggly:
+            type: loggly
+            token: '%loggly_token%'
+            tags: [exception]
