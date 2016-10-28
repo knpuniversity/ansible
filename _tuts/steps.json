@@ -224,7 +224,17 @@
             "id": "roles-install-redis-role",
             "name": "Roles: Install Redis role",
             "description": null
+        },
+        {
+            "id": "vault-send-logs-to-loggly",
+            "name": "Vault: Send logs to Loggly",
+            "description": null
+        },
+        {
+            "id": "vault-store-loggly-token-in-vault",
+            "name": "Vault: Store Loggly token in vault",
+            "description": null
         }
     ],
-    "sha": "2a0c19997730c0a18bbae4701e4cccc4f47183dc"
+    "sha": "03bed4e1c22ea274a8d0884e0cac2fbe4846d14c"
 }

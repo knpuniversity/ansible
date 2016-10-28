@@ -1,0 +1,37 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index aeadecb..b43f189 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -13,6 +13,10 @@
+       default: prod
+       private: no
+ 
++  vars_files:
++    - ./vars/vault.yml
++    - ./vars/parameters.yml
++
+   environment:
+     SYMFONY_ENV: "{{ symfony_env|lower }}"
+ 
+diff --git a/ansible/vars/parameters.yml b/ansible/vars/parameters.yml
+new file mode 100644
+index 0000000..bb489a4
+--- /dev/null
++++ b/ansible/vars/parameters.yml
+@@ -0,0 +1,2 @@
++---
++secret: '{{ vault_secret }}'
+diff --git a/ansible/vars/vault.yml b/ansible/vars/vault.yml
+new file mode 100644
+index 0000000..d18d795
+--- /dev/null
++++ b/ansible/vars/vault.yml
+@@ -0,0 +1,8 @@
++$ANSIBLE_VAULT;1.1;AES256
++66643566313034323131663964393163316333643935393265306364363733636364303061393530
++6264373839336538333366653861623364336463373763610a333331343163373561613634613339
++62353736363963396637656562396261393364306632336536303366316537383932313832356530
++6263306662386234330a343138343732356235363030613161336665356431363132333934383033
++39366165323431653635653333366366373133383338303464303362323361666139663832663934
++31383265376335383666353837303937373835626431616563623832666632333764643035326530
++376131303830313265366433316531613263
