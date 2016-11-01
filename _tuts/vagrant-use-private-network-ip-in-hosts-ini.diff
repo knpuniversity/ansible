@@ -1,5 +1,5 @@
 diff --git a/Vagrantfile b/Vagrantfile
-index c03a2f9..970203d 100644
+index 35b7908..98bf9db 100644
 --- a/Vagrantfile
 +++ b/Vagrantfile
 @@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|

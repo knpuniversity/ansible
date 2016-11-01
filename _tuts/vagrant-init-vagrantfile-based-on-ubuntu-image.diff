@@ -10,7 +10,7 @@ index 93821ad..7e355dd 100644
 +/.vagrant/
 diff --git a/Vagrantfile b/Vagrantfile
 new file mode 100644
-index 0000000..c03a2f9
+index 0000000..35b7908
 --- /dev/null
 +++ b/Vagrantfile
 @@ -0,0 +1,71 @@
@@ -28,7 +28,7 @@ index 0000000..c03a2f9
 +
 +  # Every Vagrant development environment requires a box. You can search for
 +  # boxes at https://atlas.hashicorp.com/search.
-+  config.vm.box = "bento/ubuntu-16.04"
++  config.vm.box = "ubuntu/trusty64"
 +
 +  # Disable automatic box update checking. If you disable this, then
 +  # boxes will only be checked for updates when the user runs
