@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index efdc00b..1147dac 100644
+index efdc00b..738f8a4 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -32,6 +32,11 @@
+@@ -32,6 +32,12 @@
        become: yes
        apt: name=mysql-server state=latest
  
@@ -14,6 +14,7 @@ index efdc00b..1147dac 100644
 +      apt: name="{{ item }}" state=latest
 +      with_items:
 +        - php7.0-cli
++        - php7.0-curl
 +        - php7.0-fpm
 +        - php7.0-intl
 +        - php7.0-mysql

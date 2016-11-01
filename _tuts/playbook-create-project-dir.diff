@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 690ce81..4c9d3f4 100644
+index 39b6a8a..89b8e42 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -48,3 +48,7 @@
+@@ -49,3 +49,7 @@
      - name: Set date.timezone for FPM
        become: yes
        lineinfile: dest=/etc/php/7.0/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"

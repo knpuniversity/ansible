@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index fd684ed..bb00b09 100644
+index c2214b3..ba2c0ab 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -78,29 +78,46 @@
+@@ -79,29 +79,46 @@
      - name: Create project directory and set its permissions
        become: yes
        file: path="{{ symfony_root_dir }}" state=directory owner="{{ ansible_ssh_user }}" group="{{ ansible_ssh_user }}" recurse=yes
