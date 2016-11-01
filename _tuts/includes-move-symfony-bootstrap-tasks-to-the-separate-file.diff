@@ -44,7 +44,7 @@ index 0000000..cd23b5f
 +  tags:
 +    - deploy
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index b22adfc..27cb3c5 100644
+index f86a8b8..59eb04c 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -112,44 +112,8 @@
