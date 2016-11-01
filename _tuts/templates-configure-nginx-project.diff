@@ -32,7 +32,7 @@ index ffaa6da..7676359 100644
        become: yes
        apt: name=mysql-server state=latest
 diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
-index 99aee5b..a1421b8 100644
+index 2ae3584..9f8adbb 100644
 --- a/ansible/templates/symfony.conf
 +++ b/ansible/templates/symfony.conf
 @@ -1,6 +1,6 @@
