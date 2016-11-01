@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 9e2cfa3..a744aa3 100644
+index 50ed1a5..5ae3129 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,6 +5,7 @@
@@ -10,7 +10,7 @@ index 9e2cfa3..a744aa3 100644
  
    tasks:
      - ping: ~
-@@ -88,6 +89,9 @@
+@@ -92,6 +93,9 @@
      - name: Install Composer's dependencies
        composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
  

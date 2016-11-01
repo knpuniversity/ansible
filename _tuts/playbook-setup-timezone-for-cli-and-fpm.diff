@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 738f8a4..39b6a8a 100644
+index 955d2c0..65558d5 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -41,3 +41,11 @@
+@@ -45,3 +45,11 @@
          - php7.0-fpm
          - php7.0-intl
          - php7.0-mysql

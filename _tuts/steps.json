@@ -76,6 +76,16 @@
             "description": null
         },
         {
+            "id": "playbook-add-ppa-repository-for-php-7",
+            "name": "Playbook: Add PPA repository for PHP 7",
+            "description": null
+        },
+        {
+            "id": "playbook-install-php-7-0-instead-of-default-5-5",
+            "name": "Playbook: Install PHP 7.0 instead of default 5.5",
+            "description": null
+        },
+        {
             "id": "playbook-add-task-to-install-nginx-and-expose-80-port",
             "name": "Playbook: Add task to install Nginx and expose 80 port",
             "description": null
@@ -236,5 +246,5 @@
             "description": null
         }
     ],
-    "sha": "002670934d4b0b358e14d1fed050c9cd0bb74634"
+    "sha": "71e0b01b0b45a43fca9d795b7105f63e0e8c7e02"
 }

@@ -12,7 +12,7 @@ index 98bf9db..c259b10 100644
    # Create a private network, which allows host-only access to the machine
    # using a specific IP.
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ac5fbeb..76398d3 100644
+index 4554f34..b67feea 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -24,6 +24,10 @@
@@ -23,6 +23,6 @@ index ac5fbeb..76398d3 100644
 +      become: yes
 +      apt: name=nginx state=latest
 +
-     - name: Install PHP CLI
+     - name: Add PHP 7 PPA repository
        become: yes
-       apt: name=php7.0-cli state=latest
+       apt_repository: repo=ppa:ondrej/php

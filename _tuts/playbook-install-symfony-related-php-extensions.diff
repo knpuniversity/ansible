@@ -1,10 +1,10 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index efdc00b..738f8a4 100644
+index e2b1d70..955d2c0 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -32,6 +32,12 @@
+@@ -36,6 +36,12 @@
        become: yes
-       apt: name=mysql-server state=latest
+       apt_repository: repo=ppa:ondrej/php
  
 -    - name: Install PHP CLI
 -      become: yes

@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f091ef9..5ae313b 100644
+index 1561018..21e1606 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -65,4 +65,4 @@
+@@ -69,4 +69,4 @@
        get_url: url=https://getcomposer.org/composer.phar dest=/usr/local/bin/composer mode="a+x"
  
      - name: Install Composer's dependencies

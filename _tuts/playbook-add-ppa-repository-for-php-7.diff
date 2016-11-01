@@ -1,0 +1,15 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 89d39a1..d2dcb6e 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -24,6 +24,10 @@
+       become: yes
+       apt: name=git state=latest
+ 
++    - name: Add PHP 7 PPA repository
++      become: yes
++      apt_repository: repo=ppa:ondrej/php
++
+     - name: Install PHP CLI
+       become: yes
+       apt: name=php5-cli state=latest

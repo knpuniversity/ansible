@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 89b8e42..2245f2d 100644
+index 3a211f6..aeb5b6b 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -52,4 +52,4 @@
+@@ -56,4 +56,4 @@
  
      - name: Create project directory and set its permissions
        become: yes
