@@ -244,7 +244,12 @@
             "id": "vault-store-loggly-token-in-vault",
             "name": "Vault: Store Loggly token in vault",
             "description": null
+        },
+        {
+            "id": "vagrant-provision-add-ansible-provisioner",
+            "name": "Vagrant provision: Add Ansible provisioner",
+            "description": null
         }
     ],
-    "sha": "7fe6a2d7fd3b5dc840f924fb613f310d0c1dac68"
+    "sha": "23252f1161c79630a5ef2bab16a07f449847910a"
 }
