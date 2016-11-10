@@ -249,7 +249,12 @@
             "id": "vagrant-provision-add-ansible-provisioner",
             "name": "Vagrant provision: Add Ansible provisioner",
             "description": null
+        },
+        {
+            "id": "aws-deploy-app-to-the-ec2-instance",
+            "name": "AWS: Deploy app to the EC2 instance",
+            "description": null
         }
     ],
-    "sha": "23252f1161c79630a5ef2bab16a07f449847910a"
+    "sha": "98ffd7e7621c14bcdf4557738a87db5bfa286e9e"
 }

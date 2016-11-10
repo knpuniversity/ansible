@@ -1,0 +1,11 @@
+diff --git a/ansible/hosts.ini b/ansible/hosts.ini
+index 3455abc..36010cd 100644
+--- a/ansible/hosts.ini
++++ b/ansible/hosts.ini
+@@ -3,3 +3,6 @@ localhost ansible_connection=local
+ 
+ [vb]
+ 192.168.33.10 ansible_user=vagrant ansible_ssh_pass=vagrant
++
++[aws]
++54.205.128.194 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/KnpU-Tutorial.pem
