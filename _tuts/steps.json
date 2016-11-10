@@ -254,7 +254,12 @@
             "id": "aws-deploy-app-to-the-ec2-instance",
             "name": "AWS: Deploy app to the EC2 instance",
             "description": null
+        },
+        {
+            "id": "aws-override-default-server-name-with-ec2-public-dns",
+            "name": "AWS: Override default server name with EC2 public DNS",
+            "description": null
         }
     ],
-    "sha": "98ffd7e7621c14bcdf4557738a87db5bfa286e9e"
+    "sha": "bc7ffb5f2f0c3d2d98b131a28a58e75b2c2b643e"
 }
