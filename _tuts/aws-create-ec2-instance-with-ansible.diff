@@ -1,0 +1,22 @@
+diff --git a/ansible/aws.yml b/ansible/aws.yml
+new file mode 100644
+index 0000000..45f20a7
+--- /dev/null
++++ b/ansible/aws.yml
+@@ -0,0 +1,16 @@
++---
++- hosts: localhost
++  connection: local
++  gather_facts: False
++
++  tasks:
++    - name: Create an instance
++      ec2:
++        instance_type: t1.micro
++        image: ami-123456
++        wait: yes
++        group: web_access
++        count: 1
++        key_name: KnpU-Tutorial
++        region: us-east-1
++      register: ec2

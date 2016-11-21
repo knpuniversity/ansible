@@ -259,7 +259,12 @@
             "id": "aws-override-default-server-name-with-ec2-public-dns",
             "name": "AWS: Override default server name with EC2 public DNS",
             "description": null
+        },
+        {
+            "id": "aws-create-ec2-instance-with-ansible",
+            "name": "AWS: Create EC2 instance with Ansible",
+            "description": null
         }
     ],
-    "sha": "bc7ffb5f2f0c3d2d98b131a28a58e75b2c2b643e"
+    "sha": "69f7ddbd00af09a506d4761c783710e1739090e9"
 }
