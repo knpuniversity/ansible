@@ -21,6 +21,16 @@
             "description": null
         },
         {
+            "id": "inventory-show-second-local-ip",
+            "name": "Inventory: Show second local ip",
+            "description": null
+        },
+        {
+            "id": "inventory-remove-duplicate-local-ip",
+            "name": "Inventory: Remove duplicate local ip",
+            "description": null
+        },
+        {
             "id": "vagrant-init-vagrantfile-based-on-ubuntu-image",
             "name": "Vagrant: Init Vagrantfile based on Ubuntu image",
             "description": null
@@ -38,6 +48,11 @@
         {
             "id": "playbook-add-task-to-ping-all-hosts",
             "name": "Playbook: Add task to ping all hosts",
+            "description": null
+        },
+        {
+            "id": "playbook-execute-play-on-vb-only",
+            "name": "Playbook: Execute play on vb only",
             "description": null
         },
         {
@@ -266,5 +281,5 @@
             "description": null
         }
     ],
-    "sha": "98e367f95960fbf849e6d7313cb3508025a59b58"
+    "sha": "2d83ff73c14f378923906197dd2406edf17c770d"
 }

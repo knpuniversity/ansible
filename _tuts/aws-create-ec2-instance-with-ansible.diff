@@ -35,17 +35,6 @@ index 0000000..f7f1942
 +
 +    # debug the output to see what AWS returns back
 +    - debug: var=ec2
-diff --git a/ansible/hosts.ini b/ansible/hosts.ini
-index 36010cd..f891545 100644
---- a/ansible/hosts.ini
-+++ b/ansible/hosts.ini
-@@ -1,5 +1,5 @@
- [local]
--localhost ansible_connection=local
-+127.0.0.1 ansible_connection=local
- 
- [vb]
- 192.168.33.10 ansible_user=vagrant ansible_ssh_pass=vagrant
 diff --git a/ansible/vars/parameters.yml b/ansible/vars/parameters.yml
 index a515deb..28d17d1 100644
 --- a/ansible/vars/parameters.yml
