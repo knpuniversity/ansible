@@ -12,17 +12,17 @@ index 98bf9db..c259b10 100644
    # Create a private network, which allows host-only access to the machine
    # using a specific IP.
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 4554f34..b67feea 100644
+index 54c76f8..464512a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -24,6 +24,10 @@
-       become: yes
+@@ -20,6 +20,10 @@
+       become: true
        apt: name=git state=latest
  
 +    - name: Install Nginx web server
-+      become: yes
++      become: true
 +      apt: name=nginx state=latest
 +
      - name: Add PHP 7 PPA repository
-       become: yes
+       become: true
        apt_repository: repo=ppa:ondrej/php

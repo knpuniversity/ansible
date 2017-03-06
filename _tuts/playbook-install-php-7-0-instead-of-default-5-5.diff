@@ -1,10 +1,10 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index d2dcb6e..4554f34 100644
+index bcd23bf..54c76f8 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -30,4 +30,4 @@
+@@ -26,4 +26,4 @@
  
      - name: Install PHP CLI
-       become: yes
+       become: true
 -      apt: name=php5-cli state=latest
-+      apt: name=php7.0-cli state=latest
++      apt: name=php7.1-cli state=latest

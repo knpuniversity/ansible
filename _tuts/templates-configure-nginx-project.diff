@@ -1,9 +1,9 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ffaa6da..7676359 100644
+index 0ea9c57..0cac48c 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,9 @@
- - hosts: all
+ - hosts: vb
  
    vars:
 +    server_name: mootube.l
@@ -12,8 +12,8 @@ index ffaa6da..7676359 100644
  
    tasks:
      - ping: ~
-@@ -31,6 +33,18 @@
-       become: yes
+@@ -27,6 +29,18 @@
+       become: true
        apt: name=nginx state=latest
  
 +    - name: Add Symfony config template to the Nginx available sites

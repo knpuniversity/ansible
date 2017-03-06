@@ -1,9 +1,9 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index b67feea..e2b1d70 100644
+index 464512a..f7969ce 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -28,6 +28,10 @@
-       become: yes
+@@ -24,6 +24,10 @@
+       become: true
        apt: name=nginx state=latest
  
 +    - name: Install MySQL DB server
@@ -11,5 +11,5 @@ index b67feea..e2b1d70 100644
 +      apt: name=mysql-server state=latest
 +
      - name: Add PHP 7 PPA repository
-       become: yes
+       become: true
        apt_repository: repo=ppa:ondrej/php

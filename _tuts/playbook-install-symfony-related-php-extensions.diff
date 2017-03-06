@@ -1,20 +1,19 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index e2b1d70..955d2c0 100644
+index f7969ce..416117d 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -36,6 +36,12 @@
-       become: yes
+@@ -32,6 +32,12 @@
+       become: true
        apt_repository: repo=ppa:ondrej/php
  
 -    - name: Install PHP CLI
--      become: yes
--      apt: name=php7.0-cli state=latest
 +    - name: Install PHP packages
-+      become: yes
+       become: true
+-      apt: name=php7.1-cli state=latest
 +      apt: name="{{ item }}" state=latest
 +      with_items:
-+        - php7.0-cli
-+        - php7.0-curl
-+        - php7.0-fpm
-+        - php7.0-intl
-+        - php7.0-mysql
++        - php7.1-cli
++        - php7.1-curl
++        - php7.1-fpm
++        - php7.1-intl
++        - php7.1-mysql
