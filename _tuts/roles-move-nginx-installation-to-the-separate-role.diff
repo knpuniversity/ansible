@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 71d8caf..27cf24f 100644
+index a6fa6a9..2211f28 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@
@@ -20,140 +20,107 @@ index 71d8caf..27cf24f 100644
    tasks:
      - ping: ~
  
-@@ -42,26 +44,6 @@
-       become: true
-       apt: name=git state=latest
+@@ -47,35 +49,6 @@
+         name: git
+         state: latest
  
 -    - name: Install Nginx web server
 -      become: true
--      apt: name=nginx state=latest
+-      apt:
+-        name: nginx
+-        state: latest
 -      notify: Restart Nginx
 -
 -    - name: Add Symfony config template to the Nginx available sites
--      become: yes
--      template: src=templates/symfony.conf dest="/etc/nginx/sites-available/{{ server_name }}.conf"
+-      become: true
+-      template:
+-        src: templates/symfony.conf
+-        dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
 -      notify: Restart Nginx
 -
 -    - name: Enable Symfony config template from Nginx available sites
--      become: yes
--      file: src="/etc/nginx/sites-available/{{ server_name }}.conf" dest="/etc/nginx/sites-enabled/{{ server_name }}.conf" state=link
+-      become: true
+-      file:
+-        src: "/etc/nginx/sites-available/{{ server_name }}.conf"
+-        dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
+-        state: link
 -      notify: Restart Nginx
 -
 -    - name: Add enabled Nginx site to /etc/hosts
--      become: yes
--      lineinfile: dest=/etc/hosts regexp="{{ server_name }}" line="127.0.0.1 {{ server_name }}"
--      notify: Restart Nginx
+-      become: true
+-      lineinfile:
+-        dest: /etc/hosts
+-        regexp: "{{ server_name }}"
+-        line: "127.0.0.1 {{ server_name }}"
 -
      - name: Install MySQL DB server
-       become: yes
-       apt: name=mysql-server state=latest
-@@ -112,10 +94,6 @@
+       become: true
+       apt:
+@@ -148,12 +121,6 @@
      - include: ./includes/symfony-bootstrap.yml
  
    handlers:
 -    - name: Restart Nginx
--      become: yes
--      service: name=nginx state=restarted
+-      become: true
+-      service:
+-        name: nginx
+-        state: restarted
 -
      - name: Restart PHP-FPM
-       become: yes
-       service: name=php7.0-fpm state=restarted
+       become: true
+       service:
 diff --git a/ansible/roles/nginx/handlers/main.yml b/ansible/roles/nginx/handlers/main.yml
 new file mode 100644
-index 0000000..ab07d65
+index 0000000..0515ae2
 --- /dev/null
 +++ b/ansible/roles/nginx/handlers/main.yml
-@@ -0,0 +1,4 @@
+@@ -0,0 +1,6 @@
 +---
 +- name: Restart Nginx
-+  become: yes
-+  service: name=nginx state=restarted
++  become: true
++  service:
++    name: nginx
++    state: restarted
+\ No newline at end of file
 diff --git a/ansible/roles/nginx/tasks/main.yml b/ansible/roles/nginx/tasks/main.yml
 new file mode 100644
-index 0000000..4992469
+index 0000000..265e891
 --- /dev/null
 +++ b/ansible/roles/nginx/tasks/main.yml
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,29 @@
 +---
 +- name: Install Nginx web server
 +  become: true
-+  apt: name=nginx state=latest
++  apt:
++    name: nginx
++    state: latest
 +  notify: Restart Nginx
 +
 +- name: Add Symfony config template to the Nginx available sites
 +  become: true
-+  template: src=symfony.conf dest="/etc/nginx/sites-available/{{ server_name }}.conf"
++  template:
++    src: templates/symfony.conf
++    dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
 +  notify: Restart Nginx
 +
 +- name: Enable Symfony config template from Nginx available sites
 +  become: true
-+  file: src="/etc/nginx/sites-available/{{ server_name }}.conf" dest="/etc/nginx/sites-enabled/{{ server_name }}.conf" state=link
++  file:
++    src: "/etc/nginx/sites-available/{{ server_name }}.conf"
++    dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
++    state: link
 +  notify: Restart Nginx
 +
 +- name: Add enabled Nginx site to /etc/hosts
 +  become: true
-+  lineinfile: dest=/etc/hosts regexp="{{ server_name }}" line="127.0.0.1 {{ server_name }}"
-+  notify: Restart Nginx
-diff --git a/ansible/roles/nginx/templates/symfony.conf b/ansible/roles/nginx/templates/symfony.conf
-new file mode 100644
-index 0000000..9f8adbb
---- /dev/null
-+++ b/ansible/roles/nginx/templates/symfony.conf
-@@ -0,0 +1,54 @@
-+server {
-+    server_name {{ server_name }};
-+    root {{ symfony_web_dir }};
-+
-+    location / {
-+        # try to serve file directly, fallback to app.php
-+        try_files $uri /app.php$is_args$args;
-+    }
-+    # DEV
-+    # This rule should only be placed on your development environment
-+    # In production, don't include this and don't deploy app_dev.php or config.php
-+    location ~ ^/(app_dev|config)\.php(/|$) {
-+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-+        include fastcgi_params;
-+        # When you are using symlinks to link the document root to the
-+        # current version of your application, you should pass the real
-+        # application path instead of the path to the symlink to PHP
-+        # FPM.
-+        # Otherwise, PHP's OPcache may not properly detect changes to
-+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
-+        # for more information).
-+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-+        fastcgi_param DOCUMENT_ROOT $realpath_root;
-+    }
-+    # PROD
-+    location ~ ^/app\.php(/|$) {
-+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-+        include fastcgi_params;
-+        # When you are using symlinks to link the document root to the
-+        # current version of your application, you should pass the real
-+        # application path instead of the path to the symlink to PHP
-+        # FPM.
-+        # Otherwise, PHP's OPcache may not properly detect changes to
-+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
-+        # for more information).
-+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-+        fastcgi_param DOCUMENT_ROOT $realpath_root;
-+        # Prevents URIs that include the front controller. This will 404:
-+        # http://domain.tld/app.php/some-path
-+        # Remove the internal directive to allow URIs like this
-+        internal;
-+    }
-+
-+    # return 404 for all other php files not matching the front controller
-+    # this prevents access to other php files you don't want to be accessible.
-+    location ~ \.php$ {
-+      return 404;
-+    }
-+
-+    error_log /var/log/nginx/{{ server_name }}_error.log;
-+    access_log /var/log/nginx/{{ server_name }}_access.log;
-+}
++  lineinfile:
++    dest: /etc/hosts
++    regexp: "{{ server_name }}"
++    line: "127.0.0.1 {{ server_name }}"
+diff --git a/ansible/templates/symfony.conf b/ansible/roles/nginx/templates/symfony.conf
+similarity index 100%
+rename from ansible/templates/symfony.conf
+rename to ansible/roles/nginx/templates/symfony.conf
 diff --git a/ansible/roles/nginx/vars/main.yml b/ansible/roles/nginx/vars/main.yml
 new file mode 100644
 index 0000000..23d40bf

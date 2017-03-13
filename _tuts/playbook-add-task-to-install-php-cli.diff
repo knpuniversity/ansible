@@ -1,11 +1,14 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index cf08bfe..5f75fde 100644
+index 1089456..58ab663 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -20,3 +20,6 @@
-       become: true
-       apt: name=git state=latest
- 
+@@ -24,3 +24,9 @@
+       apt:
+         name: git
+         state: latest
++
 +    - name: Install PHP CLI
 +      become: true
-+      apt: name=php5-cli state=latest
++      apt:
++        name: php5-cli
++        state: latest

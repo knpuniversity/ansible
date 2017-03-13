@@ -1,17 +1,23 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
 new file mode 100644
-index 0000000..cd23b5f
+index 0000000..733a0a3
 --- /dev/null
 +++ b/ansible/includes/symfony-bootstrap.yml
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,45 @@
 +---
 +- name: Install Composer's dependencies
-+  composer: working_dir="{{ symfony_root_dir }}" no_dev="{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
++  composer:
++    working_dir: "{{ symfony_root_dir }}"
++    no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
 +  tags:
 +    - deploy
 +
 +- name: Fix var directory permissions
-+  file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
++  file:
++    path: "{{ symfony_var_dir }}"
++    state: directory
++    mode: 0777
++    recurse: yes
 +  changed_when: False
 +  tags:
 +    - permissions
@@ -44,20 +50,26 @@ index 0000000..cd23b5f
 +  tags:
 +    - deploy
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 45849c8..71d8caf 100644
+index f4553a5..a6fa6a9 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -108,44 +108,8 @@
+@@ -144,50 +144,8 @@
        tags:
          - deploy
  
 -    - name: Install Composer's dependencies
--      composer: working_dir="{{ symfony_root_dir }}" no_dev="{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+-      composer:
+-        working_dir: "{{ symfony_root_dir }}"
+-        no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
 -      tags:
 -        - deploy
 -
 -    - name: Fix var directory permissions
--      file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
+-      file:
+-        path: "{{ symfony_var_dir }}"
+-        state: directory
+-        mode: 0777
+-        recurse: yes
 -      changed_when: False
 -      tags:
 -        - permissions

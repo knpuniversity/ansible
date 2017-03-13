@@ -1,10 +1,11 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ef68058..48c2222 100644
+index 036f571..0538fc2 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -5,4 +5,5 @@
+@@ -5,5 +5,6 @@
      - ping: ~
  
      - name: Install cowsay - it's probably important
 +      become: true
-       apt: name=cowsay
+       apt:
+         name: cowsay

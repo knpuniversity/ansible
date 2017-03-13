@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 0ea9c57..0cac48c 100644
+index 26b29e8..18a15e8 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,9 @@
@@ -12,27 +12,35 @@ index 0ea9c57..0cac48c 100644
  
    tasks:
      - ping: ~
-@@ -27,6 +29,18 @@
-       become: true
-       apt: name=nginx state=latest
+@@ -34,6 +36,26 @@
+         name: nginx
+         state: latest
  
 +    - name: Add Symfony config template to the Nginx available sites
-+      become: yes
-+      template: src=templates/symfony.conf dest="/etc/nginx/sites-available/{{ server_name }}.conf"
++      become: true
++      template:
++        src: templates/symfony.conf
++        dest: "/etc/nginx/sites-available/{{ server_name }}.conf"
 +
 +    - name: Enable Symfony config template from Nginx available sites
-+      become: yes
-+      file: src="/etc/nginx/sites-available/{{ server_name }}.conf" dest="/etc/nginx/sites-enabled/{{ server_name }}.conf" state=link
++      become: true
++      file:
++        src: "/etc/nginx/sites-available/{{ server_name }}.conf"
++        dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
++        state: link
 +
 +    - name: Add enabled Nginx site to /etc/hosts
-+      become: yes
-+      lineinfile: dest=/etc/hosts regexp="{{ server_name }}" line="127.0.0.1 {{ server_name }}"
++      become: true
++      lineinfile:
++        dest: /etc/hosts
++        regexp: "{{ server_name }}"
++        line: "127.0.0.1 {{ server_name }}"
 +
      - name: Install MySQL DB server
-       become: yes
-       apt: name=mysql-server state=latest
+       become: true
+       apt:
 diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
-index 2ae3584..9f8adbb 100644
+index 49d8634..abc2ae3 100644
 --- a/ansible/templates/symfony.conf
 +++ b/ansible/templates/symfony.conf
 @@ -1,6 +1,6 @@

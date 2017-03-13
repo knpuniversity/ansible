@@ -1,12 +1,17 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 7589a10..0113c38 100644
+index c1e0bc7..ce19f9a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -49,3 +49,7 @@
-     - name: Set date.timezone for FPM
-       become: yes
-       lineinfile: dest=/etc/php/7.1/fpm/php.ini regexp="date.timezone =" line="date.timezone = UTC"
+@@ -67,3 +67,12 @@
+         dest: /etc/php/7.1/fpm/php.ini
+         regexp: "date.timezone ="
+         line: "date.timezone = UTC"
 +
 +    - name: Create project directory and set its permissions
-+      become: yes
-+      file: path="/var/www/project" state=directory owner="vagrant" group="vagrant" recurse=yes
++      become: true
++      file:
++        path: "/var/www/project"
++        state: directory
++        owner: "vagrant"
++        group: "vagrant"
++        recurse: yes

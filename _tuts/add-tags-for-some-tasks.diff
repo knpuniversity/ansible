@@ -1,32 +1,44 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f5f25c9..689ed0b 100644
+index a8f1a84..4dd97d8 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -79,29 +79,46 @@
-     - name: Create project directory and set its permissions
-       become: yes
-       file: path="{{ symfony_root_dir }}" state=directory owner="{{ ansible_user }}" group="{{ ansible_user }}" recurse=yes
+@@ -109,12 +109,16 @@
+         owner: "{{ ansible_user }}"
+         group: "{{ ansible_user }}"
+         recurse: yes
 +      tags:
 +        - deploy
  
      - name: Checkout Git repository
-       git: repo=https://github.com/knpuniversity/ansible.git dest="{{ symfony_root_dir }}" force=yes
+       git:
+         repo: https://github.com/knpuniversity/ansible.git
+         dest: "{{ symfony_root_dir }}"
+         force: yes
 +      tags:
 +        - deploy
  
      - name: Install Composer
-       become: yes
-       get_url: url=https://getcomposer.org/composer.phar dest=/usr/local/bin/composer mode="a+x"
+       become: true
+@@ -122,11 +126,15 @@
+         url: https://getcomposer.org/composer.phar
+         dest: /usr/local/bin/composer
+         mode: "a+x"
 +      tags:
 +        - deploy
  
      - name: Install Composer's dependencies
-       composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
+       composer:
+         working_dir: "{{ symfony_root_dir }}"
+         no_dev: no
 +      tags:
 +        - deploy
  
      - name: Fix var directory permissions
-       file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
+       file:
+@@ -134,16 +142,25 @@
+         state: directory
+         mode: 0777
+         recurse: yes
 +      tags:
 +        - permissions
 +        - deploy

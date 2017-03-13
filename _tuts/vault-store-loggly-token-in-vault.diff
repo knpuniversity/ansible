@@ -1,8 +1,8 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index b3d70a9..4454efc 100644
+index 5b506b9..45c584a 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
-@@ -17,6 +17,12 @@
+@@ -23,6 +23,12 @@
      regexp: "^    secret:"
      line: "    secret: {{ symfony_secret }}"
  

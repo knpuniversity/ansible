@@ -1,12 +1,12 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 812c215..0ea9c57 100644
+index 2dc44a7..26b29e8 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -44,6 +44,7 @@
+@@ -56,6 +56,7 @@
          - php7.1-fpm
          - php7.1-intl
          - php7.1-mysql
 +        - php7.1-xml
  
      - name: Set date.timezone for CLI
-       become: yes
+       become: true

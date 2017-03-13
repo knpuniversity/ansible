@@ -1,13 +1,13 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a51e4b8..99a3279 100644
+index ae020b1..515b1dd 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -10,7 +10,7 @@
- 
+@@ -12,7 +12,7 @@
      - name: Upgrade installed packages
        become: true
--      apt: upgrade=dist
-+      apt: upgrade=safe
+       apt:
+-        upgrade: dist
++        upgrade: safe
  
      - name: Install cowsay - it's probably important
        become: true

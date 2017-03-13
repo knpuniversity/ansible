@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 6c841dc..f1f58a7 100644
+index b5b8da3..2a9eba9 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,6 +5,7 @@
@@ -10,16 +10,20 @@ index 6c841dc..f1f58a7 100644
  
    tasks:
      - ping: ~
-@@ -88,6 +89,9 @@
-     - name: Install Composer's dependencies
-       composer: working_dir="{{ symfony_root_dir }}" no_dev="no"
+@@ -126,6 +127,13 @@
+         working_dir: "{{ symfony_root_dir }}"
+         no_dev: no
  
 +    - name: Fix var directory permissions
-+      file: path="{{ symfony_var_dir }}" state=directory mode=0777 recurse=yes
++      file:
++        path: "{{ symfony_var_dir }}"
++        state: directory
++        mode: 0777
++        recurse: yes
 +
    handlers:
      - name: Restart Nginx
-       become: yes
+       become: true
 diff --git a/web/app.php b/web/app.php
 index 4c2c465..737673b 100644
 --- a/web/app.php
