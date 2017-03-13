@@ -1,9 +1,9 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
 new file mode 100644
-index 0000000..733a0a3
+index 0000000..f1ca803
 --- /dev/null
 +++ b/ansible/includes/symfony-bootstrap.yml
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,46 @@
 +---
 +- name: Install Composer's dependencies
 +  composer:
@@ -24,16 +24,17 @@ index 0000000..733a0a3
 +    - deploy
 +
 +# Symfony console commands
-+- name: Create DB if not exist
++- name: Create DB if not exists
 +  command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
-+  register: result
-+  changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
++  register: db_create_result
++  changed_when: "{{ db_create_result.stdout|match('already exists. Skipped') }}"
 +  tags:
 +    - deploy
 +
 +- name: Execute migrations
 +  command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
-+  changed_when: "{{ result.stdout|match('No migrations to execute') }}"
++  register: db_migrations_result
++  changed_when: "{{ db_migrations_result.stdout|match('No migrations to execute') }}"
 +  tags:
 +    - deploy
 +
@@ -50,10 +51,10 @@ index 0000000..733a0a3
 +  tags:
 +    - deploy
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f4553a5..a6fa6a9 100644
+index 391133f..a6fa6a9 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -144,50 +144,8 @@
+@@ -144,51 +144,8 @@
        tags:
          - deploy
  
@@ -76,16 +77,17 @@ index f4553a5..a6fa6a9 100644
 -        - deploy
 -
 -    # Symfony console commands
--    - name: Create DB if not exist
+-    - name: Create DB if not exists
 -      command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
--      register: result
--      changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
+-      register: db_create_result
+-      changed_when: "{{ db_create_result.stdout|match('already exists. Skipped') }}"
 -      tags:
 -        - deploy
 -
 -    - name: Execute migrations
 -      command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
--      changed_when: "{{ result.stdout|match('No migrations to execute') }}"
+-      register: db_migrations_result
+-      changed_when: "{{ db_migrations_result.stdout|match('No migrations to execute') }}"
 -      tags:
 -        - deploy
 -

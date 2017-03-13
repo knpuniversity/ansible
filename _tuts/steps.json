@@ -186,8 +186,13 @@
             "description": null
         },
         {
-            "id": "add-tags-for-some-tasks",
-            "name": "Add tags for some tasks",
+            "id": "add-tags-permissions",
+            "name": "Add tags: permissions",
+            "description": null
+        },
+        {
+            "id": "add-tags-deploy",
+            "name": "Add tags: deploy",
             "description": null
         },
         {
@@ -281,5 +286,5 @@
             "description": null
         }
     ],
-    "sha": "21bd85f6c17d74f1a3cc35ece890fd7df1b5df8f"
+    "sha": "abef0cc897ebb08f341fcf82d6a47654529323a3"
 }

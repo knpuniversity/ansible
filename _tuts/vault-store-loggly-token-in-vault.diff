@@ -1,5 +1,5 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index 5b506b9..45c584a 100644
+index 3ff036d..5b1cc26 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -23,6 +23,12 @@
@@ -13,7 +13,7 @@ index 5b506b9..45c584a 100644
 +    line: "    loggly_token: {{ loggly_token }}"
 +
  # Symfony console commands
- - name: Create DB if not exist
+ - name: Create DB if not exists
    command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
 diff --git a/ansible/vars/parameters.yml b/ansible/vars/parameters.yml
 index 00aa7db..a515deb 100644

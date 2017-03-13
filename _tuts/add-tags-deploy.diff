@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a8f1a84..4dd97d8 100644
+index b401f66..ffdf0e4 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -109,12 +109,16 @@
@@ -35,16 +35,14 @@ index a8f1a84..4dd97d8 100644
  
      - name: Fix var directory permissions
        file:
-@@ -134,16 +142,25 @@
-         state: directory
-         mode: 0777
+@@ -136,16 +144,23 @@
          recurse: yes
-+      tags:
-+        - permissions
+       tags:
+         - permissions
 +        - deploy
  
      # Symfony console commands
-     - name: Create DB if not exist
+     - name: Create DB if not exists
        command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
 +      tags:
 +        - deploy

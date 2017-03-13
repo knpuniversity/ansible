@@ -1,20 +1,22 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 8c04e2f..2c89a1e 100644
+index 7ea3e38..8457c8b 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -151,18 +151,19 @@
-     - name: Create DB if not exist
+@@ -151,19 +151,20 @@
+     - name: Create DB if not exists
        command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
-       register: result
-+      changed_when: "{{ result.stdout|match('already exists. Skipped') }}"
+       register: db_create_result
++      changed_when: "{{ db_create_result.stdout|match('already exists. Skipped') }}"
        tags:
          - deploy
  
--    - debug: var=result
+-    - debug:
+-        var: db_create_result
 -
      - name: Execute migrations
        command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
-+      changed_when: "{{ result.stdout|match('No migrations to execute') }}"
++      register: db_migrations_result
++      changed_when: "{{ db_migrations_result.stdout|match('No migrations to execute') }}"
        tags:
          - deploy
  

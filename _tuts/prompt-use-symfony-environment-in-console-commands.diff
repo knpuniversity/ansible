@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 7102d47..f4553a5 100644
+index a6b0548..391133f 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -147,7 +147,7 @@
@@ -11,7 +11,7 @@ index 7102d47..f4553a5 100644
        tags:
          - deploy
  
-@@ -178,12 +178,13 @@
+@@ -179,12 +179,13 @@
  
      - name: Load data fixtures
        command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
