@@ -1,8 +1,8 @@
-diff --git a/ansible/host_vars/54.205.128.194.yml b/ansible/host_vars/54.205.128.194.yml
+diff --git a/ansible/group_vars/aws.yml b/ansible/group_vars/aws.yml
 new file mode 100644
 index 0000000..e6a33e1
 --- /dev/null
-+++ b/ansible/host_vars/54.205.128.194.yml
++++ b/ansible/group_vars/aws.yml
 @@ -0,0 +1,2 @@
 +---
 +host_server_name: ec2-54-205-128-194.compute-1.amazonaws.com
