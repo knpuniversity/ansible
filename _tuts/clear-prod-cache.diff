@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f96c39a..428ebee 100644
+index 8d1dcf7..899a331 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -167,6 +167,11 @@
+@@ -175,6 +175,11 @@
        tags:
          - deploy
  

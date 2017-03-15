@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 6b435a6..20bf672 100644
+index 1425654..4b51270 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -148,7 +148,7 @@
+@@ -156,7 +156,7 @@
      - name: Install Composer's dependencies
        composer:
          working_dir: "{{ symfony_root_dir }}"
@@ -11,7 +11,7 @@ index 6b435a6..20bf672 100644
        tags:
          - deploy
  
-@@ -180,11 +180,12 @@
+@@ -188,11 +188,12 @@
  
      - name: Load data fixtures
        command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'

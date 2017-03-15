@@ -1,8 +1,23 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 919e7e2..d1c4bb5 100644
+index 919e7e2..4fdd1b6 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -85,3 +85,14 @@
+@@ -22,6 +22,14 @@
+       apt:
+         name: cowsay
+ 
++    - name: Install low-level utilities
++      become: true
++      apt:
++        name: "{{ item }}"
++      with_items:
++        - zip
++        - unzip
++
+     - name: Install Git VCS
+       become: true
+       apt:
+@@ -85,3 +93,14 @@
          repo: https://github.com/symfony/symfony-standard.git
          dest: "{{ symfony_root_dir }}"
          force: yes

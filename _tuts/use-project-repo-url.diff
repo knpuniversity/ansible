@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 2a9eba9..8cc996e 100644
+index e169e31..acba6a9 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -111,7 +111,7 @@
+@@ -119,7 +119,7 @@
  
      - name: Checkout Git repository
        git:

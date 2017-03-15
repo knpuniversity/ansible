@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 18a15e8..b5b8da3 100644
+index 33aef68..53906a7 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -35,12 +35,14 @@
+@@ -43,12 +43,14 @@
        apt:
          name: nginx
          state: latest
@@ -17,7 +17,7 @@ index 18a15e8..b5b8da3 100644
  
      - name: Enable Symfony config template from Nginx available sites
        become: true
-@@ -48,6 +50,7 @@
+@@ -56,6 +58,7 @@
          src: "/etc/nginx/sites-available/{{ server_name }}.conf"
          dest: "/etc/nginx/sites-enabled/{{ server_name }}.conf"
          state: link
@@ -25,7 +25,7 @@ index 18a15e8..b5b8da3 100644
  
      - name: Add enabled Nginx site to /etc/hosts
        become: true
-@@ -79,6 +82,7 @@
+@@ -87,6 +90,7 @@
          - php7.1-intl
          - php7.1-mysql
          - php7.1-xml
@@ -33,7 +33,7 @@ index 18a15e8..b5b8da3 100644
  
      - name: Set date.timezone for CLI
        become: true
-@@ -93,6 +97,7 @@
+@@ -101,6 +105,7 @@
          dest: /etc/php/7.1/fpm/php.ini
          regexp: "date.timezone ="
          line: "date.timezone = UTC"
@@ -41,7 +41,7 @@ index 18a15e8..b5b8da3 100644
  
      - name: Create project directory and set its permissions
        become: true
-@@ -120,3 +125,16 @@
+@@ -128,3 +133,16 @@
        composer:
          working_dir: "{{ symfony_root_dir }}"
          no_dev: no
