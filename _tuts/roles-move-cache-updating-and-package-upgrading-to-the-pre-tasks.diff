@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ffe0ecd..900a211 100644
+index ffe0ecd..621f827 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -23,12 +23,6 @@
@@ -15,9 +15,9 @@ index ffe0ecd..900a211 100644
      - name: Update APT package manager repositories cache
        become: true
        apt:
-@@ -44,6 +38,12 @@
+@@ -39,6 +33,12 @@
        apt:
-         name: cowsay
+         upgrade: safe
  
 +  roles:
 +    - nginx
@@ -25,6 +25,6 @@ index ffe0ecd..900a211 100644
 +  tasks:
 +    - ping: ~
 +
-     - name: Install Git VCS
+     - name: Install cowsay - it's probably important
        become: true
        apt:

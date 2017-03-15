@@ -256,8 +256,18 @@
             "description": null
         },
         {
-            "id": "vault-store-symfony-secret-in-vault",
-            "name": "Vault: Store Symfony secret in vault",
+            "id": "vault-refactor-variables-into-file",
+            "name": "Vault: Refactor variables into file",
+            "description": null
+        },
+        {
+            "id": "vault-add-parameters-yml-using-normal-var",
+            "name": "Vault: Add parameters.yml using normal var",
+            "description": null
+        },
+        {
+            "id": "vault-create-and-load-vault-yml",
+            "name": "Vault: Create and load vault.yml",
             "description": null
         },
         {
@@ -286,5 +296,5 @@
             "description": null
         }
     ],
-    "sha": "ca8443e67ec1283627fa21b3c185aa61b533c87b"
+    "sha": "f9267ad80f875a72bbeb132e27fb7e337e5e731c"
 }

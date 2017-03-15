@@ -1,0 +1,28 @@
+diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
+index 0445269..b6745e0 100644
+--- a/ansible/includes/symfony-bootstrap.yml
++++ b/ansible/includes/symfony-bootstrap.yml
+@@ -17,6 +17,14 @@
+     - permissions
+     - deploy
+ 
++- name: Set Symfony secret in parameters.yml
++  lineinfile:
++    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
++    regexp: "^    secret:"
++    line: "    secret: {{ symfony_secret }}"
++  tags:
++    - deploy
++
+ # Symfony console commands
+ - name: Create DB if not exists
+   command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
+index 2872eb9..a761fb5 100644
+--- a/ansible/vars/vars.yml
++++ b/ansible/vars/vars.yml
+@@ -3,3 +3,4 @@ symfony_root_dir: /var/www/project
+ symfony_web_dir: "{{ symfony_root_dir }}/web"
+ symfony_var_dir: "{{ symfony_root_dir }}/var"
+ symfony_console_path: "{{ symfony_root_dir }}/bin/console"
++symfony_secret: "udderly secret $tring"

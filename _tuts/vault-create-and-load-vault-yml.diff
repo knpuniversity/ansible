@@ -1,0 +1,36 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 8733658..2e329c2 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -2,6 +2,7 @@
+ - hosts: vb
+ 
+   vars_files:
++    - ./vars/vault.yml
+     - ./vars/vars.yml
+ 
+   vars_prompt:
+diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
+index a761fb5..6d67968 100644
+--- a/ansible/vars/vars.yml
++++ b/ansible/vars/vars.yml
+@@ -3,4 +3,4 @@ symfony_root_dir: /var/www/project
+ symfony_web_dir: "{{ symfony_root_dir }}/web"
+ symfony_var_dir: "{{ symfony_root_dir }}/var"
+ symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+-symfony_secret: "udderly secret $tring"
++symfony_secret: "{{ vault_symfony_secret }}"
+diff --git a/ansible/vars/vault.yml b/ansible/vars/vault.yml
+new file mode 100644
+index 0000000..27affac
+--- /dev/null
++++ b/ansible/vars/vault.yml
+@@ -0,0 +1,8 @@
++$ANSIBLE_VAULT;1.1;AES256
++62313836626639653563363463316530346563316361316633613938626563373934363834336639
++3735343165343739653866643763376431666239643435330a343234396138373965323537633333
++61616261336138356436663266383533373166393837373561393365363130633864323262333531
++6563633238636465640a643337316361393132633963303361653434613462353363373234336333
++38636163653630343665363537663334643137626336633435336566316565623464346239343961
++61366666636131373164316436396664646437353635343464653030626432373939353439353433
++633563663465306666303638663931666637
