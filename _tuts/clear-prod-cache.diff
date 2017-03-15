@@ -1,14 +1,13 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 8457c8b..ccd52e6 100644
+index f96c39a..428ebee 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -168,6 +168,12 @@
+@@ -167,6 +167,11 @@
        tags:
          - deploy
  
 +    - name: Clear cache
 +      command: '{{ symfony_console_path }} cache:clear --env prod'
-+      changed_when: "{{ result.stdout|match('was successfully cleared') }}"
 +      tags:
 +        - deploy
 +

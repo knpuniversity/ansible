@@ -1,17 +1,18 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 2a67633..b2bfaa9 100644
+index 6e49148..f9d6e65 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -17,6 +17,12 @@
+@@ -17,6 +17,13 @@
    environment:
      SYMFONY_ENV: "{{ symfony_env|lower }}"
  
 +  pre_tasks:
 +    - name: Convert entered Symfony environment to lowercase
-+      set_fact: symfony_env="{{ symfony_env|lower }}"
++      set_fact:
++        symfony_env: "{{ symfony_env|lower }}"
 +      tags:
 +        - always
 +
    tasks:
-     - debug: var=ansible_env.SYMFONY_ENV
- 
+     - debug:
+         var: ansible_env.SYMFONY_ENV

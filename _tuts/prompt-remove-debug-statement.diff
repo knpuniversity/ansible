@@ -1,12 +1,16 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index b2bfaa9..a6b0548 100644
+index f9d6e65..6b435a6 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -24,8 +24,6 @@
+@@ -25,12 +25,6 @@
          - always
  
    tasks:
--    - debug: var=ansible_env.SYMFONY_ENV
+-    - debug:
+-        var: ansible_env.SYMFONY_ENV
+-
+-    - debug:
+-        var: symfony_env
 -
      - ping: ~
  

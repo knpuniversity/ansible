@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 2211f28..6400cfb 100644
+index ffe0ecd..900a211 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -22,12 +22,6 @@
+@@ -23,12 +23,6 @@
        tags:
          - always
  
@@ -15,7 +15,7 @@ index 2211f28..6400cfb 100644
      - name: Update APT package manager repositories cache
        become: true
        apt:
-@@ -43,6 +37,12 @@
+@@ -44,6 +38,12 @@
        apt:
          name: cowsay
  

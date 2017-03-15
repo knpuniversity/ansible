@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 6400cfb..00b8e79 100644
+index 900a211..c0498d5 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -39,6 +39,8 @@
+@@ -40,6 +40,8 @@
  
    roles:
      - nginx

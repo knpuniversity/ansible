@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a6fa6a9..2211f28 100644
+index f567099..ffe0ecd 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@
@@ -10,7 +10,7 @@ index a6fa6a9..2211f28 100644
      symfony_root_dir: /var/www/project
      symfony_web_dir: "{{ symfony_root_dir }}/web"
      symfony_var_dir: "{{ symfony_root_dir }}/var"
-@@ -23,6 +22,9 @@
+@@ -24,6 +23,9 @@
        tags:
          - always
  
@@ -20,7 +20,7 @@ index a6fa6a9..2211f28 100644
    tasks:
      - ping: ~
  
-@@ -47,35 +49,6 @@
+@@ -48,35 +50,6 @@
          name: git
          state: latest
  
@@ -56,7 +56,7 @@ index a6fa6a9..2211f28 100644
      - name: Install MySQL DB server
        become: true
        apt:
-@@ -148,12 +121,6 @@
+@@ -149,12 +122,6 @@
      - include: ./includes/symfony-bootstrap.yml
  
    handlers:
