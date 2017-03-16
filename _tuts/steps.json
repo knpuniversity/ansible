@@ -241,6 +241,26 @@
             "description": null
         },
         {
+            "id": "when-stat-for-composer-file",
+            "name": "When: stat for composer file",
+            "description": null
+        },
+        {
+            "id": "when-only-install-composer-when-needed",
+            "name": "When: Only install Composer when needed",
+            "description": null
+        },
+        {
+            "id": "when-register-clone-variable",
+            "name": "When: Register clone variable",
+            "description": null
+        },
+        {
+            "id": "when-set-fact-when-code-changed",
+            "name": "When: set_fact & when code_changed",
+            "description": null
+        },
+        {
             "id": "roles-move-nginx-installation-to-the-separate-role",
             "name": "Roles: Move Nginx installation to the separate role",
             "description": null
@@ -296,5 +316,5 @@
             "description": null
         }
     ],
-    "sha": "4efadb802dc49c833c1b4d957a7e0e3a944e4520"
+    "sha": "f99f09e9b99f87e6fca82c78e02370593c81fcb3"
 }

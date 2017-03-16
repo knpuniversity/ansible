@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 33aef68..53906a7 100644
+index 33aef68..879c4cb 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -43,12 +43,14 @@
@@ -37,7 +37,7 @@ index 33aef68..53906a7 100644
          dest: /etc/php/7.1/fpm/php.ini
          regexp: "date.timezone ="
          line: "date.timezone = UTC"
-+        notify: Restart PHP-FPM
++      notify: Restart PHP-FPM
  
      - name: Create project directory and set its permissions
        become: true

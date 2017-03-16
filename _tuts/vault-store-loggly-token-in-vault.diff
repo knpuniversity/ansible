@@ -1,8 +1,8 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index b6745e0..b2e5aac 100644
+index 04b6cb3..97bf7a4 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
-@@ -25,6 +25,14 @@
+@@ -26,6 +26,14 @@
    tags:
      - deploy
  

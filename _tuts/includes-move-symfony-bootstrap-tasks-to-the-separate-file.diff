@@ -50,7 +50,7 @@ index 0000000..0445269
 +    - deploy
 \ No newline at end of file
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 4b51270..378a754 100644
+index 96d4f34..5ef2425 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -153,49 +153,8 @@

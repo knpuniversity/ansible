@@ -1,0 +1,46 @@
+diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
+index 0445269..700e895 100644
+--- a/ansible/includes/symfony-bootstrap.yml
++++ b/ansible/includes/symfony-bootstrap.yml
+@@ -5,6 +5,7 @@
+     no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+   tags:
+     - deploy
++  when: code_changed
+ 
+ - name: Fix var directory permissions
+   file:
+@@ -31,6 +32,7 @@
+   changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
+   tags:
+     - deploy
++  when: code_changed
+ 
+ - name: Load data fixtures
+   command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
+@@ -41,4 +43,5 @@
+ - name: Clear cache
+   command: '{{ symfony_console_path }} cache:clear --env {{ symfony_env }}'
+   tags:
+-    - deploy
+\ No newline at end of file
++    - deploy
++  when: code_changed
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index a8d1cc7..faa7218 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -145,10 +145,9 @@
+       tags:
+         - deploy
+ 
+-    - debug:
+-        var: repo_code
+-      tags:
+-        - deploy
++    - name: Register code_changed variable
++      set_fact:
++        code_changed: repo_code.changed
+ 
+     - name: Check for Composer
+       stat:
