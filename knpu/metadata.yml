@@ -1,29 +1,6 @@
-title: Ansible for Automation!
-
-summary: |
-    In this screencast, we automate provision of Linux server
-    with a wonderful automation tool named Ansible and explore
-    the most fundamental parts of this process:
-
-    - Provision hosts with Ansible
-    - Inventory files
-    - Ansible modules
-    - Playbooks, plays, tasks
-    - Variables and facts
-    - Handlers
-    - Conditionals and tags
-    - Jinja2 templates (functions, filters, loops, variables, etc.)
-    - Roles
-    - Prompt input
-    - Debugging
-    
-    Are you ready to start adding some automation to your daily workflow?
-
-illustration: ansible.png
-
-# todo - fill these in later
-tuts_hero:
-    start_step: start
-    #finish_step: start
-
-chapters: []
+chapters:
+    - ansible-intro
+    - ansible-modules
+    - hosts-inventory
+    - vagrant-ansible
+    - playbook-basics

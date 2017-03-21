@@ -1,14 +1,149 @@
-# Ansible Modules
+# Modules
 
-Ansible is full of things called modules. A module is a small program that executes over SSH. Most of the time, you won't think about, "I want to run this command." You'll be thinking about, "I want to execute this module and allow it to do whatever work it does." For example, there are modules that help you AptGet install on Ubuntu, and other modules that help you modify the contents of files on the server.
-Of course when you run Ansible, you're always going to be running Ansible against another server or multiple other servers. Those are called the hosts. So we're always thinking about, "I want to run this module on those hosts." The simplest way to do all of this is from a command line, by using the Ansible command line to say 'ansible localhost,' which means for now, we're actually going to run this against our local host machine, '-m' for the module, and we're going to execute a module called command, which is the simplest module in Ansible.
-We're going to pass the command module some arguments, which is /bin/echo Hello Ansible. We run it, we get back that response. The first module is command. In the second, I'll show you a giant list of all the built-in modules. You'll see how each module has its own arguments that you can pass to them. In fact, the command module is so fundamentally important, it is actually the default module, so if we don't pass -m, it defaults to the command module.
-Another example is ansible localhost -m ping. The ping module, which, as you probably guessed, is a small program that makes sure that we can ping the server, or more specifically, make sure that we can SSH onto that server, or connect to that server, however we're set up to do that.
-Okay, cool. So what other modules do we have? Flip back to your browser and Google for Ansible modules. They have a couple of cool pages on this, like modules by category. I'm going to go to the list of all modules. This should get you really excited. These are built-in programs so that you don't have to do a lot of work to get a lot of work done.
-One of them which is familiar to us is called Composer, the same module that is really good at working with Composer. For example, back on the command line, right now the vendor directory is populated with all of my vendor files, but let's delete vendor. Let's rm -rf it. Let's see if we can use the Composer module to re-populate that. So ansible localhost -m composer.
-Aah. You can see it actually fails. Missing required arguments: working_dir. So whenever you look at a specific module page, it's awesome because it's going to give you all of the options, their default value, and whether or not they are required like working_dir. Below, they usually have a bunch of really good examples. In this case, we need to pass -a working:dir= In this case we can just pass it ./, because we're working right on our local machine. I also want you to pass no_dev=false. This is another option from the Composer module, and we're going to talk more about why that's necessary in a little bit.
-This time, it's actually working. In fact, you can see in the tab behind the scenes, it was running some items. Boom! Check this out. We see the full output of all of that stuff happening. I want you to notice that it says changed true, and the output comes back as yellow. The module is actually detecting that this command did something. It made a change to the server. If you try it again right now, it comes back as green, and it says changed false.
-That is one of the important superpowers of modules. Not only do they make something happen on your server, do they get your server into a specific state - in this case, they make sure that our Composer is installed - it's able to detect whether or not it made a change on when it ran that, which is going to become important later when we start triggering different actions based on whether or not something.
-How does this work? It's actually built into the module itself. The Composer module is smart enough to know that nothing changed based on the output of the command. By the way, knowing what we know now, we could have actually cleared the vendor directory by using the command module, which is the default module, and passing that, rm -rf vendor. Just to prove that that worked, we'll run the Composer one again, and this time we're going to come back and we're going to get that yellow changed state once again.
-That's just touching the surface of modules. Next, let's talk about how we organize what actual servers that these run on, because obviously we're not going to be running these on our local server forever.
+We need to talk about 2 important words in Ansible: modules and hosts.
 
+Ansible comes built with a *ton* of things called *modules*: small programs that
+do some work on the server. Most of the time, instead of saying:
+
+> Ansible! Execute this command!
+
+you'll say:
+
+> Ansible! Execute this module and allow it to run whatever commands it needs to
+> get its job done.
+
+For example, if you want to install something on an Ubuntu server, instead of running
+`sudo apt-get install php7.1`, you'll use the `apt` module. Need to edit a file?
+There's a module for that too.
+
+And when you execute a module, you'll of course always execute that module on one
+or more servers. These are called hosts. So, in Ansible language, we'll say:
+
+> I want to run this module on these hosts.
+
+## Running your First Module
+
+Ok, terminology garbage done. Let's do something! The simplest way to execute a module
+is from the command line. `ansible localhost` means that - for now - we're going to
+run this module against our local machine. Then, `-m command` to run the "command"
+module - the simplest module in Ansible that allows you to... well... just run a
+command directly on the server. Then, add `-a "bin/echo 'Hello Ansible"'` to pass
+that as an argument to the `command` module:
+
+```terminal
+ansible localhost -m command -a "bin/echo 'Hello Ansible'"
+```
+
+Try it! We see some output and... Hello Ansible! Congrats! You just run your first
+module: `command`. In this case, we can even remove the `-m` option - the `command`
+module is so fundamental, it's the *default* module... if we don't pass one.
+
+Hey! Let's try another module!
+
+```terminal
+ansible localhost -m ping
+```
+
+You can probably guess what this does: `ping` is a small program that makes sure
+that we can contact the server.
+
+What other modules can we use? Flip back to your browser and Google for "Ansible modules".
+They have a few pages, like "modules by category". But let's
+go to the full [All Modules](http://docs.ansible.com/ansible/list_of_all_modules.html)
+page.
+
+Woh! If we're commanding a robot army, we just found out that a lot of our robots
+already know how to do a *ton* of stuff. Yes! This is all free functionality!
+
+## The composer Module
+
+One of these modules should look pretty interesting to PHP developers: the [composer](http://docs.ansible.com/ansible/composer_module.html)
+module. Instead of executing Composer commands manually on the server, you can use
+this.
+
+For example, back on the command line, if you setup your project like I did, then
+your `vendor/` directory is populated with files. Let's kill them! Be reckless by
+running:
+
+```terminal
+rm -rf vendor
+```
+
+Now, take the `composer` module for a test drive:
+
+```terminal
+ansible localhost -m composer
+```
+
+Woh! It fails!
+
+> Missing required arguments: working_dir.
+
+The Ansible module documentation is pretty awesome: each page lists all of that
+module's options, their default value and whether or not they're *required*, like
+`working_dir`. And below, they usually have a bunch of really nice examples.
+
+In this case, to pass the option, add `-a "working_dir=./"` to point to *this*
+directory, since the module will run on *this* machine. We also need to pass
+`no_dev=false`. That's just another option for this module - and we'll talk about
+what it does in a little while.
+
+Ok, try that!
+
+```terminal
+ansible localhost -m composer -a "working_dir=./ no_dev=false"
+```
+
+Woohoo! It looks like it's working! My terminal tab even shows the crazy things
+it's doing behind the scenes.
+
+***TIP
+If it doesn't work on your machine, no big deal. This module requires you to have
+PHP and composer installed. Soon, we'll *guarantee* that these are installed on
+a fresh Ubuntu machine.
+***
+
+Once it's done... boom! We see the full output of everything that happened.
+
+## The "changed" Status
+
+AND, we see one *really* important thing: it says "changed true" and the output
+is yellow. The module detected that this command made a *change* to the server.
+Run the module again:
+
+```terminal
+ansible localhost -m composer -a "working_dir=./ no_dev=false"
+```
+
+Woh! Now the output is green and it says "changed false".
+
+That is one of the most important superpowers of modules: not only do they make
+something happen on your server, they're able to detect whether or not the server
+*changed* by running the module. This will be important: later, we can trigger
+different actions based on whether or not a module did or did not actually make
+any changes.
+
+But how the heck did Ansible know that the server didn't change the second time?
+That cleverness is actually built into each module. The `composer` module is smart
+enough to know that nothing changed based on the *output* of the command - the fact
+that it said:
+
+> Nothing to install or update
+
+By the way, now that we're rocking Ansible, we could have cleared the vendor directory
+via the `command` module:
+
+```terminal
+ansible localhost -a "rm -rf vendor"
+```
+
+To prove that worked, run the `composer` module again:
+
+```terminal
+ansible localhost -m composer -a "working_dir=./ no_dev=false"
+```
+
+Ha! Back to "changed true" with yellow output.
+
+Next, let's talk about how we organize which servers we're running Ansible against.
+Because obviously, we don't want to run against localhost forever!

@@ -1,16 +1,95 @@
-# Hosts Inventory
+# Hosts & the Inventory File
 
-So far when run our command, we actually get a couple of warnings on top. Host file not found with a path to some host file somewhere. Then it said provided hosts list is empty, only localhost is available. So we know that we execute modules on a host and so far we're using localhosts.
+When we run `ansible`, we see a few warnings on top:
 
-Well, turns out, out of the box, the only host we can run our modules against are localhost. If you want to start running them against other servers, we need to create a host configuration file that describes those. Now you can either do these in a global host file, in the location to your global host file might be different, or you can do it right inside your project and describe the host for this project, which is the way that I like to do it.
+> Host file not found
 
-So in our project, let's create a new directory called Ansible to hold our Ansible configuration. And inside that we'll do a hosts.ini file. Now the smallest thing you need for a host is just the IP address, 127.0.0.1, let's configure our localhost again. And as soon as you do that, you can actually run against that, 127.0.0.1 -m ping. Then to tell Ansible, which host file to use, you'll pass -i ansible/host.ini. It's -i because the host file is known as your inventory, that's a bit of Ansible specific configuration. These is our host inventory.
+with a path to a host file somewhere on your system. Then it says:
 
-When we try that, it actually fails. Because I keep telling you that Ansible works by doing SSH onto the server and then running those commands. Well technically that's not 100% true. You can actually configure Ansible to connect to your server in multiple different ways, though 99% of the time you're going to use SSH. The only real exception to that is when you're working on your local computer. We don't actually want to do SSH onto our local computer. We need to tell Ansible that this is a local connection. The way you do that is after your IP address, you type ansible_connection=local. You can look up for the other Ansible underscore connection values.
+> provided hosts list is empty, only localhost is available.
 
-Now this is actually really important. So let's try that. We go back now, it works. But this little thing we did here is actually kind of important. Ansible connection's known as a variable and as we build out more complex Ansible configuration, this idea of setting and using variables is going to become more important. As you'll see, you can actually set more variables for each of your hosts, which is going to allow you to actually change behavior based on which host you're running something against.
+It turns out, at first, we can *only* execute ansible against one host: `localhost`.
+If you want to start running against any other server, you need to create a host
+configuration file. You can either do this in a global hosts file - in the location
+described in the warning - or you can create a file right inside your project. That's
+the way I like to do it!
 
-So ansible_connection is just a built-in variable that Ansible uses and we're changing that variable here in our inventory file. One of the other common things you going to see in host files is that you're going to group them. Group the host into host groups. So let's try a new host group called local. Now right now this group only has one host under it, which is our localhost. As soon as you do that, instead of specifying the IP address here, you can say ansible local, and that's going to run that module against all hosts inside of the local group, which right now is just one, but we could add another one. Just to prove it we can say localhost and then we'll say ansible_connection=local. When we run the command now you actually see it run that twice, so you can already see how this is really powerful because you might need to run a command against all of your web servers, which might be a number of different IP addresses below that.
+In your project, create a new directory called `ansible`. And inside, make a new
+`hosts.ini` file.
 
-In fact, there's a special command called --list-hosts, which is actually going to list all of the hosts that are going to be effected when you run things against that group. So let's go back. Remove localhost and let's keep going and start executing these things, not against our local machine but actually against a virtual box, a virtual machine.
+The *smallest* thing you need to configure a host is... just the IP address: 127.0.0.1.
+We'll keep running things against our local machine for a bit longer.
 
+As *soon* as you have this, you can use *this* as your host: `ansible 127.0.0.1 -m ping`.
+To tell Ansible about the new hosts file, add `-i ansible/hosts.ini`. It's `-i` because
+the hosts file is known as your *inventory*. Try it!
+
+```terminal
+ansible 127.0.0.1 -m ping -i ansible/hosts.ini
+```
+
+## Setting Host Variables
+
+Ah! It fails! I keep telling you that Ansible works by connecting over SSH and then
+running commands. Well, technically, that's not 100% true: you can actually configure
+Ansible to connect to your server in different ways, though you'll almost always
+use SSH. The most common exception is when you're working on your *local* machine -
+you don't need to connect via SSH at all!
+
+To tell Ansible that this is a local connection, in your `hosts.ini` file, after
+the IP address, add `ansible_connection=local`. There's also a `docker` connection
+type if you're getting nerdy with Docker.
+
+Try that ping again!
+
+```terminal
+ansible 127.0.0.1 -m ping -i ansible/hosts.ini
+```
+
+Got it!
+
+This little change is actually *really* important. By saying `ansible_connection=local`,
+we are setting a *variable* inside of Ansible. And as we build out more complex Ansible
+configuration, this idea of setting and using variables will become more important.
+As you'll see, you can set more variables for each host, which will let us change
+behavior on a host-by-host basis.
+
+In this case, `ansible_connection` is a built-in variable that Ansible uses when
+it connects. We're simply changing it first.
+
+## Host Groups
+
+So right now, we have just *one* host. But eventually, you might have *many* - like
+5 web server hosts, 2 database hosts and a Redis host. One common practice is to
+*group* your hosts. Let me show you: at the top, add a group called `[local]`,
+with our one host below it.
+
+As soon as we do that, instead of using the IP address in the command, we can use
+the group name:
+
+```terminal
+ansible local -m ping -i ansible/hosts.ini
+```
+
+That will run the module against *all* hosts inside of the `local` group... which
+is just one right now. Boring! Let's add another! Below the first, add `localhost`
+with `ansible_connection=local`.
+
+This is a little silly, but it shows how this works. Run the command now!
+
+```terminal
+ansible local -m ping -i ansible/hosts.ini
+```
+
+Yes! It runs the ping module twice: once on each server. If you needed to setup 10
+web servers... well, you can imagine how *awesome* this could be.
+
+And actually, there's a special option - `--list-hosts` that can show you all of
+the hosts in that group:
+
+```terminal
+ansible local --list-hosts -i ansible/hosts.ini
+```
+
+Ok, remove the `localhost` line. Time to start executing things against a *real*
+server.
