@@ -3,4 +3,5 @@ chapters:
     - ansible-modules
     - hosts-inventory
     - vagrant-ansible
-    - playbook-basics
+    - playbook
+    - apt-module

@@ -1,79 +1,133 @@
-# Vagrant Ansible
+# Vagrant <3's Ansible
 
-So our first task, and main goal, is going to be to see if we can create a
-really nice Ansible setup that can provision an entire server for us. And to do
-that we are actually going to use virtual mosk and Vagrant to create a virtual
-machine. And then we are entirely going to tap Ansible, install everything
-needed on that machine to get our application up and running.
+Our first big goal is to see if we can use Ansible to setup, or provision, an entire
+server that can run our MooTube app. To setup an empty VM, we'll use Vagrant
+with VirtualBox.
 
-So before we start, make sure that you have VirtualBox installed. However
-that's done on your particular machine. And then also, Vagrant, which has a
-nice installer for every system. On Mac I actually use Brew to install Vagrant,
-but you can install it however you want. As long as, ultimately you can type
-Vagrant dash V and get the version of your Vagrant.
+So before we start, make sure that you have VirtualBox installed: it's different
+for each OS, but should - hopefully - be pretty easy. Next, make sure you have Vagrant:
+it has a nice installer for every OS. On my Mac, surprise! I installed Vagrant via
+brew.
 
-So in order to use Vagrant, we need to have a Vagrant file that describes what
-we want our virtual machine to look like. So we are going to generate one by
-using Vagrant init ubuntu/trusty 64. That's not the newest version of Ubuntu,
-but it's one that works really well. And you're free to use a different one.
-But if you do, there might be subtle things you need to update for inside,
-while you are following along with the tutorial.
+As long as you can type `vagrant -v`, you're good to go.
 
-Once you've done that, you should be able to type Vagrant up and wait for the
-magic to happen. If this is the first time running the command, it probably
-will have to download a giant image which might take awhile so apologies. Run
-this. Come back once that's done downloading, and let it do it's thing.
+## Vagrantfile Setup!
 
-Once that's done, you should be able to test it out by doing Vagrant SSH. And
-hopefully that will long you into your brand new, basically empty Ubuntu
-virtual machine.
+If you're new to Vagrant, it's a tool that helps create and boot different virtual
+machines, usually via VirtualBox behind the scenes. It works by reading a configuration
+file... which we don't have yet. Let's generate it!
 
-By the way, this does store some configuration in a .Vagrant file, which in the
-real project you are actually going to want to add to your .gitignore file.
+```terminal
+vagrant init ubuntu/trusty64
+```
 
-Cool. So our goal is to have Ansible talk to our new virtual machine. Now by
-default it doesn't actually have an external IP address that we can reach it
-via. But if you look at the Vagrant file which was generated automatically for
-us when we typed Vagrant init, there is a section here about a private network.
-So go ahead and uncomment that out. This is going to allow us on our host
-machine to access the virtual machine via this IP address.
+That just created a file - `Vagrantfile` - at the root of our project that will boot
+a VM using an `ubuntu/trusty64` image. That's not the newest version of Ubuntu, but
+it works really well. You're free to use a different one, but a few commands or usernames
+and passwords might be different! 
 
-Once you've done that, you're actually going to need to type Vagrant reload so
-that it can make the changes on the server so that that network is available.
+## Boot that VM!
 
-Perfect. If you that IP address, you should be able to ping that and it's
-actually coming back. So now that we want to talk to this host, it means we are
-going to go into our host file and add it here. Now I'm going to keep my local
-group and create a new group called VB for VirtualBox. And under there, I'm
-going to add our IP address. Of course, we know as soon as we do that, we
-should be able to come over here at Ansible VB -M ping, to try to use the ping
-module, -i ansible/hosts.ini.
+With that file in place, let's boot the VM!
 
-When you do that, that's not going to work. The reason is that we haven't
-specified any username or password for that vagrant machine. And the vagrant
-machine isn't set up to automatically allow us to have access without a
-username password. So actually if you tried, SSH Vagrant@192.168.33.10 you're
-going to get one, if not two, errors. If this is your first time using Vagrant,
-there's a good chance you won't see this error. But if you have used Vagrant
-before, what it's basically telling me is I've used this IP address in the past
-to talk to a different server, and somebody at this IP address is talking to a
-new server, it's telling me that this could be a security risk. In our case,
-it's not. It needs to go into my known hosts file on line 210 and delete the
-line that's there. Delete that. Save. And then let's try that command again.
+```terminal
+vagrant up
+```
 
-It's going to ask me to save the fingerprint to that server. And then it's
-going to ask us for the password. So for the image that we are using, you can
-SSH using a Vagrant and the password Vagrant and that lets us in.
+Then... go make a sandwich! Or run around outside! Unless you've run this command
+before, it'll need to download the Ubuntu image... which is pretty huge. So go freshen
+up your cup of coffee and come back.
 
-So now that we know that's working, how do we tell Ansible to use that username
-and password for SSH? Well, not surprising, it's going to go back to variables.
-There is a variable called Ansible_user. Set that to Vagrant. And then to set
-another variable, it's space, then ansible_ssh_pass=vagrant.
+Thanks to the power of video, we'll zoom to the end! Zooooom!
 
-This time we are trying the ping module. It works. Now, quick note about this
-SSH password. You know this is plain text which obviously for our VirtualBox is
-no big deal. In reality there is something called the Ansible vault, which is a
-way for you to store things like passwords securely without exposing them in
-plain text. We are going to talk about the vault down the line. But now that we
-have Ansible talking to our Vagrant machine, we need to create a playbook and
-start setting that machine up.
+When it finishes, make sure you can SSH into it:
+
+```terminal
+vagrant ssh
+```
+
+With any luck, you'll step right into your brand new, basically empty, but totally
+awesome, Ubuntu virtual machine.
+
+By the way, Vagrant stores some info in a `.vagrant` directory. In a real project,
+you'll probably want to add this to your `.gitignore` file.
+
+## Setup an External IP Address
+
+Our goal is to have Ansible talk to this new VM. For that, we need a dependable IP
+address for the VM. Check out the `Vagrantfile` that was generated automatically
+for us: it has a section about a "private network". Uncomment that!
+
+This will let us talk to the VM via `192.168.33.10`.
+
+For that to take effect, run:
+
+```terminal
+vagrant reload
+```
+
+That should take just a minute or two. Perfect! And now we can ping that IP!
+
+```terminal
+ping 192.168.33.10
+```
+
+## Configuring the new Ansible Host
+
+The VM represents a new host. And that means we need to add it to our hosts file!
+In `hosts.ini`, let's keep the `local` group and add another called `vb`, for VirtualBox.
+Under there, add the IP: `192.168.33.10`.
+
+We know that as soon as we make this change, we should be use the `vb` host:
+
+```terminal
+ansible vb -m ping -i ansible/hosts.ini
+```
+
+That should work, right? It fails! The ping module does a bit more than just a ping,
+and in this case, it's detecting that Ansible can't SSH into the machine. The reason
+is that we haven't specified a username and password or key to use for SSH.
+
+## Configuring SSH Properly
+
+To see what I mean, try SSH'ing manually - the machine is setup with a `vagrant` user:
+
+```terminal
+ssh vagrant@192.168.33.10
+```
+
+Woh! Our first error looks awesome!
+
+> WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED
+
+You may or may not get this error. Since I've used Vagrant in this same way in the
+past, it's telling me that last time I SSH'ed to this IP address, it was a different
+machine! We know that's ok - there's nothing nefarious happening. To fix it, I just
+need to find line 210 of my `known_hosts` file and remove the old fingerprint.
+I'll do that and save. Try it again:
+
+```terminal
+ssh vagrant@192.168.33.10
+```
+
+It saves the fingerprint and then asks for a password. The password for the image
+that we're using is `vagrant`. That's pretty standard, but it might be different
+if you're using a different image.
+
+We're inside! So, how can we tell Ansible to SSH with username `ansible` and password
+`ansible`? The answer is... not surprising! These are two more variables in your
+hosts inventory file: `ansible_user` set to `vagrant` and `ansible_ssh_pass=vagrant`.
+
+Try the ping again:
+
+```terminal
+ansible vb -m ping -i ansible/hosts.ini
+```
+
+Eureka! But, quick note about the SSH password. If this weren't just a local VM,
+we might not want to store the password in plain text. Instead, you can use a private
+key for authentication, or use the Ansible "vault" - a cool feature that lets us
+*encrypt* secret things, like passwords. More on that later.
+
+But for now, our setup is done! We have a VM, and Ansible can talk to it. Next, we
+need to create a *playbook* that's capable of setting up the VM.

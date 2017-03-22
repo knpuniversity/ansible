@@ -34,7 +34,7 @@ that as an argument to the `command` module:
 ansible localhost -m command -a "bin/echo 'Hello Ansible'"
 ```
 
-Try it! We see some output and... Hello Ansible! Congrats! You just run your first
+Try it! We see some output and... Hello Ansible! Congrats! You just ran your first
 module: `command`. In this case, we can even remove the `-m` option - the `command`
 module is so fundamental, it's the *default* module... if we don't pass one.
 

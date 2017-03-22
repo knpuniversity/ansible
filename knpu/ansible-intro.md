@@ -54,7 +54,7 @@ server. As long as you can SSH to a server, you can unleash your Ansible robot a
 onto it. That's pretty cool.
 
 But Ansible is even more interesting than that. When you execute an Ansible *task* -
-that's what they're called - it is *idempotent*... well. usually it is. Idempotency
+that's what they're called - it is *idempotent*... well, usually it is. Idempotency
 is an obscure - but cool - word to mean that Ansible tasks don't just dumbly run
 a command. What they *really* do is *guarantee* that the server finishes in a specific
 *state*. For example, if we tell Ansible to create a directory, it doesn't necessarily
