@@ -41,7 +41,7 @@ The ping works, but the install fails! Check out the error:
 
 Of course! Ansible doesn't automatically run things with `sudo`. When a task *does*
 need sudo, it needs another option: `become: true`. This means that we want to
-*become* the super user. In our VM, the `ansible` user can `sudo` without typing
+*become* the super user. In our VM, the `vagrant` user can `sudo` without typing
 their password. But if that's not your situation, you *can* configure the password.
 
 Try it again!

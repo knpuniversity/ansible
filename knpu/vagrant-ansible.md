@@ -78,7 +78,7 @@ The VM represents a new host. And that means we need to add it to our hosts file
 In `hosts.ini`, let's keep the `local` group and add another called `vb`, for VirtualBox.
 Under there, add the IP: `192.168.33.10`.
 
-We know that as soon as we make this change, we should be use the `vb` host:
+We know that as soon as we make this change, we should be able to use the `vb` host:
 
 ```terminal
 ansible vb -m ping -i ansible/hosts.ini
@@ -114,8 +114,8 @@ It saves the fingerprint and then asks for a password. The password for the imag
 that we're using is `vagrant`. That's pretty standard, but it might be different
 if you're using a different image.
 
-We're inside! So, how can we tell Ansible to SSH with username `ansible` and password
-`ansible`? The answer is... not surprising! These are two more variables in your
+We're inside! So, how can we tell Ansible to SSH with username `vagrant` and password
+`vagrant`? The answer is... not surprising! These are two more variables in your
 hosts inventory file: `ansible_user` set to `vagrant` and `ansible_ssh_pass=vagrant`.
 
 Try the ping again:
