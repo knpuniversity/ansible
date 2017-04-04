@@ -17,7 +17,10 @@ the way I like to do it!
 In your project, create a new directory called `ansible`. And inside, make a new
 `hosts.ini` file.
 
-The *smallest* thing you need to configure a host is... just the IP address: 127.0.0.1.
+The *smallest* thing you need to configure a host is... just the IP address: `127.0.0.1`:
+
+[[[ code('6400d561e1') ]]]
+
 We'll keep running things against our local machine for a bit longer.
 
 As *soon* as you have this, you can use *this* as your host: `ansible 127.0.0.1 -m ping`.
@@ -37,8 +40,11 @@ use SSH. The most common exception is when you're working on your *local* machin
 you don't need to connect via SSH at all!
 
 To tell Ansible that this is a local connection, in your `hosts.ini` file, after
-the IP address, add `ansible_connection=local`. There's also a `docker` connection
-type if you're getting nerdy with Docker.
+the IP address, add `ansible_connection=local`:
+
+[[[ code('09d3a4b361') ]]]
+
+There's also a `docker` connection type if you're getting nerdy with Docker.
 
 Try that ping again!
 
@@ -62,7 +68,9 @@ it connects. We're simply changing it first.
 So right now, we have just *one* host. But eventually, you might have *many* - like
 5 web server hosts, 2 database hosts and a Redis host. One common practice is to
 *group* your hosts. Let me show you: at the top, add a group called `[local]`,
-with our one host below it.
+with our one host below it:
+
+[[[ code('093cda96a2') ]]]
 
 As soon as we do that, instead of using the IP address in the command, we can use
 the group name:
@@ -73,7 +81,9 @@ ansible local -m ping -i ansible/hosts.ini
 
 That will run the module against *all* hosts inside of the `local` group... which
 is just one right now. Boring! Let's add another! Below the first, add `localhost`
-with `ansible_connection=local`.
+with `ansible_connection=local`:
+
+[[[ code('4f202b3964') ]]]
 
 This is a little silly, but it shows how this works. Run the command now!
 
@@ -91,5 +101,8 @@ the hosts in that group:
 ansible local --list-hosts -i ansible/hosts.ini
 ```
 
-Ok, remove the `localhost` line. Time to start executing things against a *real*
-server.
+Ok, remove the `localhost` line:
+
+[[[ code('c1aca1aee1') ]]]
+
+Time to start executing things against a *real* server.

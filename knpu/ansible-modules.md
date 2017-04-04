@@ -27,7 +27,7 @@ Ok, terminology garbage done. Let's do something! The simplest way to execute a 
 is from the command line. `ansible localhost` means that - for now - we're going to
 run this module against our local machine. Then, `-m command` to run the "command"
 module - the simplest module in Ansible that allows you to... well... just run a
-command directly on the server. Then, add `-a "bin/echo 'Hello Ansible"'` to pass
+command directly on the server. Then, add `-a "bin/echo 'Hello Ansible'"` to pass
 that as an argument to the `command` module:
 
 ```terminal
@@ -35,8 +35,13 @@ ansible localhost -m command -a "bin/echo 'Hello Ansible'"
 ```
 
 Try it! We see some output and... Hello Ansible! Congrats! You just ran your first
-module: `command`. In this case, we can even remove the `-m` option - the `command`
-module is so fundamental, it's the *default* module... if we don't pass one.
+module: `command`. In this case, we can even remove the `-m` option:
+
+```terminal
+ansible localhost -a "bin/echo 'Hello Ansible'"
+```
+
+The `command` module is so fundamental, it's the *default* module... if we don't pass one.
 
 Hey! Let's try another module!
 
@@ -49,24 +54,22 @@ that we can contact the server.
 
 What other modules can we use? Flip back to your browser and Google for "Ansible modules".
 They have a few pages, like "modules by category". But let's
-go to the full [All Modules](http://docs.ansible.com/ansible/list_of_all_modules.html)
-page.
+go to the full [All Modules][all_modules] page.
 
 Woh! If we're commanding a robot army, we just found out that a lot of our robots
 already know how to do a *ton* of stuff. Yes! This is all free functionality!
 
 ## The composer Module
 
-One of these modules should look pretty interesting to PHP developers: the [composer](http://docs.ansible.com/ansible/composer_module.html)
-module. Instead of executing Composer commands manually on the server, you can use
-this.
+One of these modules should look pretty interesting to PHP developers: the [composer][composer_module]
+module. Instead of executing Composer commands manually on the server, you can use this.
 
 For example, back on the command line, if you setup your project like I did, then
 your `vendor/` directory is populated with files. Let's kill them! Be reckless by
 running:
 
 ```terminal
-rm -rf vendor
+rm -rf vendor/
 ```
 
 Now, take the `composer` module for a test drive:
@@ -77,7 +80,7 @@ ansible localhost -m composer
 
 Woh! It fails!
 
-> Missing required arguments: working_dir.
+> Missing required arguments: `working_dir`.
 
 The Ansible module documentation is pretty awesome: each page lists all of that
 module's options, their default value and whether or not they're *required*, like
@@ -99,7 +102,7 @@ it's doing behind the scenes.
 
 ***TIP
 If it doesn't work on your machine, no big deal. This module requires you to have
-PHP and composer installed. Soon, we'll *guarantee* that these are installed on
+PHP and Composer installed. Soon, we'll *guarantee* that these are installed on
 a fresh Ubuntu machine.
 ***
 
@@ -115,7 +118,7 @@ Run the module again:
 ansible localhost -m composer -a "working_dir=./ no_dev=false"
 ```
 
-Woh! Now the output is green and it says "changed false".
+Woh! Now the output is green and it says "changed: false".
 
 That is one of the most important superpowers of modules: not only do they make
 something happen on your server, they're able to detect whether or not the server
@@ -134,7 +137,7 @@ By the way, now that we're rocking Ansible, we could have cleared the vendor dir
 via the `command` module:
 
 ```terminal
-ansible localhost -a "rm -rf vendor"
+ansible localhost -a "rm -rf vendor/"
 ```
 
 To prove that worked, run the `composer` module again:
@@ -143,7 +146,11 @@ To prove that worked, run the `composer` module again:
 ansible localhost -m composer -a "working_dir=./ no_dev=false"
 ```
 
-Ha! Back to "changed true" with yellow output.
+Ha! Back to "changed: true" with yellow output.
 
 Next, let's talk about how we organize which servers we're running Ansible against.
 Because obviously, we don't want to run against localhost forever!
+
+
+[all_modules]: http://docs.ansible.com/ansible/list_of_all_modules.html
+[composer_module]: http://docs.ansible.com/ansible/composer_module.html
