@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index de370ef..8c92563 100644
+index a44465b..e1966ac 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -117,12 +117,16 @@
+@@ -117,30 +117,42 @@
          owner: "{{ ansible_user }}"
          group: "{{ ansible_user }}"
          recurse: yes
@@ -17,11 +17,21 @@ index de370ef..8c92563 100644
 +      tags:
 +        - deploy
  
-     - name: Install Composer
+     - name: Download Composer
+       script: scripts/install_composer.sh
++      tags:
++        - deploy
+ 
+     - name: Move Composer globally
        become: true
-@@ -130,11 +134,15 @@
-         url: https://getcomposer.org/composer.phar
-         dest: /usr/local/bin/composer
+       command: mv composer.phar /usr/local/bin/composer
++      tags:
++        - deploy
+ 
+     - name: Set permissions on Composer
+       become: true
+       file:
+         path: /usr/local/bin/composer
          mode: "a+x"
 +      tags:
 +        - deploy
@@ -35,7 +45,7 @@ index de370ef..8c92563 100644
  
      - name: Fix var directory permissions
        file:
-@@ -144,16 +152,23 @@
+@@ -150,16 +162,23 @@
          recurse: yes
        tags:
          - permissions

@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 79e0369..630378d 100644
+index c4ce355..b664dae 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -151,17 +151,13 @@
+@@ -151,19 +151,16 @@
        tags:
          - deploy
  
@@ -11,12 +11,15 @@ index 79e0369..630378d 100644
 -      tags:
 -        - deploy
 -
-     - name: Install Composer
+     - name: Download Composer
+       script: scripts/install_composer.sh
++      when: not composer_stat.stat.exists
+       tags:
+         - deploy
+ 
+     - name: Move Composer globally
        become: true
-       get_url:
-         url: https://getcomposer.org/composer.phar
-         dest: /usr/local/bin/composer
-         mode: "a+x"
+       command: mv composer.phar /usr/local/bin/composer
 +      when: not composer_stat.stat.exists
        tags:
          - deploy

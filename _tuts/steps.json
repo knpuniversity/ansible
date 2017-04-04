@@ -141,8 +141,13 @@
             "description": null
         },
         {
-            "id": "variables-install-composer-and-project-dependencies",
-            "name": "Variables: Install Composer and project dependencies",
+            "id": "variables-install-composer",
+            "name": "Variables: Install Composer",
+            "description": null
+        },
+        {
+            "id": "variables-install-composer-deps",
+            "name": "Variables: Install Composer deps",
             "description": null
         },
         {
@@ -316,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "f99f09e9b99f87e6fca82c78e02370593c81fcb3"
+    "sha": "7c979555dc2487f1cb7ccc0becacf075bcad49eb"
 }

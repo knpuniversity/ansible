@@ -1,0 +1,60 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 919e7e2..fb38373 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -22,6 +22,14 @@
+       apt:
+         name: cowsay
+ 
++    - name: Install low-level utilities
++      become: true
++      apt:
++        name: "{{ item }}"
++      with_items:
++        - zip
++        - unzip
++
+     - name: Install Git VCS
+       become: true
+       apt:
+@@ -85,3 +93,16 @@
+         repo: https://github.com/symfony/symfony-standard.git
+         dest: "{{ symfony_root_dir }}"
+         force: yes
++
++    - name: Download Composer
++      script: scripts/install_composer.sh
++
++    - name: Move Composer globally
++      become: true
++      command: mv composer.phar /usr/local/bin/composer
++
++    - name: Set permissions on Composer
++      become: true
++      file:
++        path: /usr/local/bin/composer
++        mode: "a+x"
+diff --git a/ansible/scripts/install_composer.sh b/ansible/scripts/install_composer.sh
+new file mode 100644
+index 0000000..219f3c6
+--- /dev/null
++++ b/ansible/scripts/install_composer.sh
+@@ -0,0 +1,17 @@
++#!/bin/sh
++
++EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
++php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
++ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
++
++if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
++then
++    >&2 echo 'ERROR: Invalid installer signature'
++    rm composer-setup.php
++    exit 1
++fi
++
++php composer-setup.php --quiet
++RESULT=$?
++rm composer-setup.php
++exit $RESULT
+\ No newline at end of file

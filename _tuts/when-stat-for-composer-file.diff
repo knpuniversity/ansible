@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 5ef2425..79e0369 100644
+index 44172d0..c4ce355 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -144,6 +144,18 @@
@@ -18,6 +18,6 @@ index 5ef2425..79e0369 100644
 +      tags:
 +        - deploy
 +
-     - name: Install Composer
-       become: true
-       get_url:
+     - name: Download Composer
+       script: scripts/install_composer.sh
+       tags:

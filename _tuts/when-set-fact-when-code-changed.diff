@@ -1,5 +1,5 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index 0445269..700e895 100644
+index f18a13d..1dc9bcb 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -5,6 +5,7 @@
@@ -18,16 +18,16 @@ index 0445269..700e895 100644
  
  - name: Load data fixtures
    command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
-@@ -41,4 +43,5 @@
- - name: Clear cache
-   command: '{{ symfony_console_path }} cache:clear --env {{ symfony_env }}'
+@@ -43,4 +45,5 @@
+   command: '{{ symfony_console_path }} cache:clear --env={{ symfony_env }}'
+   changed_when: false
    tags:
 -    - deploy
 \ No newline at end of file
 +    - deploy
 +  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a8d1cc7..faa7218 100644
+index 1472933..adb4954 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -145,10 +145,9 @@

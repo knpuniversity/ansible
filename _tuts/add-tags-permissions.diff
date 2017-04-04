@@ -1,8 +1,8 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index eac4097..de370ef 100644
+index 4597f56..a44465b 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -142,6 +142,8 @@
+@@ -148,6 +148,8 @@
          state: directory
          mode: 0777
          recurse: yes

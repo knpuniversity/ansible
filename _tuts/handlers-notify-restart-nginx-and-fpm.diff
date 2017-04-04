@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 33aef68..879c4cb 100644
+index 09c314d..486dfee 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -43,12 +43,14 @@
@@ -41,7 +41,7 @@ index 33aef68..879c4cb 100644
  
      - name: Create project directory and set its permissions
        become: true
-@@ -128,3 +133,16 @@
+@@ -134,3 +139,16 @@
        composer:
          working_dir: "{{ symfony_root_dir }}"
          no_dev: no
