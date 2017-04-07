@@ -5,3 +5,14 @@ chapters:
     - vagrant-ansible
     - playbook
     - apt-module
+    - apt-upgrades
+    - php-nginx-mysql
+    - php-ini-config
+    - git-and-variables
+    - ansible-composer
+    - nginx-conf-template
+    - handlers
+    - symfony-console-commands
+    - tagging-tasks
+    - idempotency-changed-when
+    - facts-variables-environment
