@@ -12,7 +12,7 @@ chapters:
     - ansible-composer
     - nginx-conf-template
     - handlers
-    - symfony-console-commands
-    - tagging-tasks
-    - idempotency-changed-when
-    - facts-variables-environment
+    # - symfony-console-commands
+    # - tagging-tasks
+    # - idempotency-changed-when
+    # - facts-variables-environment
