@@ -1,20 +1,119 @@
-# PHP Nginx MySQL
+# PHP 7, Nginx & MySQL
 
-Obviously if this server is going to host their app we're going to need PHP and a bunch of tools around it. Let's get PHP installed. I'll copy the [inaudible 00:00:11] block down here. We're gonna install the PHP CLI utility which is gonna be called php5-cli. Yes, I am installing PHP five because on this version of Ubuntu, that's all that's supported out of the box. But, we're going to upgrade in a second by using a custom channel. That will be really cool, so stick with me.
+Our app is written in PHP... so... we should probably get that installed. Copy the
+`git ` block, paste it, and change it to `php5-cli`. Run that playbook!
 
-Let's try the playbook. While it's running, I'll flip over to my virtual machine where I have vagrant ssh indicated here. Of course, if we try php-v right now, it's not gonna work. But as soon as ansible finishes, switch back and it does work. Php 5.5.9, all right so we all know that php five is dead, especially 5.5, so we need to upgrade to seven. Like I said, on this version of Ubuntu, that's not officially supported. That's no problem because there's always an outside repository that can help us out.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
 
-If you use Ubuntu a lot, you know this is how, when you go through a process of adding an outside repository, which allows you to download, install new packages from that repository. To handle this with ansible, it's not gonna be via the apt module. But there is one called apt repository. Add/remove apt repositories. There's no requirements for it. If we look down on the options, it's fairly simple. It has one required option called repository, we point that at the repository that we need to use.
+And yea... I know PHP 5 is *ancient*. But our Ubuntu distribution doesn't support
+version 7. But don't worry, we're going to upgrade to 7 in a minute by using a custom
+repository. It's going to be awesome - so stay with me.
 
-Then in our playbook, above the installed phpcli, we're gonna say name: add php seven ppa repository. What I'm skipping here is the research of actually figuring out if there is a repository and what the name of that repository is. I've already done that research, so I'm gonna skip straight to using the app repository module, [inaudible 00:03:03] repository ppa:ondrej/php. That's the name of the repository that exists that's gonna allow us to install php seven.
+While the playbook is running, change over to your terminal tab and make sure you're
+still SSH'ed into the VM. Of course, if we try `php -v` right now... it doesn't
+work. But as *soon* as ansible finishes, try it again:
 
-Of course we do it before we install php because down here, now we can install php 7.1-cli. Okay, lets give that a try. I flip back to my tab where I'm running ansible. Execute our playbook. Okay, that finishes, no errors. Two tasks changed which we expected. When we flip over to our vm, we can run php-v 7.1.3, awesome. So php is good, let's go ahead and finish installing the last couple for really necessary things. First, nginx. I'll go above php with the order in this case, it doesn't matter. We'll say install nginx web server. With our normal become true, and use apt. We'll install nginx at the latest state.
+```terminal
+php -v
+```
 
-We'll flip over, go back to our ansible tab and re-run our playbook. Now in reality, because it does take some time to run your playbook, you might want to do multiple steps in a row between trying things. But while we're learning, it's really important just to do one at a time so we can figure out exactly what's happening. Now when that finishes, it means that nginx should be installed in the server and should actually be running. We can flip over here and let's use a curl on the server and curl for local host.
+Yea! Version 5.5.9. Now, let's kill this ancient version of PHP and go to 7.
 
-Yes, we see welcome to nginx. We need to get all of our virtual hosts set up, but nginx is actually running. [inaudible 00:05:50] if we flip over to our host machine ... we should be able to put the ip address of the machine in and that loads up as well. Now eventually, we're gonna want to use mootube.l on our host machine to talk to our virtual machine. To handle that, I'm gonna flip over here, go back to my tab that is on my host machine and I'll pop in and edit my host's file. Down here, wherever is convenient, we'll add 192.168.33.10 and we'll say mootube.l.
+## Using a Custom apt Repository
 
-So that hopefully, we can type http://mootube.l and it hits our server as well. Okay, last thing before we get going is we're also gonna need my sql installed, so I'll copy the nginx configuration, we'll install my sql db server and use the mysql-server package. Then flip over and run our ansible [inaudible 00:07:24]. Now in a bigger infrastructure, you may actually have multiple hosts. One host that just has your web server, and another host that actually hosts your database server. For now, in our setup, we're gonna be putting the nginx php and mysql all onto the same server.
+Here's the deal: if you research how to install PHP 7 on this version of Ubuntu,
+you'll learn about a third-party repository called `ppa:ondrej/php`. If we can add
+this to our apt *sources* - usually done by running a few commands - we'll be in
+business.
 
-As we've seen from our playbook, each play is for a specific host. There's nothing stopping us from having one host for our web where we set up nginx and another host for our database where we install the mysql server and then configure those things to talk to each other. For our development server, we can just put everything on one machine. Awesome, when that finishes, to try it we can go onto our virtual machine and type mysql-u root and we are in. I'll type exit to get back to our normal command line.
+And of course... there's a module for that! It's not `apt`, it's `apt_repository`.
+It doesn't have any requirements, and the options look pretty easy - just set
+`repository` to the one we want to use.
 
+Let's do it! In the playbook, above the PHP task, add a new one: Add PHP 7 Personal
+Package Archive repository. Use the `apt_repository` module and set repository to:
+`ppa:ondrej/php`.
+
+And *now*, we can install `php7.1-cli`. Run it!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Love it... no errors, and 2 tasks changed. Over in the VM, try:
+
+```terminal
+php -v
+```
+
+Oh, sweet PHP 7.1 goodness.
+
+## Install Nginx
+
+We're on a role - so let's take care of installing a few more things, like Nginx!
+Add the new task: Install Nginx web server. I'm putting this above the PHP install,
+but it doesn't matter. Add the normal `become: true`, `apt` and install
+`nginx` with `state: latest`.
+
+Run it!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+And by the way, in the real world... where you can't fast-forward through Ansible,
+running the playbook takes awhile. So, you might want to add multiple steps before
+testhing things.
+
+Ok, worked again! In theory, Nginx is now installed and running! Switch over to
+the VM and try to hit our server:
+
+```terminal
+curl localhost
+```
+
+Hey hey! We are rocking! Sure, we still need to add a lot of Nginx configuration,
+but it *is* running.
+
+*And* we should be able to see this page from our host machine. Find your browser and
+go to `http://192.168.33.10`. Hey again Nginx!
+
+Now eventually, we're going to access the site via `mootube.l` from our host machine.
+To handle that, head to your terminal on your *main* machine - so not the VM - and
+edit your `/etc/hosts` file. Inside, anywhere, add `192.168.33.10 mootube.l`. Save
+that!
+
+Back at the browser test it: `http://mootube.l`. Got it!
+
+## Install MySQL
+
+Before we move on, let's check one more thing off our list: MySQL. Copy the Nginx
+configuration to Install MySQL DB Server. Set it to the `mysql-server` package.
+
+Run Ansible again:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Now, in a bigger infrastructure, you might want to keep your database on a separate
+server, or host, in Ansible language.
+
+As we've seen from our playbook, each *play* is for a specific host. And there's
+nothing stopping us from having one host for our web server, with Nginx and PHP,
+and another host for our database, where we install the MySQL server. But for our
+example, we'll keep them all together.
+
+Ok! Now MySQL should be installed. Move to your VM terminal tab, and try to connect
+to the local server:
+
+```terminal
+mysql -u root
+```
+
+And we are in! Type exit to get out.
+
+We've got Nginx, MySQL and PHP installed. But, PHP isn't ready yet... we're missing
+a bunch of PHP extension and our `php.ini` file needs some changes. Let's crush that!

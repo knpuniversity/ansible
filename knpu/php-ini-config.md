@@ -1,4 +1,4 @@
-# PHP ini Config
+# php.ini Config
 
 So we have a lot of the basics installed. We've got php, we've got mysql, we've got nginx. But of course when we install php, we're just installing php 7.1-cli and in reality, [inaudible 00:00:14] in reality, we're gonna need more than that. We need php-mysql, php-fpm. There's a number of extensions that we're gonna need. That list could go longer and longer depending on what your application requires. So in Ubuntu, this is fairly easy to do because these are all gonna be installed in the apt kit. Apt kit installed php 7.1-curl, -fpm, -mysql. We could copy and paste this line over and over and over again, but fortunately, there's a better way.
 
