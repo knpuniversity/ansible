@@ -13,7 +13,7 @@ and code along with me! After unzipping the file, you'll find a `start/` directo
 which will have the same code that you see here. Follow the `README.md` file to get
 your project up and running. Well actually, setting up the project isn't *that* important,
 because we will ultimately use Ansible to do that! But if you want to see things
-working now follow that file. The last step wiil be to go into your terminal, move
+working now follow that file. The last step will be to go into your terminal, move
 into the directory, and run
 
 ```terminal
@@ -35,7 +35,10 @@ be *bananas* if we could have an automated way to *deploy* code to Amazon EC2 se
 Well, that's *exactly* what we're going to do.
 
 Our project is a Symfony application... but if you're not used to Symfony, that's
-*no* problem. From a server-perspective, the app requires a few interesting things.
+*no* problem. From a server-perspective, the app requires a few interesting things:
+
+[[[ code('a32773e729') ]]]
+
 First, it needs a database connection to load the video info. And second, it uses
 Redis to cache a few things. So when we boot up our servers, that stuff needs to
 be there.
@@ -75,10 +78,10 @@ I'm on a Mac, I've already installed it with: `brew install robotarmy`. I mean,
 brew install ansible
 ```
 
-If you're on different system, check out the Ansible docs for your install instructions.
-Unfortunately, if you're using Windows, you *can't* use Ansible. Well, you can't
-natively. If you're virtualizing a Linux machine or are using Windows 10 with the
-Linux subsystem, then you can install Ansible there.
+If you're on different system, check out the [Ansible docs][[installation]] for your
+install instructions. Unfortunately, if you're using Windows, you *can't* use Ansible.
+Well, you can't natively. If you're virtualizing a Linux machine or are using Windows 10
+with the Linux subsystem, then you can install Ansible there.
 
 Once you've got it, run
 
@@ -89,3 +92,6 @@ ansible --version
 to make sure you have at least version 2.0.
 
 Ok team, let's boot up our robot army!
+
+
+[installation]: http://docs.ansible.com/ansible/intro_installation.html#installation
