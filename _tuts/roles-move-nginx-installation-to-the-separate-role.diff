@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index adb4954..e6b8fcc 100644
+index 0baa9b3..7cab863 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@
@@ -56,8 +56,8 @@ index adb4954..e6b8fcc 100644
      - name: Install MySQL DB server
        become: true
        apt:
-@@ -178,12 +151,6 @@
-         - deploy
+@@ -181,12 +154,6 @@
+     - include: ./includes/symfony-bootstrap.yml
  
    handlers:
 -    - name: Restart Nginx

@@ -266,6 +266,11 @@
             "description": null
         },
         {
+            "id": "roles-move-symfony-bootstrap-tasks-to-separate-file",
+            "name": "Roles: Move Symfony bootstrap tasks to separate file",
+            "description": null
+        },
+        {
             "id": "roles-move-nginx-installation-to-the-separate-role",
             "name": "Roles: Move Nginx installation to the separate role",
             "description": null
@@ -321,5 +326,5 @@
             "description": null
         }
     ],
-    "sha": "7c979555dc2487f1cb7ccc0becacf075bcad49eb"
+    "sha": "cdbbcd3f12482260286616b18872de55d66d5edb"
 }
