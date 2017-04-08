@@ -1,0 +1,18 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 3bb1b41..3e0d1f0 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -172,6 +172,13 @@
+       tags:
+         - deploy
+ 
++    - name: Make sure composer is at its latest version
++      composer:
++        working_dir: "{{ symfony_root_dir }}"
++        command: self-update
++      tags:
++        - deploy
++
+     - name: Install Composer's dependencies
+       composer:
+         working_dir: "{{ symfony_root_dir }}"

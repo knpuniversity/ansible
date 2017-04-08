@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 2c9372c..8e889fa 100644
+index 223ec06..e413dd0 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -145,10 +145,9 @@
@@ -16,7 +16,7 @@ index 2c9372c..8e889fa 100644
  
      - name: Check for Composer
        stat:
-@@ -184,6 +183,7 @@
+@@ -193,6 +192,7 @@
          no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
        tags:
          - deploy
@@ -24,7 +24,7 @@ index 2c9372c..8e889fa 100644
  
      - name: Fix var directory permissions
        file:
-@@ -210,6 +210,7 @@
+@@ -219,6 +219,7 @@
        changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
        tags:
          - deploy
@@ -32,7 +32,7 @@ index 2c9372c..8e889fa 100644
  
      - name: Load data fixtures
        command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
-@@ -223,6 +224,7 @@
+@@ -232,6 +233,7 @@
        changed_when: false
        tags:
          - deploy

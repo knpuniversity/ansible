@@ -54,10 +54,10 @@ index 0000000..1dc9bcb
 +    - deploy
 +  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 8e889fa..0baa9b3 100644
+index e413dd0..9b37a59 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -177,54 +177,8 @@
+@@ -186,54 +186,8 @@
        tags:
          - deploy
  

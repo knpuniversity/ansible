@@ -251,6 +251,16 @@
             "description": null
         },
         {
+            "id": "when-upgrade-composer-task",
+            "name": "When: Upgrade Composer task",
+            "description": null
+        },
+        {
+            "id": "when-adding-changed-when-to-upgrade",
+            "name": "When: Adding changed_when to upgrade",
+            "description": null
+        },
+        {
             "id": "when-register-clone-variable",
             "name": "When: Register clone variable",
             "description": null
@@ -321,5 +331,5 @@
             "description": null
         }
     ],
-    "sha": "cdbbcd3f12482260286616b18872de55d66d5edb"
+    "sha": "8ae9b0f9bc96d8d825e183ec92c227040b1df75d"
 }
