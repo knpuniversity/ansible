@@ -241,11 +241,6 @@
             "description": null
         },
         {
-            "id": "includes-move-symfony-bootstrap-tasks-to-the-separate-file",
-            "name": "Includes: Move Symfony bootstrap tasks to the separate file",
-            "description": null
-        },
-        {
             "id": "when-stat-for-composer-file",
             "name": "When: stat for composer file",
             "description": null
