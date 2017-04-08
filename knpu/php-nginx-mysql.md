@@ -64,8 +64,8 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
 ```
 
 And by the way, in the real world... where you can't fast-forward through Ansible,
-running the playbook takes awhile. So, you might want to add multiple steps before
-testhing things.
+running the playbook takes awhile. So, you might want to add multiple tasks before
+testing things.
 
 Ok, worked again! In theory, Nginx is now installed and running! Switch over to
 the VM and try to hit our server:
