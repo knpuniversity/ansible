@@ -1,24 +1,128 @@
-# php.ini Config
+# Extension, php.ini & lineinefile
 
-So we have a lot of the basics installed. We've got php, we've got mysql, we've got nginx. But of course when we install php, we're just installing php 7.1-cli and in reality, [inaudible 00:00:14] in reality, we're gonna need more than that. We need php-mysql, php-fpm. There's a number of extensions that we're gonna need. That list could go longer and longer depending on what your application requires. So in Ubuntu, this is fairly easy to do because these are all gonna be installed in the apt kit. Apt kit installed php 7.1-curl, -fpm, -mysql. We could copy and paste this line over and over and over again, but fortunately, there's a better way.
+PHP, MySQL and Nginx: check, check and check! But we've *only* installed `php7.1-cli`.
+An in reality, we need a lot more than that! What about `php7.1-mysql` or `php7.1-fpm`?
+Yep, we need those friendly extensions... and a few others.
 
-What we effectively want to do is apt kit install a bunch of packages at once. To do that, let's change our name of this task to install php packages. Then, where we have the name, we're gonna put double quotes, then {{ item then close }}. Below the apt module, we'll say with underscore items, then we're gonna make a list of all the things that we want to install. Php7.1-cli, our apt is gonna need curl, fpm, intl, and mysql at least. This is really cool. I'll flip over to get that rolling. This is a nice shorthand syntax where it's gonna loop over each of these items in here and put it right here.
+## Looping: with_items
 
-For the first time, we're seeing a bit of templating language that Ansible has built in. Anytime you see open { open { close }, close }, you're writing ginga code, which is python's templating language, which is more or less identical to twig if you've used that. In this case, we are literally opening up ginga and printing a variable called item. That works because Ansible has this nice loop functionality built in with items. Obviously this is gonna work with any module, we don't need to use this just with the apt module.
+Wonderfully, on Ubuntu, these are all installed via `apt-get`. We *could* copy and
+paste the `php7.1-cli` task over and over and over again for each package. Or,
+to level-up our Ansible-awesomeness, we can loop!
 
-When we flip back over, you can see installed a bunch of those packages. I'm gonna go over to my third tab where I've already vagrant ssh'd. I'm gonna go over to my third tab and make sure you're inside the machine via vagrant ssh and now we can run php-I and I'm gonna grep that for mysql. Perfect, you can see pdo mysql files being loaded and we have pdo mysql down here, proving that that last step just worked.
+Let's see how: change the task's name to `Install PHP packages`. Then, instead of
+`php7.1-cli`, add the very cryptic `"{{ item }}"`. Finish it with a new `with_items`
+key *after* the `apt` module. This gets a big list of the stuff we want: `php7.1-cli`,
+`php7.1-curl`, ice cream, `php7.1-fpm`, `php7.1-intl`, a pony and `php7.1-mysql`.
+If we need more goodies later, we can add them.
 
-We re-run that command again and I'm gonna grep for timezone. So we check this out, it says date.timezone no value. Which means that that setting in php, that ini is not set. In [inaudible 00:04:06] that's not that big of a deal, it backs up to utc, but what if we did want to set this? How could we make a change to the php.ini file from inside of Ansible? First question is, where is the php.ini file? I use a little trick where I'll run php--ini and that will tell me that the php to ini file is located right here.
+Flip over to your terminal and try it!
 
-If we open that up, and hit /timezone, inside of here you'll find the line where the date.timezone is set, it's comma'd it out right now. We want Ansible to uncomma that line and set that to UTC for us. I'll hit escape:q to quit out of there. Now remember, with Ansible there's always a module that does that. In this case, I'll search for Ansible lineinfile for the module that's gonna do exactly this for us. As you can see, it says ensure a particular line is in a file or replace an existing line using a regular expression. Down here we have a couple of important options.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
 
-The only required one, if you look at the list is called path, that's the path to the file that you want to modify. Then we're also gonna use the regxp option, it says the regular expression to look for in every line of the file. Which means it's gonna search for a regular expression, we'll have it search for date.timezone. Then here, we're gonna use these line option. It says the line to insert or replace into the file. As you can see, with the descriptions on here, there's some really powerful things you can do with regular expressions. But our case is actually pretty simple.
+## Using Jinja
 
-Now before we use this, one other thing to point out is that this option is called path. Over here it says before 2.3, this option was only usable as dest, destfile and name. If you notice, if we flip over to our terminal tab on our host machine and run Ansible--version, we are on Ansible 2.1, so actually we are not going to use the new path option, we're gonna use the old dest option. This is a bit of a gotcha with Ansible. For whatever reason, they always show on their site, the latest version of the documentation, which [inaudible 00:07:46] even includes documentation for versions that aren't released yet. If you try to use an option and it doesn't work, you may need to revert back to an older name for that option.
+While we wait, let's check out the code we just wrote. For the *first* time, we're
+seeing Ansible's templating language in action! Yep, whenever you see `{{ }}`, you're
+writing Jinja code - that's Python's templating language... which - guess what - is
+more or less identical to Twig. Win!
 
-All right, let's add a new task, I'll set date.timezone for cli. Of course, we'll use become true. Use the lineinfile. Module, we'll pass those options that we talked about. First we're gonna pass destination. Which we know is going to be this path here on the machine. The regular expression we're gonna be looking for date.timezone=. In this case, not really a regular expression just a simple string. Then we're going to replace that with date.timezone = utc. Notice that's not just a find and replace. It finds any line that contains this and will replace the entire line down here with this string, which is why the comet symbol, the semi colon is gonna disappear.
+In this case, we're opening up Jinja to print a variable called `item`. That works
+because `Ansible` has this nice `with_items` loop feature. And notice, this is *not*
+special to the `apt` module - it'll work anywhere.
 
-I'm actually gonna copy and paste this whole thing again and change it to set time date.timezone for fpm. And we'll change this director down here from cli to fpm. Because in Ubuntu, they actually maintain two different configuration files. One for the cli and another one, the one we actually use is the php fpm. All right, let's flip over to our host machine ... and run our playbook. As a reminder, I'll go over to my virtual machine here. Right now I'm gonna run php-I grep timezone, no value. Then as soon as that finishes, we can go back over here and now we see utc. We know exactly why that's working, because inside of our php-ini file, that line has been replaced. So line and file, Swiss army knife for modifying configuration files.
+Oh, and those quotes *are* important: quoting is usually optional in YAML. But if
+a value starts with `{`, it's mandatory.
 
+Head back to the terminal. Yes! Celerbate! PHP extensions installed! I'll move to
+my third tab where I've already run `vagrant ssh` to get into the VM. Check for the
+MySQL extension:
 
+```terminal
+php -i | grep mysql
+```
 
+See that PDO MySQL stuff? That proves it worked!
+
+Re-run that command again and look for `timezone`:
+
+```terminal
+php -i | grep timezone
+```
+
+## Tweaking `php.ini` settings with lineinfile
+
+Hmm, it says `date.timezone` no value, which means that it is *not* set in `php.ini`.
+Since PHP 7.0, that's not a *huge* deal - in PHP 5 this caused an annoying warning.
+But, I still want to make sure it's set.
+
+Question number 1 is... where the heck is my `php.ini` file? Answer, run:
+
+```terminal
+php --ini
+```
+
+There it is `/etc/php/7.1/cli/php.ini`. Open that up in `vim` and hit `/timezone`,
+enter, to find that setting. Ok, it's commented-out right now. We want Ansible
+to uncomment that line and set it to UTC. Quit with Escape, `:q`, enter.
+
+So how can we tell Ansible to make a change *right* in the middle of a file? Of course,
+Ansible has a module *just* for that! Search for the `Ansible lineinefile` module.
+Ah, ha!
+
+> Ensure a particular line is in a file, or replace an existing line
+
+Let's check out the options! The only required one is `path` - the file we need
+to change. Then, we can use the `regexp` option to find the target line and `line`
+as the value to replace it with.
+
+Before we do this, look back at the `path` option. It says that *before* Ansible
+2.3, this was called `dest`, `destfile` or `name` instead of `path`. What version
+do we have? Find out:
+
+```terminal
+ansible --version
+```
+
+We're on 2.1! So instead of `path`, we need to use `dest`. This is something to
+watch out for... because at the time of this recording, Ansible 2.3 isn't even
+released yet! For some reason, Ansible always shows the docs for its latest, unreleased
+version.
+
+Let's rock! Add the new task: `Set date.timezone for CLI`. Add `become: true` and
+use the `lineinfile` module. For options, pass it `dest: /etc/php/7.1/cli/php.ini`
+and `regexp: date.timezone =`. We're not leveraging any regex here: this will simply
+find a line that contains `date.timezone =`. Finally, add `line: date.timezone = UTC`.
+
+With the `line` option, the *entire* line will be replaced - not just the part that
+was matched from the `regexp` option. That means the comment at the beginning of the
+line *will* be removed.
+
+Now, copy that entire task and paste it. In Ubuntu, there are 2 different `php.ini`
+files: rename this one to `Set date.timezone for FPM`. Change the `dest` path
+from `cli/` to `fpm/`. That's the correct path inside the VM.
+
+Run it!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Before that finishes, flip back to the VM and check the timezone setting:
+
+```terminal
+php -i | grep timezone
+```
+
+No value. Then... once it finishes... try it again:
+
+```terminal
+php -i | grep timezone
+```
+
+Got it! UTC! I'll open up my `php.ini` to be sure... and... yes! The line was perfectly
+replaced.
+
+Say hello to `lineinfile`: your Swiss army knife for updating configuration files.

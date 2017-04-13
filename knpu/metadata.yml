@@ -10,6 +10,7 @@ chapters:
     - php-ini-config
     - git-and-variables
     - ansible-composer
+    - composer-deps
     - nginx-conf-template
     - handlers
     # - symfony-console-commands

@@ -1,40 +1,92 @@
-# Composer
+# Installing Composer & the script Module
 
-Now that we have the project pulled down, we need to use Composer to install its dependencies. Actually, we used the Composer module earlier. Actually going to Google again for Ansible Modules to get the full All Modules page up. From here I'll search for Composer and open this in a new tab.
+With our project cloned, the next step is obvious: use Composer to install our dependencies!
+Actually, we used the Composer module earlier from the command line. Google again
+for "Ansible Modules" and find the "All Modules" page. I'll find the `composer`
+module and open that in a new tab.
 
-Remember, one of the dependencies for the Composer module is that you actually need to have Composer installed in a bin path, like usr/local/bin. We do not have that yet, and Composer is not something that can be installed via App Get. How do you install Composer? Well we all know, we go to getcomposure.org. We hit download and it gives us these four lines of code here.
+This module is really easy... except for one problem. Under Requirements, it says
+that `composer` already needs to be installed. We have *not* done that yet... and,
+unfortunately, it can't be installed with `apt-get`.
 
-Now the problem is, because it says down here, it says, "Do not redistribute the install code. It will change for every version of the installer." Because Composer has some built in security here to verify that the installer is valid and there's not some sort of security problem. We really don't want to just blindly run these four commands on the Ansible. Instead you can follow the link to how to install Composure programmatically. It gives you this shell script, which is interesting.
+## Installing Composer Programmatically?
 
-Basically you run this shell script, it will go out and get the expected signature, download the Composure setup file, execute the Composure setup file, and make sure that the signature was the expected signature. The end result of running the script is that we have a Composure.phar file right in our directory.
+So how *do* you install it? Check out http://getcomposer.org and click "Download".
 
-What we're going to need to do is actually run this script. Now, before we start Composure itself, near the top, after I install [cowsay 00:02:03], I'm actually going to add one other quick task called "Install low-level utilities, become: true, apt:" and then I'm going to use the loop syntax so I will install item, with_items, zip, and unzip. The reason I'm doing this is if I didn't do this, Composer is going to work more slowly. You'll actually see a bunch of warnings if you to use Composer on a system without zip and unzip. I'm going to install those just so we have them, though technically our system would work either way.
+Normally, we just paste these lines into our terminal and celebrate! But... there's
+this problematic fine print at the bottom:
 
-Now, our goal is to run this script on our host machine. Fortunately, there is actually a module called Script, which does exactly that. Runs a local script on a remote node after transferring it. Awesome. Because you see down here, we basically just point it at the local script and it takes care of uploading it and everything else. Let's go over to the "How to install Composer", let's copy our script, and in our Ansible director I'm going to create a new scripts directory with a new file called install.composer.sh. Paste that in there.
+> Do not redistribute the install code. It will change for every version of the install.
 
-Next, at the bottom, create a new task called "Download Composer" and we use the new scripts module. You notice that the easiest way to use the script is just to literally put it on the same line as the module name. They don't even have a name key, I'm going to keep the name key for my consistency. But whenever you use a module, there's always a single line way of doing it, and then the multi-line way that I prefer. In this case we'll use the single line. We'll say "script" and we can point that directly at our "scripts/install_composer.sh".
+Huh. Composer includes a bit of built-in security: a sha hash to make sure that
+the installer hasn't been tampered with. If we tried to use these 4 commands in
+Ansible, it would work... for awhile. But next time the installer is updated, and
+that sha changed... it would *stop* working.
 
-Now, as I mentioned, the end result of this script is it actually downloads a Composer.phar file into whatever directory this is running in. Since we haven't specified a directory, this is just going to run in our home director, which is great, because it also means that we don't need to become root in order to download Composer. But it does mean we then need to take that Composer.phar file and move it into a bin director. So we'll create a second thing here called Move Composer globally. This will require "become: true" and in this case, I'm going to use the command module that we used earlier.
+What do to!? Check out that [how to install Composer programmatically](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md)
+link. Eureka: a shell script that will safely download the latest version of Composer.
+The end result is a `composer.phar` file wherever we run this script from.
 
-I'll close script, find command, and like script, the easiest way to use command is just via the freeform single line method. So we'll say "command: mv composer.phar" to "/usr/local/bin/composer". Now, if you're a little surprised I'm using command module here, that's good. That's good. You might have expected there to be a module that helps move files, and in fact that's the first thing that I looked for. We know there is a nice file module that helps us create files, directories, and symlinks, but the file module doesn't move files. If you want to move files, you should just use the command module. But in general, don't rush to use the command module, there's usually a built-in, better module than the command module. Only use it when you actually need to.
+## Installing Composer with script
 
-Our last thing, once we move Composer to that spot, we're going to need to make sure that it has the executable permissions on it. So I'll say, "name: Set Permissions on Composer, become: true." In this case we're going to go back and use the file module. Remember, Composer, Ansible is all about state. The file module is really less about creating files or symlinks and more about making sure those files and symlinks exist and that they exist with the correct permissions. In this case, we're going to take advantage of the mode option to guarantee that this file is in a specific mode. I'll use the file module, set its path to "/usr/local/bin/composer" and then we'll use the mode and set that to "a+x" so that all users have executable permissions on composer. Now, notice I do have the path repeated in two places for Composer, so if you wanted you could set that up as a variable on top as well so that you're not repeating that everywhere.
+Our mission is clear: somehow, execute this shell script via Ansible. But before
+we do that, near the top, add one new task: Install low-level utilities. Here, use
+the `apt` module and the `with_items` syntax to install `zip` and `unzip`. Without
+these, Composer will run *really* slowly and you'll blame Jordi when you should
+be thanking him.
 
-Okay. Let's give this a try. I'll go back to my host machine, we'll run Ansible. On my server, you see that I am in my home directory, you see there's nothing in my home directory right now. But if you're really fast, you'll actually see the installation script actually download something into that directory. Oh, and it actually fails with "file or module does not exist." Install_Composer.sh. So let's see what mistake we made here.
+Now, back to our main job: how can we execute a script on a host? Why, with... the
+`script` module of course!
 
-Ah, watch the spelling on that. Underscore Composer.sh.
+> Runs a local script on a remote node after transferring it
 
-Let's go over and run our Ansible command. Inside of our VM, you can see we're currently in our home directory and there's nothing in our home directory. If you're quick, during the download Composer task, we'll actually see the shell script download a file into that directory. There it is. Composer-setup, [inaudible 00:09:53] composer-temp.phar, turns into composer.phar and then it's gone because our task successfully moved it over here. Awesome. So because of that, we can finally type composer and we have everything.
+Neato! We just point it at a local script, and it takes care of the rest. Go copy
+the script and, in our `ansible` directory, create a new `scripts` directory and
+a new file called `install_composer.sh`. Paste the code there.
 
-With this in place, we can finally go over back to the Composer module and use this to install our dependencies. Now, you remember before we actually used this directly from command line to install our Composer packages, so this is going to work no different. We'll call the task "Install Composer's dependencies", use the Composer module, use the one required option, which we'll set to "symfony_root_dir". And that's it. Coming back over here, and rerun our playbook.
+Back in the playbook, at the bottom, create a new task: Download Composer. Use the
+`script` module. Then, the easiest way to use this is to literally put the script
+filename on the same line as the module name: `script: scripts/install_composer.sh`.
+Actually, every module can be used with a one-line syntax like this... but since
+line breaks are pretty cheap these days, I usually organize things a bit more.
 
-Once it installs Composer's dependencies, it'll pause on this step for a second because it's doing the work. Whoa, and in this case it actually explodes. Let's check this out. First you can see that it looks like it was downloading everything just fine. In fact, if we go over to our directory, I'm going to move to "var/www/project" and ls vendor, it looks like everything's there. The problem actually came later, when it ran Symfony's post-install tasks, and we see "Fatal error: Uncaught" exception, SensorGeneratorBundle does not exist.
+Thanks to this task, we'll have a new `composer.phar` file in our home directory,
+which is where this task - well, all tasks - are running. But that's not enough:
+we need to move this to `/user/local/bin/composer`.
 
-The problem is that by default, the Composer module runs Composer like this. "Composer install --no-dev". Which may or may not be what you want. When you use --no--dev, it means it's not going to install the things that are inside of your required -dev key. In a typical Symfony installation, that actually makes things blow up, unless you go a step further and actually set some environment variables, which we'll do later. But on this machine, we actually probably do want dev dependencies because it's going to be a development machine. So to fix that in our playbook, we're going to set an option "no_dev" to no, or false. This is the same thing we actually used from the command line earlier. This time when we run the playbook it's going to run a lot faster, because we already downloaded everything we need, so when it re-runs Composer it will pass and be a lot faster.
+## Moving Composer Globally
 
-Oh, except this time it blows up with a different error. "Attempted to load class \"DOMDocument\" from the global namespace." So, here's the problem. Here's what we should have done originally. When you download a new Symfony project, you can run "php bin/symfonyrequirements", it actually checks to make sure your system has everything it needs on it before it runs. If you check the file, it says "Your system is not ready to run Symfony projects." It actually, the biggest problem is it says "simplexml_import_dom() must be available, Install and enable the SimpleXML extension." Which actually means, further up, when we were installing our extensions, we need to install php7.1-xml.
+Create another task: Move Composer globally. This time, use `become: true` and use
+the `command` module. In your browser, go find the `command` module. Like with `script`,
+`command` has a short syntax. We'll say: `command: mv composer.phar` to `/usr/local/bin/composer`.
 
-The cool thing about this, is this is usually the stuff we forget about when we're setting up a new machine, and then we run it, and then we forget next time we set up the machine. This time that's hard-coded into our playbook, so we can rerun this playbook over and over again in the future and never again forget about the xml extension.
+If you're a little surprised that I'm using the `command` module instead of some
+built-in `file` or `move` module... me too! In general, you should always look for
+a built-in module first: they're always more powerful than using `command`. But sometimes,
+like with moving files, `command` *is* the right tool for the job.
 
-Finally, this time, it works just time. We flip over and run the Symfony requirements again, we're in really good shape. We do have one optional recommendation but we have taken care of our required recommendations, and probably most importantly, we can run "bin/console" and boot up Symfony's console which actually proves that our application is working. So now the last big step is to configure an enginex virtual host to point to this project, get that configured with PHP FDM so we can actually pull the site up on the other web.
+Add *one* more task to make sure the file is executable: "Set Permissions on Composer"
+with `become: true`.
 
+Remember, Ansible is all about *state*. The job of the `file` module isn't really
+to *create* files or symlinks. Instead, it's to make sure that they *exist* and
+have the right permissions. In this case, we're going to take advantage of the
+`mode` option to guarantee that the file is executable.
+
+In the playbook, use the `file` module, set `path` to `/usr/local/bin/composer`
+and `mode` to `"a+x"` to guarantee that all users have executable permission.
+
+Oh, and make sure the file you created is `install_compser.sh`.
+
+Time to give this a try. Find your main machine's terminal and run the playbook!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Back on the VM, I'm in my home directory. And right now, it's empty. But if you're
+really fast, you can see the installation script doing its work. There it is:
+`composer-setup.phar`, `composer-temp.phar`, `composer.phar` and then it's gone
+once our task moves it. Yes!
+
+And finally, we can type `composer`. Let's install some dependencies already!

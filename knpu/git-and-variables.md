@@ -1,26 +1,96 @@
-# Git and Variables
+# Cloning the Code & Using Variables
 
-So, at this point we have PHP. We're not totally done setting things up, but we are ready to actually pull down our code into the machine. Let's think about what the process looks like. First, we're gonna need to create a directory. And second, we're gonna need to pull down our code with git. There are many valid ways to get your code onto a machine, but pulling down from git is a really, really easy one.
+With PHP setup, it's time to actually pull down our code onto the server. Let's think
+about what this process will look like. First, we need to create a directory. Then
+we need to clone our code with `git`. Well there are several ways to get code onto
+a machine - but using `git` is a really nice option.
 
-So, first creating a directory. Very simple thing to do. Not surprisingly, Ansible has module for that. Google for the Ansible file module, you'll find this, which you can see sets attributes of files, symlinks, and directories. So, if you're ever creating a file, symlink or directory and you need to change the permissions on it, this is your guide.
+## The file Module
 
-As before, it has a number of options, Path is gonna be the one that's really most important to us. There's other ones like State, which is where we tell it to create a symlink file or directory. And then we'll also be able to set the owner and the group onto that, for permissions purposes.
+Let's create that directory. Not surprisingly, Ansible has module for this. Search
+for the `Ansible file module`. Yes! This helps set attributes on files, symlinks
+and directories. If you need to create any of these or set permissions, this is
+your friend.
 
-So, let's do it. Name: Create project directory and set its permissions. We'll need to become true because this is gonna be creating on a part of the file system that we don't have access to. And we'll do var/ww/project. State: Directory, so that it creates directory. And then we're gonna set the owner to vagrant. And the group to vagrant. Because remember, that's where [SSH-ing 00:01:45] as, so we want to create them as us, so we can actually write to them later. Also gonna set recurse to yes, instead of the var or www directories don't exist, it's just gonna create those.
+The most important option is `path`, but there are few other we'll need, like `state`,
+where you choose what type of "thing" the path should be, and also, `owner`, `group`
+and `mode` for permissions goodness.
 
-Now before we actually try this, as I mentioned, as the vagrant owner and group are because that's who were SSH-ing as. If you check out our host INI file, you'll remember that we actually hinted vagrant, said, "Hey, when you SSH to this, use the vagrant user name." And we did that by overriding a built-in variable called [and-spawners 00:02:22] or user. Well, guess what? Variables are things that we can actually use in our playbook. So, instead of hard-coding vagrant here and also having it in our host file, we instead can open up [Ginga 00:02:34] with curly-curly and then say Ansible_user. End curly, end curly.
+You know the drill: create a new task: `Create a project directory and set its permissions`.
+Use `become: true`, use `file` and set `path` to, how about, `/var/www/project`.
+The `state` should be `directory` and add `owner: vagrant` and `group: vagrant`.
+This will let our SSH user write these files.
 
-I repeat the same thing down below for the group. Now, notice I have these surrounded in double quotes. Usually, in YAML, it doesn't really matter if you quote or don't quote or not sure of quote stuff. But, because the curly brace is a special character in YAML, if your value starts with curly brace, like it does here, you need to have quotes around that.
+***TIP
+In some setups, you might want to have your web-server user - e.g. `www-data` - be
+the owner if this directory. Then, you can use `become: www-data` on future calls
+to become that user.
+***
 
-So, I'll run over here and we'll start running our playbook. While we're waiting for that, let's get to the next step. Once we have this directory, we're gonna want to clone our repository onto it. Not surprisingly, there is a Ansible git module which is awesome. We're only gonna use a small part of how powerful this is. As you see, it has requirements that git is already installed, which is why we installed git earlier. And it's pretty simple. We're gonna pass it to the repository that we want to clone from. And the destination that we want to clone to.
+Oh, and set `recurse: true` - in case `/var/www` doesn't exist, it'll create
+that!
 
-We're also gonna use this force flag, which is way for it to remove any modified files and just run them over in case we went on and changed some files on the server. For now, instead of actually pulling down our [inaudible 00:04:11] code, for simplicity's sake, we're gonna pull down this Symphony Standard Edition. So I'm gonna copy the Cloner download link, it doesn't matter if you use SSH. I use the HTTPS version.
+## Referencing Variables
 
-And down here, let's start this. This time, we'll say check out git repository. We do not need to become true because we're gonna put it into our directory that we own, so that's awesome. We can go straight to our git, paste the repo, paste the destination, and /bar/ww/project. And then we'll say force yes.
+But don't try this yet! Thanks to our `hosts.ini` setup, we've told Ansible that
+we want to SSH as the user `vagrant`. We did that by overriding a built-in variable
+called `ansible_user`. Well, guess what? We can *reference* that same variable in
+our playbook! Instead of hardcoding `vagrant`, use Jinja: `{{ ansible_user }}`. Repeat
+that next to `group`.
 
-Now, before we try that, let's flip over here and, awesome, you can see that the directory was created. If we move over to our vagrant machine, we can Ls/var, www/project, which right now is empty. Now, our new task for checking out the git repository is perfect, but we have the same problem we had before, which is that this var/ww/project thing is duplicated in two places, which is not the biggest deal, but you know. It's not ideal. So, in the same way that we overrode a variable called Ansible_user, which was a built-in variable, we can also just add random new variables to our playbook. It's a really powerful idea.
+Start up your playbook!
 
-I'll go all the way back up to the top and, right below my hosts, I'm gonna add vars. Vars, and then below that, I'm gonna say, symphony_root_dir. We'll set that to /var/ww/project. Just like before, if you copy that, down below, we're just gonna use that by doing double curly brace, paste the variable, and double curly brace, making sure that we have that surrounded in double quotes. Same thing, down here for destination.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
 
-All right. We're in good shape. Let's give it a try. Switch back over to my virtual machine. Re-run Ansible. Fast forward through all the steps. I've finished this successfully and, over here in our VM, there it is cloned into the project. So, our project was down, but we're not done. We still need to do Composer install and we need to set up a bunch of other things as well. Let's do it.
+## The git Module
 
+While we're waiting, let's moveto the next step: cloning our code via git. Unfortunately,
+Ansible does *not* have a `git` module to help us... bah! Just kidding, it totally
+does! Search for the `Ansible git module` to find it.
+
+The module *does* have `git` as a requirement - but we already installed that. So
+our job is pretty simple: pass it the `repo` we want to clone, and the `dest`-ination we
+want to clone to.
+
+Do it! Go to `http://github.com/symfony/symfony-standard`. To start, we'll pull down
+the Symfony Standard Edition *instead* of our MooTube code. But that's just temporary.
+I'll click the "Clone" button and copy the URL.
+
+Now, add a task: `Checkout Git repository`. We do *not* need `become: true` because
+we *own* the destination directory. Go straight to `git`, then `repo` set to the
+URL we just copied. For `dest`, put `/var/www/project`. Add `force: yes`: that'll
+discard uncommitted changes if there are any.
+
+Head back to your terminal. Sweet! The directory *was* created! In the VM, the
+`/var/www/project` directory is empty.
+
+## Creating a Variable
+
+Before we run the new `git` task, I want to solve *one* last thing: we have duplication!
+The directory name - `/var/www/project` is in *two* places. Lame!
+
+Well, good news: in addition to overriding variables - like `ansible_user` - we
+can create *new* variables.
+
+Go all the way to the top of the file - right below `hosts` - though the order doesn't
+matter. Add a new `vars:` key, then below, set `symfony_root_dir: /var/www/project`.
+
+Copy that new variable name and use it *just* like before: `{{ symfony_root_dir }}`.
+Repeat that next to `dest`.
+
+Ok, *now* I'm happy. Move over and try the playbook!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Looks good! Check the directory in the VM:
+
+```terminal
+ls /var/www/project
+```
+
+Got it! The code is here, but it's not working yet: we need to install our Composer
+dependencies!
