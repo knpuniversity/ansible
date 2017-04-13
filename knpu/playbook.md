@@ -26,10 +26,18 @@ Error!
 ## Your First Play and Task
 
 Ah, ok, this is a preview of some Ansible terminology. Let's start filling in the
-playbook. At the top, every YAML file in Ansible starts with three dashes (`---`).
+playbook. At the top, every YAML file in Ansible starts with three dashes (`---`):
+
+[[[ code('011e51fe26') ]]]
+
 It's not really important and doesn't meaning anything... it's just a YAML standard.
-Below, add `host: all`. Then, indent two spaces, add `tasks`, indent again, and 
-add `ping: ~`.
+Below, add `host: all`:
+
+[[[ code('1a51639663') ]]]
+
+Then, indent two spaces, add `tasks`, indent again, and  add `ping: ~`:
+
+[[[ code('3b17ffb71b') ]]]
 
 If you're new to YAML, you *do* need to be careful: the spacing and indentation
 are important. Try it:
@@ -55,8 +63,11 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -l vb
 
 But a better way is to configure this *inside* of your playbook. This play will
 be responsible for setting up an entire server... so we don't want to run it against
-our local machine... ever. Change the `all` to `vb`. Now try the command, but without
-the `-l` option:
+our local machine... ever. Change the `all` to `vb`:
+
+[[[ code('1c56d58c81') ]]]
+
+Now try the command, but without the `-l` option:
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini

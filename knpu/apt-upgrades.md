@@ -14,13 +14,21 @@ the `upgrade` option.
 
 Head back to your playbook and add a new task to update the APT package manager
 repositories cache. Add `become: true`, use the `apt` module, and set `update_cache`
-to `yes`. Remember, `yes` and `true` mean the same thing.
+to `yes`:
+
+[[[ code('69375ccc9c') ]]]
+
+Remember, `yes` and `true` mean the same thing.
 
 ## upgrade: Upgrading Packages
 
 Cool! Copy that task to create the next one: upgrade the existing packages. Now,
-set `upgrade` to `dist`. There are a few possible values for `upgrade` - some upgrade
-more aggressively than others.
+set `upgrade` to `dist`:
+
+[[[ code('f48d0ef4cd') ]]]
+
+There are a few possible values for `upgrade` - some upgrade more aggressively
+than others.
 
 Find your terminal and run that playbook!
 
@@ -68,8 +76,11 @@ In this case, the requirement is already met out-of-the-box. But in other situat
 in fact, in older versions of this Ubuntu image, you may need to add a task to install
 `aptitude` via the `apt` module.
 
-But now, just set `upgrade` to `safe`. Then, try the playbook again to make sure
-it's still happy!
+But now, just set `upgrade` to `safe`:
+
+[[[ code('d1fd3b6e59') ]]]
+
+Then, try the playbook again to make sure it's still happy!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
@@ -83,7 +94,10 @@ we need.
 ## Installing git
 
 So let's add a task to install the Git version control system: we'll use it to "deploy"
-our code. Like always, `become: true`, use the `apt` module, and use `name: git`.
+our code. Like always, `become: true`, use the `apt` module, and use `name: git`:
+
+[[[ code('6102532c24') ]]]
+
 I'll move this below `cowsay` - but the order between these doesn't matter.
 
 Try this out:
@@ -103,7 +117,11 @@ a lot smarter than simply running `apt-get install`: the module helps guarantee
 that a package is in a specific *state*, like "present" or "absent"... if you wanted
 to make sure that a package was *not* installed.
 
-Add `state` to our task, set to `latest`. Now, instead of simply making sure that
+Add `state` to our task, set to `latest`:
+
+[[[ code('fa9eaef070') ]]]
+
+Now, instead of simply making sure that
 the package is *present* on the system, it will make sure that it's upgraded to the
 *latest* available version. This setting is a bit more aggressive - so do what's
 best for you.
