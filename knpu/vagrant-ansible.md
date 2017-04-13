@@ -9,7 +9,13 @@ for each OS, but should - hopefully - be pretty easy. Next, make sure you have V
 it has a nice installer for every OS. On my Mac, surprise! I installed Vagrant via
 brew.
 
-As long as you can type `vagrant -v`, you're good to go.
+As long as you can type: 
+
+```terminal
+vagrant -v
+```
+
+you're good to go.
 
 ## Vagrantfile Setup!
 
@@ -50,13 +56,17 @@ With any luck, you'll step right into your brand new, basically empty, but total
 awesome, Ubuntu virtual machine.
 
 By the way, Vagrant stores some info in a `.vagrant` directory. In a real project,
-you'll probably want to add this to your `.gitignore` file.
+you'll probably want to add this to your `.gitignore` file:
+
+[[[ code('e384a4a614') ]]]
 
 ## Setup an External IP Address
 
 Our goal is to have Ansible talk to this new VM. For that, we need a dependable IP
 address for the VM. Check out the `Vagrantfile` that was generated automatically
 for us: it has a section about a "private network". Uncomment that!
+
+[[[ code('efdace2f14') ]]]
 
 This will let us talk to the VM via `192.168.33.10`.
 
@@ -76,7 +86,9 @@ ping 192.168.33.10
 
 The VM represents a new host. And that means we need to add it to our hosts file!
 In `hosts.ini`, let's keep the `local` group and add another called `vb`, for VirtualBox.
-Under there, add the IP: `192.168.33.10`.
+Under there, add the IP: `192.168.33.10`:
+
+[[[ code('a46814d8af') ]]]
 
 We know that as soon as we make this change, we should be able to use the `vb` host:
 
@@ -98,7 +110,7 @@ ssh vagrant@192.168.33.10
 
 Woh! Our first error looks awesome!
 
-> WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED
+> WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 
 You may or may not get this error. Since I've used Vagrant in this same way in the
 past, it's telling me that last time I SSH'ed to this IP address, it was a different
@@ -116,7 +128,9 @@ if you're using a different image.
 
 We're inside! So, how can we tell Ansible to SSH with username `vagrant` and password
 `vagrant`? The answer is... not surprising! These are two more variables in your
-hosts inventory file: `ansible_user` set to `vagrant` and `ansible_ssh_pass=vagrant`.
+hosts inventory file: `ansible_user` set to `vagrant` and `ansible_ssh_pass=vagrant`:
+
+[[[ code('ce698677df') ]]]
 
 Try the ping again:
 
