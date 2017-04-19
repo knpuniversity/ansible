@@ -13,7 +13,13 @@ chapters:
     - composer-deps
     - nginx-conf-template
     - handlers
-    # - symfony-console-commands
-    # - tagging-tasks
-    # - idempotency-changed-when
-    # - facts-variables-environment
+    - symfony-console-commands
+    - tagging-tasks
+    - idempotency-changed-when
+    - facts-variables-environment
+    - faster-smarter-playbook
+    - ansible-roles
+    - 3rd-party-roles
+    - variable-vault
+    - ec2-deploy-group-vars
+    - launch-cloud-instance
