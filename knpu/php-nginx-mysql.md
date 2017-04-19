@@ -1,7 +1,11 @@
 # PHP 7, Nginx & MySQL
 
 Our app is written in PHP... so... we should probably get that installed. Copy the
-`git ` block, paste it, and change it to `php5-cli`. Run that playbook!
+`git ` block, paste it, and change it to `php5-cli`:
+
+[[[ code('af5f41639c') ]]]
+
+Run that playbook!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
@@ -13,7 +17,7 @@ repository. It's going to be awesome - so stay with me.
 
 While the playbook is running, change over to your terminal tab and make sure you're
 still SSH'ed into the VM. Of course, if we try `php -v` right now... it doesn't
-work. But as *soon* as ansible finishes, try it again:
+work. But as *soon* as Ansible finishes, try it again:
 
 ```terminal
 php -v
@@ -34,9 +38,15 @@ It doesn't have any requirements, and the options look pretty easy - just set
 
 Let's do it! In the playbook, above the PHP task, add a new one: Add PHP 7 Personal
 Package Archive repository. Use the `apt_repository` module and set repository to:
-`ppa:ondrej/php`.
+`ppa:ondrej/php`:
 
-And *now*, we can install `php7.1-cli`. Run it!
+[[[ code('4962fcaf0c') ]]]
+
+And *now*, we can install `php7.1-cli`:
+
+[[[ code('b76fe9585e') ]]]
+
+Run it!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
@@ -55,7 +65,9 @@ Oh, sweet PHP 7.1 goodness.
 We're on a role - so let's take care of installing a few more things, like Nginx!
 Add the new task: Install Nginx web server. I'm putting this above the PHP install,
 but it doesn't matter. Add the normal `become: true`, `apt` and install
-`nginx` with `state: latest`.
+`nginx` with `state: latest`:
+
+[[[ code('fecf6a8c71') ]]]
 
 Run it!
 
@@ -90,7 +102,9 @@ Back at the browser test it: `http://mootube.l`. Got it!
 ## Install MySQL
 
 Before we move on, let's check one more thing off our list: MySQL. Copy the Nginx
-configuration to Install MySQL DB Server. Set it to the `mysql-server` package.
+configuration to Install MySQL DB Server. Set it to the `mysql-server` package:
+
+[[[ code('2ab84da6a9') ]]]
 
 Run Ansible again:
 
