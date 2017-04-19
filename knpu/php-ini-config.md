@@ -1,4 +1,4 @@
-# Extension, php.ini & lineinefile
+# Extensions, php.ini & lineinfile
 
 PHP, MySQL and Nginx: check, check and check! But we've *only* installed `php7.1-cli`.
 An in reality, we need a lot more than that! What about `php7.1-mysql` or `php7.1-fpm`?
@@ -26,7 +26,7 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
 
 While we wait, let's check out the code we just wrote. For the *first* time, we're
 seeing Ansible's templating language in action! Yep, whenever you see `{{ }}`, you're
-writing Jinja code - that's Python's templating language... which - guess what - is
+writing Jinja code - a Python templating language... which - guess what - is
 more or less identical to Twig. Win!
 
 In this case, we're opening up Jinja to print a variable called `item`. That works
@@ -69,7 +69,7 @@ enter, to find that setting. Ok, it's commented-out right now. We want Ansible
 to uncomment that line and set it to UTC. Quit with Escape, `:q`, enter.
 
 So how can we tell Ansible to make a change *right* in the middle of a file? Of course,
-Ansible has a module *just* for that! Search for the `Ansible lineinefile` module.
+Ansible has a module *just* for that! Search for the `Ansible lineinfile` module.
 Ah, ha!
 
 > Ensure a particular line is in a file, or replace an existing line

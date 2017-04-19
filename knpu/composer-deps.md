@@ -21,7 +21,7 @@ populated.
 
 The problem was later - when one of Symfony's post-install tasks ran:
 
-> Fatal error: Uncaught exception, SensorGeneratorBundle does not exist.
+> Fatal error: Uncaught exception, SensioGeneratorBundle does not exist.
 
 Oh yea. By default, the `composer` module runs composer like this:
 
@@ -63,7 +63,7 @@ php bin/symfony_requirements
 > Your system is not ready to run Symfony projects.
 
 Duh! The message - about the SimpleXML extension - means that we're missing an extension!
-In our playbook, find the task were we install php. Add another extension: `php7.1-xml`.
+In our playbook, find the task where we install php. Add another extension: `php7.1-xml`.
 
 Run that playbook - hopefully - one last time:
 

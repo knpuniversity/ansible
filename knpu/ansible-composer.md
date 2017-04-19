@@ -23,7 +23,7 @@ the installer hasn't been tampered with. If we tried to use these 4 commands in
 Ansible, it would work... for awhile. But next time the installer is updated, and
 that sha changed... it would *stop* working.
 
-What do to!? Check out that [how to install Composer programmatically](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md)
+What to do? Check out that [how to install Composer programmatically](https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md)
 link. Eureka: a shell script that will safely download the latest version of Composer.
 The end result is a `composer.phar` file wherever we run this script from.
 
@@ -52,7 +52,7 @@ line breaks are pretty cheap these days, I usually organize things a bit more.
 
 Thanks to this task, we'll have a new `composer.phar` file in our home directory,
 which is where this task - well, all tasks - are running. But that's not enough:
-we need to move this to `/user/local/bin/composer`.
+we need to move this to `/usr/local/bin/composer`.
 
 ## Moving Composer Globally
 
@@ -76,7 +76,7 @@ have the right permissions. In this case, we're going to take advantage of the
 In the playbook, use the `file` module, set `path` to `/usr/local/bin/composer`
 and `mode` to `"a+x"` to guarantee that all users have executable permission.
 
-Oh, and make sure the file you created is `install_compser.sh`.
+Oh, and make sure the file you created is `install_composer.sh`.
 
 Time to give this a try. Find your main machine's terminal and run the playbook!
 

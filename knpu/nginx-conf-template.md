@@ -91,7 +91,7 @@ have the link, and `/etc/hosts` has our new `mootube.l` line at the bottom.
 Wow, we just killed it!
 
 So, in theory, we should be able to go to our browser and refresh `http://mootube.l`
-to see our site. Refresh! Um.... we still see the same, boring - but polity - Nginx
+to see our site. Refresh! Um.... we still see the same, boring - but polite - Nginx
 Configuration page.
 
 Why? Some of you are probably screaming the answer at your computer... and also

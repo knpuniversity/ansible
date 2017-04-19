@@ -1,4 +1,4 @@
-# Cloning the Code & Using Variables
+# git & Variables
 
 With PHP setup, it's time to actually pull down our code onto the server. Let's think
 about what this process will look like. First, we need to create a directory. Then
@@ -46,7 +46,7 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
 
 ## The git Module
 
-While we're waiting, let's moveto the next step: cloning our code via git. Unfortunately,
+While we're waiting, let's move to the next step: cloning our code via git. Unfortunately,
 Ansible does *not* have a `git` module to help us... bah! Just kidding, it totally
 does! Search for the `Ansible git module` to find it.
 
