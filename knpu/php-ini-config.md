@@ -10,11 +10,20 @@ Wonderfully, on Ubuntu, these are all installed via `apt-get`. We *could* copy a
 paste the `php7.1-cli` task over and over and over again for each package. Or,
 to level-up our Ansible-awesomeness, we can loop!
 
-Let's see how: change the task's name to `Install PHP packages`. Then, instead of
-`php7.1-cli`, add the very cryptic `"{{ item }}"`. Finish it with a new `with_items`
-key *after* the `apt` module. This gets a big list of the stuff we want: `php7.1-cli`,
-`php7.1-curl`, ice cream, `php7.1-fpm`, `php7.1-intl`, a pony and `php7.1-mysql`.
-If we need more goodies later, we can add them.
+Let's see how: change the task's name to `Install PHP packages`:
+
+[[[ code('9ce6f7bc6f') ]]]
+
+Then, instead of `php7.1-cli`, add the very cryptic `"{{ item }}"`:
+
+[[[ code('d9a337303b') ]]]
+
+Finish it with a new `with_items` key *after* the `apt` module. This gets a big
+list of the stuff we want: `php7.1-cli`, `php7.1-curl`, ice cream, `php7.1 -fpm`,
+`php7.1-intl`, a pony and `php7.1-mysql`. If we need more goodies later, we can
+add them:
+
+[[[ code('ca46ddefce') ]]]
 
 Flip over to your terminal and try it!
 
@@ -33,10 +42,13 @@ In this case, we're opening up Jinja to print a variable called `item`. That wor
 because `Ansible` has this nice `with_items` loop feature. And notice, this is *not*
 special to the `apt` module - it'll work anywhere.
 
-Oh, and those quotes *are* important: quoting is usually optional in YAML. But if
-a value starts with `{`, it's mandatory.
+Oh, and those quotes *are* important:
 
-Head back to the terminal. Yes! Celerbate! PHP extensions installed! I'll move to
+[[[ code('7e67e8cb3c') ]]]
+
+Quoting is usually optional in YAML. But if a value starts with `{{`, it's mandatory.
+
+Head back to the terminal. Yes! Celebrate! PHP extensions installed! I'll move to
 my third tab where I've already run `vagrant ssh` to get into the VM. Check for the
 MySQL extension:
 
@@ -65,11 +77,20 @@ php --ini
 ```
 
 There it is `/etc/php/7.1/cli/php.ini`. Open that up in `vim` and hit `/timezone`,
-enter, to find that setting. Ok, it's commented-out right now. We want Ansible
-to uncomment that line and set it to UTC. Quit with Escape, `:q`, enter.
+enter, to find that setting:
+
+```ini
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+;date.timezone =
+```
+
+Ok, it's commented-out right now. We want Ansible to uncomment that line and set it
+to UTC. Quit with Escape, `:q`, enter.
 
 So how can we tell Ansible to make a change *right* in the middle of a file? Of course,
-Ansible has a module *just* for that! Search for the `Ansible lineinfile` module.
+Ansible has a module *just* for that! Search for the "Ansible lineinfile" module.
 Ah, ha!
 
 > Ensure a particular line is in a file, or replace an existing line
@@ -92,9 +113,18 @@ released yet! For some reason, Ansible always shows the docs for its latest, unr
 version.
 
 Let's rock! Add the new task: `Set date.timezone for CLI`. Add `become: true` and
-use the `lineinfile` module. For options, pass it `dest: /etc/php/7.1/cli/php.ini`
-and `regexp: date.timezone =`. We're not leveraging any regex here: this will simply
-find a line that contains `date.timezone =`. Finally, add `line: date.timezone = UTC`.
+use the `lineinfile` module:
+
+[[[ code('fc78c9ba94') ]]]
+
+For options, pass it `dest: /etc/php/7.1/cli/php.ini` and `regexp: date.timezone =`:
+
+[[[ code('75b5d3f036') ]]]
+
+We're not leveraging any regex here: this will simply find a line that contains `date.timezone =`.
+Finally, add `line: date.timezone = UTC`:
+
+[[[ code('a8a99361fc') ]]]
 
 With the `line` option, the *entire* line will be replaced - not just the part that
 was matched from the `regexp` option. That means the comment at the beginning of the
@@ -102,7 +132,9 @@ line *will* be removed.
 
 Now, copy that entire task and paste it. In Ubuntu, there are 2 different `php.ini`
 files: rename this one to `Set date.timezone for FPM`. Change the `dest` path
-from `cli/` to `fpm/`. That's the correct path inside the VM.
+from `cli/` to `fpm/`. That's the correct path inside the VM:
+
+[[[ code('25bc8a3e94') ]]]
 
 Run it!
 
@@ -122,7 +154,15 @@ No value. Then... once it finishes... try it again:
 php -i | grep timezone
 ```
 
-Got it! UTC! I'll open up my `php.ini` to be sure... and... yes! The line was perfectly
-replaced.
+Got it! UTC! I'll open up my `php.ini` to be sure... and...
+
+```ini
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+date.timezone = UTC
+```
+
+Yes! The line was perfectly replaced.
 
 Say hello to `lineinfile`: your Swiss army knife for updating configuration files.
