@@ -30,7 +30,51 @@ vagrant init ubuntu/trusty64
 That just created a file - `Vagrantfile` - at the root of our project that will boot
 a VM using an `ubuntu/trusty64` image. That's not the newest version of Ubuntu, but
 it works really well. You're free to use a different one, but a few commands or usernames
-and passwords might be different! 
+and passwords might be different!
+
+***TIP
+If you want to use the latest Ubuntu 16.04 LST release, you have to do some simple tweaks:
+1. Change the VM box in `Vagrantfile`:
+    ```ruby
+    # Vagrantfile
+    Vagrant.configure("2") do |config|
+      # ...
+      config.vm.box = "ubuntu/xenial64"
+      # ...
+    ```
+2. This version of Ubuntu has a different default username to login via SSH, so you have to
+change it to `ubuntu` and specify the private SSH key file instead of the password - Ansible
+can't log in into the server using just a username and password pair. Also, Ubuntu 16.04 has
+the new pre-installed Python 3, so you have to specidy a valid path to the `python3` binary
+file, because Ansible can't find it by itself. You can specify all this information in
+`hosts.ini` file for the VirtualBox host:
+    ```ini
+    # ...
+    [vb]
+    192.168.33.10 ansible_user=ubuntu ansible_ssh_private_key_file=./.vagrant/machines/default/virtualbox/private_key ansible_python_interpreter=/usr/bin/python3
+    # ...
+    ```
+3. Ubuntu 16.04 doesn't have pre-installed `aptitude` so you have to install it first if you
+want to use `safe` upgrade of installed packages, that's why in your playbook add one more
+task before upgrading:
+    ```yaml
+    ---
+    - hosts: vb
+      # ...
+      tasks:
+        # ...
+        - name: Install aptitude
+          become: true
+          apt:
+            name: aptitude
+
+        - name: Upgrade installed packages
+          become: true
+          apt:
+            upgrade: safe
+        # ...
+    ```
+***
 
 ## Boot that VM!
 
