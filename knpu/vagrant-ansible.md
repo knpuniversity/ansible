@@ -34,6 +34,7 @@ and passwords might be different!
 
 ***TIP
 If you want to use the latest Ubuntu 16.04 LTS release, you'll need a few tweaks:
+
 1) Change the VM box in `Vagrantfile`:
 
 ```ruby
