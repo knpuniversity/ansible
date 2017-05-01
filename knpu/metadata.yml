@@ -13,6 +13,7 @@ chapters:
     - composer-deps
     - nginx-conf-template
     - handlers
+    - cache-permissions
     - symfony-console-commands
     - tagging-tasks
     - idempotency-changed-when

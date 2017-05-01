@@ -1,20 +1,78 @@
 # Tagging Tasks
 
-Sometimes, especially when debugging, it can be useful to run just a subset of your tasks. Like, for example right now, whenever we make a change, we're rerunning out entire playbook, which honestly takes a lot of time. So it might be convenient at times just to run some parts of our playbook. And there are few other real-world non-debugging examples of when we would wan to do this.
+Sometimes - *especially* when debugging - you just want to run only *some* of your
+playbook. Because... our playbook is getting so awesome... that, honestly, it takes
+some serious time to run!
 
-I'm gonna start by breaking our application to show you an example. I'm going to go onto our virtual machine, inside of my project directory, I'm actually going to change our var directory's permissions, to chmod-R 555 var/, with a sudo in front of that, so it actually works. Then I'm gonna do sudo rf var/cache/* so the var cache director needs to be writable for the application to work. So if I flip over to my browser, it explodes. Now this is not something that would normally happen when we're using our application. We don't expect our permissions to change, but to fix this, we know all we need to do is just rerun our entire playbook, because we have a task in here that fixes those permissions.
+For example, in my VM, I'm going to change the permissions on the `var/` directory:
 
-However, if this were happening quite often, we might want to wait to just target this one task. A great way to do this is by giving it a tag. So we can say "tags," and then "permissions." And then very simply from the command line, when we execute our playbook on our host machine, at the end we can add a -t for permissions. And when we do that, it'll still do its setup, but it will only run that one task. Boom. You can see it change, and when we refresh, life is good again.
+```terminal
+sudo chmod -R 555 var/
+```
 
-So let me give you a different example. At this time our playbook is broken up of tasks which really do two separate jobs. Some of these tasks are really about setting up the server, making sure PHP and Nginx is installed and configured and we have our extensions and those types of things. But some of the tasks are really more about code deployment: making sure that the project director is there, cloning the code, installing composer dependencies, and setting up our database.
+Definitely use `sudo`. Then, I'll remove the cache files:
 
-So in the future, we might want to, as we make changes to our code, we might want to just deploy our code but not have to go through all the tasks of setting up the server because we've already done that. So what we're gonna do is we're gonna add a tag called "deploy" to every step in here that's important when we want to update our code. So for example, for the task that actually creates the project directory, we'll add the deploy tag. Checkout Git Repository, that counts, and then the three tasks that install a composer also count because we obviously need to make sure that composer is on the machine. You could not put those in the deploy if you want to and assume that you've already run that; it's up to you.
+```terminal
+sudo rm -rf var/cache*
+```
 
-Installing the composer's dependencies, definitely. Setting up the Nginx configuration is not something that should just be done once. Fixing the permissions, yes, so we'll give that task a second tag, and then setting up the database, absolutely, especially the migration task, which will be responsible for adding new tables as we add them.
+If you try the page now, it explodes! Ok, I don't expect my permissions to suddenly
+change like this under normal conditions. But, suppose that we had *just* hit this
+permission error for the first time and then added the "Fix var permissions" task.
+In that case, we would know that re-running the *entire* playbook should fix things.
 
-All right, so let's try this: I'm gonna go overtime virtual machine. I'm gonna quickly edit a file: app/Resources/views/default/index.html.twig, and I'm gonna add a couple of exclamation points into my template and then write and quit that. If you flip over to your browser, that won't show up right now because we're in Symphony's production environment. But if you add app_deb.php to the URL and go into the deb environment, it should say ... yep, "Filter by Tag!" By the way, the app_deb.php file only works because I have modified the logic in the security here to allow things coming from my host machine. Normally you can't access this file from outside machines.
+But... couldn't we run *just* this *one* task? Yep! And a *great* way to do that
+is via *tags*.
 
-All right, so now we can go to our host machine and we're gonna rerun the ansible pass, this time with -t: deploy, and we'll see how much faster this is. Much, much better, and when you flip over and try your app, boom: our code is reset back to the way it should have been. And in the other hand, sometimes you might want the opposite. You can actually do a -skip-tags deploy. This will do the opposite, in this case, would basically just provision our server by getting everything installed.
+Below the task, add `tags`, and then `permissions`. Now, from the command line,
+tell Ansible to *only* execute tasks with this tag: `-t permissions`:
 
-Awesome.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t permissions
+```
 
+It still goes through its setup but then... yep! Only one task! Refresh the page.
+Permissions fixed!
+
+## Tagging for Deployment
+
+Here's another example. Right now, our playbook has tasks for two separate jobs.
+Some tasks setup the server - making sure PHP, Nginx and other stuff is installed
+and configured. But others are really more about code deployment: making sure
+the project directory exists, cloning the code, installing composer dependencies,
+and setting up the database.
+
+In the future - when we make changes to the code,- we might want to *just* deploy
+that code... without going through all the server setup tasks. Let's add a new
+tag - `deploy` - to every step involved in deployment. See the task that creates
+the project directory? Yep, give it the `deploy` tag. Add it to "Checkout Git Repository"
+and also to the three tasks that install Composer. Actually, this is debatable:
+you might consider Composer as a "Server setup" task, not deployment. It's up to you.
+
+Keep going! I'll add the task to everything that I want to run for *each* code update.
+It's not an exact science.
+
+Let's see if it works! In the virtual machine, I'm going to manually edit a file:
+
+```terminal
+vim app/Resources/views/default/index.html.twig
+```
+
+Let's add a few exclamation points to be *really* excited. Then hit escape, `:wq`
+to save. In the browser, that won't show up immediately - because we're in Symfony's
+`prod` environment. But if you add `app_dev.php` to the URL... yep! "Filter by Tag!".
+
+By the way, going to `app_dev.php` only works because I've already modified some
+security logic in that file to allow me to access it.
+
+Ok, back in our local machine, run the playbook... this time with `-t deploy`:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t deploy
+```
+
+Oh, much, much faster! Try the browser! Code deployed! You can also use `--skip-tags`
+if you want to get crazy and do the opposite.
+
+Next, let's talk about how we can "fix" the fact that some tasks say "Changed" *every*
+time we run them. Eventually, this will help us speed up our playbook.

@@ -1,20 +1,78 @@
 # Symfony Console Commands
 
-Our project is working now. It's on our machine, we've set all the permissions correctly, composers installed. Except it's not actually our project, this is just the symfony standard edition. It's time for us to actually pull down our codes, our project's code.
+The project is working! Except... that it's not actually *our* project: this is the
+Symfony Standard Edition. Our cow customers are waiting: let's install MooTube!
 
-If you go on GitHub to KNP University/ansible, you'll find the code behind this project. So a way that we're going to deploy our code is just basically pulling it down from a Git repository. In this case this is a public Git repository so if you're using a private Git repository there might be a couple, there will be a couple, an extra step in there to make sure that your server has access to your Git repository. This is something that's covered in the Git module.
+Head over to https://github.com/knpuniversity/ansible to find the code behind this
+project. Copy the clone URL and open your editor. Find the spot where we clone the
+repo and use *our* new URL. You know the drill: run the playbook!
 
-Okay, to clone or download, copy the URL and I'll flip over to my browser, my editor and find a spot where we actually clone our repository or replace the repository with our repository. Then flip over and run our ansible playbook to get that started. Now once we have the code pulled down there are a couple of other steps that we need to do in this project. The biggest and most important one is we need to set up the database. If you look at the README.md file, we talk about this. After you downloaded your composer dependencies, you need to set up your database by running these three commands. For symfony users, this will look familiar. We'll execute the bin/console script that's in the bin directory and then we'll run a few commands to get our database set up.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
 
-So this is a perfect use of the command module. There's nothing fancy we need to do, we just need to run these three commands. So let's head into our playbook and right above the hand loaders at the bottom, we'll add a couple of commands. We'll add a couple of tasks for it's symfony console commands. First one is gonna be to create the database, if it does not exist. We use the command module for that. But here we're actually gonna need the path to the bin/console file.
+Our repository is public... which makes life easy. If you have a *private* repository,
+you'll need to make sure that your server has access to it. They talk about that
+a bit in the `git` module docs. You can also use a deploy key.
 
-So a good way to do that and to follow up what we've been doing already is to set that is a variable on top. So I'll go back to the top and create a new variable and we'll call it symfony console path set to symfony_root_dir/bin/console. That's an executable file. And down below we can use that in our command. It's like, curly curly Symfony console path and then doctrine database create. That's an executable file so I don't need to pre-fix it with PHP. Oh, and add a -- If-not-exist on the end. That will make the command only do something if the database doesn't already exist.
+## Using the Console
 
-Perfect. I'll copy that task and create one to execute the migrations but we'll actually add the tables to our database. We use the command doctrine migrations migrate--no-interactions. So that it doesn't ask us or to confirm anything when I run the command it just runs the command. And one more, which will be to load the data fixtures, our test data into the database. This is something we'll only want to run on a development machine which we'll talk about later. This one is going to be hautelook_Alice:doctrine:fixtures:load--no-interaction. Again, these are just coming from our reboot file, these are the commands that I know that I need to run to get the project set up.
+Once we have the code, we need to setup a few other things, like the database.
+The `README.md` file talks about these: after you download the composer dependencies,
+you can set up the database by running these three commands. Each runs through Symfony's
+console: an executable file in the `bin/` directory.
 
-All right, so we'll flip back over to ansible and whoa. You can see we blew up huge. Remember this was running just after we changed our project. And actually the reason is not that important, you see down here it says an error occurred during the cache:clear-- warmup command. -- no warmup command. So after we run composer installer instead of symfony, symfony runs a couple of post install commands, one I'm clear is the cache and this blew up. And the reason for this is not actually important.
+This is a perfect situation for the `command` module... because... well, we literally
+just need to run 3 commands. Head to your playbook. Right above the handlers, add
+a comment: "Symfony Console Commands". We'll start with a task called "Create DB
+if not exists". Use the `command` module. For the value... we need to know the path
+to that `bin/console` file.
 
-When we change from an old ... When we change to an entirely new repository, and a totally new project, it put our cache into a weird state. So this is a on time problem and over here on the virtual machine, I'm gonna move over into my project, into this rm -rf var/cache/*. We just need to clear the cache one time to fix that. So now it's running an entire playbook, again, this time composer installer should work, shouldn't have those one time cache problems. And hopefully we should end up with the database.
+This is another good spot for a variable! create a new one called `symfony_console_path`
+set to `{{ symfony_root_dir }}/bin/console`.
 
-Beautiful. And you'll notice we do see changed for each of our three new tasks and that's because we're running the command module and the command module isn't smart enough to know whether or not these actually changed anything. So it's one of the down sides to using the command module. So let's flip back over to our browser, we'll go to our tab that used to be loading the standard edition, refresh, and welcome to Mootube. The fact that it's showing these videos means our database is working. Okay, so next we're gonna talk about something called tags which is gonna help us de-bug our playbook more quickly instead of having to re-run it every single time in full whenever we change something.
+Use that in the command: ``{{ symfony_console_path }} doctrine:database:create --if-not-exists``.
+That last flag prevents an error if the database is already there.
 
+Awesome! Copy that task to create the second one: "Execute migrations". Use
+`doctrine:migrations:migrate --no-interaction`. And add one more: "Load data fixtures".
+This is something that we only want to run if this is a development machine, because
+it resets the database. We'll talk about controlling that later.
+
+For this command, use `hautelook_alice:doctrine:fixtures:load --no-interaction`.
+
+Ok! The 3 commands are ready! Head back to the terminal. Woh! It exploded!
+
+And actually... the reason is not that important: it says an error occurred during
+the `cache:clear --no-warmup` commmand. After we run `composer install`, Symfony
+runs several post install commands. One clears the cache. Changing from one project
+to an entirely *different* project temporarily put things in a weird state. This one
+time, in the virtual machine, just remove the cache manually:
+
+```terminal
+rm -rf var/cache/*
+```
+
+Try the playbook now:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+This time `composer install` should work and *hopefully* our new commands will setup
+the database. By the way! A Symfony 3 app reads its configuration from a `parameters.yml`
+file... which is *not* committed to the repository. So... in theory, that file should
+*not* yet exist... and none of this should work. But that file *does* exist! Why?
+Thanks to a special line in `composer.json`, after `composer install` finishes, the
+`parameters.yml.dist` file is copied to `parameters.yml`. And thanks to that dist
+file, Symfony will try to connect to MySQL using the `root` user and no password.
+If that's *not* right, just modify the file on the VM directly for now. Later, we'll
+talk about how we could properly update this file.
+
+Yes! It worked! Notice: the three new tasks all say *changed*. That's because the
+`command` module isn't smart enough to know whether or not these *actually* changed
+anything. But, more on that soon!
+
+Find your browser and refresh! Welcome to MooTube! The fact that it's showing these
+videos means our database is working. Now, let's talk about *tags*: a cool way to
+help us run only *part* of our playbook.
