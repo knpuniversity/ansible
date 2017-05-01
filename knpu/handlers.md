@@ -1,26 +1,135 @@
-# Handlers
+# Handlers: For Handling Serious Biz
 
-Nginx is probably set up to point to our projects, but we need to restart it to get things working. Not surprisingly, there is a module for that, called service. Because in Ubuntu, typically you will restart Nginx through the service subsystem. The service module is super simple, you give it the name of the module, then you give it the state that you want, like start and stop, restart it or reload it. So really cool. What it seems like we should do is add a new task at the bottom which restarts Nginx. However, there is a better way.
+Nginx *is*... but of course, we need to restart or at least reload it for our site
+to, ya know, *actually* work. Surprise! There's a module for that... called `service`.
+This module is all business: give it the `name` of the service and the `state` you
+want, like `started` or `restarted`.
 
-At the bottom, I want you to add a new section called handlers. A handler is written just like any task, it's gonna have a name, so I'll say restart Nginx, become true, and then we use the module we want, in this case service. We want to restart the Nginx module so we'll put it's state to restarted. Here's the thing about handlers. Unlike tasks, they're not automatically called. To call them, you find one of your tasks, like for example the task here after we've symbolically linked our Nginx sites enabled, sites available. At the bottom, you say notify. Then you put the name of that handler. Restart Nginx.
+Ok, so let's just add a new task to restart Nginx, right? Wait, no! Ansible has
+an option... a more *awesome* option.
 
-I'm gonna say a small lie right now which explains how this works and then we'll see how this is not entirely true. When you set things up this way, when this task runs, it will notify the restart Nginx handler and then that will run. There are a couple of reasons why you put this as a handler instead of a task. One of them is that the handlers run at the end and if multiple tasks notify the same handler, that handler is only run once, so that's nice. There's another reason I'll show you in a second.
+## Hello Handlers
 
-Let's flip over, go to our local machine and run the Ansible playbook. What we're expecting to see is all of our normal tasks being run and then this handler being run at the end. But look it, there's nothing at the end. There's no handlers, it didn't actually run my handler. To prove it, if you go over here and refresh, we're still looking at the original Nginx site. See, here's the second reason that handlers are different than tasks. A handler only runs if the task that's notifying it changed. If you look at our list, not surprisingly almost every task says okay. Which means that it didn't actually make a change to the server. The only two that are making a change to the server are the download composer and move composer globally. Honestly, those aren't really changing the server. These tasks aren't currently smart enough to know that they're not making a change to the server, so they're reporting that they're always making a change.
+At the bottom of the playbook, add a new section called `handlers`. A handler is
+written *just* like any task: it has a name - "Restart Nginx" - we use `become: true`,
+and then choose the module we want: `service`. Set the name to `nginx` and `state`
+to `restarted`.
 
-But the important one in our case is the enable synfony config is just okay. It didn't do anything. The symbolic link was already there, so it didn't actually call the handler. To see that in action, we can actually delete that. Sudo rm/etc/Nginx/sites-enabled/mootube.l.conf. Then I'll go back over here and I'll rerun our playbook. This time, that task should be in the changed state. That should trigger our handler.
+**TIP
+We could also just reload Nginx - that's enough for most changes.
+***
 
-There's the changed and running handlers. Restart Nginx. Love it, so to prove it let's go back over here flip and this is actually good, 502 bad gateway. It means something actually changed. We'll get to this in a second. But before we do, let's actually put these restart Nginx things everywhere else we needed them. For example, if the template changed and we uploaded a new template, then we're gonna want to notify Nginx after this task as well.
+Here's the deal with handlers: unlike tasks, they are *not* automatically called.
+Nope, instead, you find a task - like  the task here where we create the symbolic
+link to `sites-enabled` and, at the bottom, say `notify: Restart Nginx`.
 
-Even further up, when we first installed Nginx, if this changes because we had a new version of Nginx, we're going to want to restart Nginx in that case as well. You could also reload Nginx in some of these cases. It's up to you whether or not you want to have a restart Nginx and a reload Nginx handler. The other thing that we might need to restart is php fpm itself. Like when extensions are installed or when php to ini is modified. At the bottom, let's copy our handler and make a new one called restart php-fpm, very simply instead of the Nginx service, we'll use php7.1-fpm as our service name. I'll copy the name of our handler.
+Now, when this task runs, it will "notify" the "Restart Nginx" handler so that it
+will run. Actually, that's kind of a lie - but just go with it for now.
 
-As I mentioned, the two places where we really need this are after we install our php extensions, in case there are new extensions installed or if php fpm itself got updated. Then also when we change our php to ini setting for the fpm environment. Beautiful. Since we haven't actually restarted php-fpm yet, I'm gonna go over onto my virtual machine. I'm gonna sudo vim ... the php to ini file for fpm. I'm gonna search in here for timezone, which is already updated to utc. I'm actually gonna change that back to an empty string. Now when we rerun the playbook, it should attack the change and actually restart php fpm for us.
+There are a few reasons why this is better as a handler than a task. First, handlers
+run after all of the tasks, and if multiple tasks notify the same handler, that handler
+only runs once. And I'll show you another advantage to handlers in a minute.
 
-This time, it restarts php fpm. Now when we refresh, we still get that 502 bad gateway. The question is why? Let's flip over, go onto our virtual machine. Let's tail our log that we created, which is var/log/Nginx/mootube.l_error.log. You can see it's actually having problems talking to php fpm sock file. That's because I have it in the wrong place. This is a perfect example of why these handlers are so powerful. The fix for this is really simple. Inside of here, it's gonna be var run/php/php7.1 so I'll make that change in both places. Then all I need to do is re-run my playbook. This is going to make sure that that updated file's in the correct location and because it detected that change, it's going to restart Nginx automatically for us.
+Change over to our local machine's terminal and run the playbook!
 
-This is exactly how we want our infrastructure always to work. There's the change, and thanks to that, we'll see the handler on the bottom. Beautiful. Flip back over, refresh, and now we get a different error, http error 500. If you go back and tail your logs this time, you're gonna see it's very simple. This is coming from synfony, it says unable to create cache directory. If you're a synfony user, you're used to this, there's a couple directories that need to be writeable and they're not writeable right now.
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
 
-There are multiple ways to fix this inside of synfony, which are beyond the scope here. The easiest way is to make sure that your var directory is 777. Again, we're gonna do this inside of our playbook so that we don't have to worry about doing it every single time. At the end, let's add one more task here, name ... fix var directory permissions. Actually to refer to the var directory, I'm gonna go up top and set another variable, synfony var dir, set to synfony dir - var and down at the bottom, just like we've done before, we're gonna use the file module, print out that invariable. Set it's state to a directory. We don't really need to create it's directory, it will already be there. Then set it's mode to 777 and tell it to recurse, yes.
+Ok, we're expecting Ansible to execute all of the tasks... and *then* call the
+handler at the end. But wait! There's nothing at the end: it did *not* call our
+handler!
 
-Go back, flip back, run your playbook. Realize that when you make these small changes, rerunning your playbook is kind of a pain. In a second, I'm gonna show you a trick where while you're developing, you can just run a few specific tasks to make sure you get them right. Boom, so when that finishes, head back, refresh. And we've got it. Our working synfony project. Except it's not our project yet, so that's what we need to do next. Pull down our projects code, get the database set up and get this thing really working.
+To prove it, refresh the browser: yep, we're still staring at the Nginx test page.
 
+## Handler and Changed State
+
+So this didn't work... and this is the *second* reason that handlers are great!
+A handler only runs if the task that's notifying it *changed*. If you look at the
+output, not surprisingly, almost every task says "Ok"... which means that it did
+*not* make a change to the server. The only two that *did* change relate to Composer...
+and honestly... those aren't really changing the server either. They just aren't
+smart enough - *yet* - to correctly report that they haven't made a change. Oh, but
+we *will* fix that.
+
+The important one in our case is "Enable Symfony Config". The symbolic link was
+already there, so it didn't change and it didn't call the handler.
+
+So let's delete that link and see what happens. In the VM, run:
+
+```terminal
+sudo rm /etc/nginx/sites-enabled/mootube.l.conf
+```
+
+Ok, try the playbook now!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Watch for the "changed" state... got it! And... yes! Running Handlers: Restart Nginx.
+*Now* try your browser. Woh! Ha, 502 bad gateway. Ya know, I'm going to say that's
+progress: Nginx *did* restart... but now something else is broken! Before we put
+on our fancy debuggin' cap, let's add the "Restart Nginx" notify everywhere else
+it's needed.
+
+For example, if we decide to change the template, we need Nginx to restart, or reload
+if you prefer. Up further, when we first install Nginx, if this changes because
+of a new Nginx version, we'll want to restart too.
+
+## Restarting PHP-FPM
+
+The *other* thing we might need to restart is PHP-FPM, like when we update `php.ini`.
+At the bottom, copy the handler and make a new one called "Restart PHP-FPM". Then,
+just replace `nginx` with `php7.1-fpm` as the service name.
+
+Copy the name of the handler.
+
+We *definitely* need to run this if any PHP extensions are installed or updated.
+And also if we change a `php.ini` setting.
+
+Beautiful! Since we haven't restarted php-fpm yet, I'll go to my VM so we can make
+one of these tasks change. Open `php.ini`:
+
+```terminal
+sudo vim /etc/php/7.1/fpm/php.ini
+```
+
+I'll search for `timezone` and set this back to an empty string. Ok, re-run the
+playbook!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+Watch for it.... yes! Restart PHP-FPM.
+
+Refresh the browser now. Still a 502 bad gateway!? That's bad news. Debuggin' time!
+In the VM, tail the log:
+
+```terminal
+tail /var/log/nginx/mootube.l_error.log
+```
+
+Ha! It doesn't see our socket file! That's because I messed up! The *true* socket
+path is `/var/run/php/php7.1-fpm.sock`.
+
+Easy fix: change in `symfony.conf`, add `/php` in both places. Start up the playbook!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+This is a *perfect* example of why handlers are so cool! Since the template task
+is "changed", Nginx is automatically restarted. That's *exactly* how it should work.
+
+Try the browser now! Ah, 500 error! Again, I'm counting that as progress!
+
+Tail the log again:
+
+```terminal
+tail /var/log/nginx/mootube.l_error.log
+```
+
+Ah, Symfony is unable to create the `cache` directory. That's an easy... but interesting
+fix. Let's do it next.
