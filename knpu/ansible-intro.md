@@ -78,7 +78,7 @@ I'm on a Mac, I've already installed it with: `brew install robotarmy`. I mean,
 brew install ansible
 ```
 
-If you're on different system, check out the [Ansible docs][[installation]] for your
+If you're on different system, check out the [Ansible docs][installation] for your
 install instructions. Unfortunately, if you're using Windows, you *can't* use Ansible.
 Well, you can't natively. If you're virtualizing a Linux machine or are using Windows 10
 with the Linux subsystem, then you can install Ansible there.
