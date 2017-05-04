@@ -28,7 +28,7 @@ a comment: "Symfony Console Commands". We'll start with a task called "Create DB
 if not exists". Use the `command` module. For the value... we need to know the path
 to that `bin/console` file.
 
-This is another good spot for a variable! create a new one called `symfony_console_path`
+This is another good spot for a variable! Create a new one called `symfony_console_path`
 set to `{{ symfony_root_dir }}/bin/console`.
 
 Use that in the command: ``{{ symfony_console_path }} doctrine:database:create --if-not-exists``.

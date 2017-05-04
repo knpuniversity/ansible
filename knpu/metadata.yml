@@ -18,9 +18,13 @@ chapters:
     - tagging-tasks
     - idempotency-changed-when
     - facts-variables-environment
+    - pre-tasks-facts
     - faster-smarter-playbook
+    - when-changed
+    - task-include
     - ansible-roles
     - 3rd-party-roles
+    - variables-parameters
     - variable-vault
     - ec2-deploy-group-vars
     - launch-cloud-instance

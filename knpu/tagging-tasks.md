@@ -13,7 +13,7 @@ sudo chmod -R 555 var/
 Definitely use `sudo`. Then, I'll remove the cache files:
 
 ```terminal
-sudo rm -rf var/cache*
+sudo rm -rf var/cache/*
 ```
 
 If you try the page now, it explodes! Ok, I don't expect my permissions to suddenly
@@ -42,7 +42,7 @@ and configured. But others are really more about code deployment: making sure
 the project directory exists, cloning the code, installing composer dependencies,
 and setting up the database.
 
-In the future - when we make changes to the code,- we might want to *just* deploy
+In the future - when we make changes to the code - we might want to *just* deploy
 that code... without going through all the server setup tasks. Let's add a new
 tag - `deploy` - to every step involved in deployment. See the task that creates
 the project directory? Yep, give it the `deploy` tag. Add it to "Checkout Git Repository"

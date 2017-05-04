@@ -19,7 +19,7 @@ should be safe to run a task over and over again without any side effects.
 
 And in reality, our tasks *are* idempotent. If we run this "Fix var directory permissions"
 task over and over and over again... that's fine! Nothing weird will happen. It's
-simply that the tasks is *reporting* that something is changing each time... when
+simply that the tasks are *reporting* that something is changing each time... when
 really... it's not!
 
 I know, I know... this seems like *such* a silly detail. But soon, we're going to

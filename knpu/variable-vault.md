@@ -1,24 +1,141 @@
-# Variable Vault
+# The Variable Vault
 
-Want to talk a little bit more about the variables we have at the top both how to organize them and also how to encrypt them when we have variables that are sensitive. Now when we created our [inaudible 00:00:13]role; we were able to organize things into their own variable spot. And you can actually do the same thing at the top level. What I mean is ... inside the ansible directory we can create a new vars directory. Inside there we can create a new vars.yml. [inaudible 00:00:29]important, because in a second you'll see us import it by its file name. Copy all of our variables, we'll put the dash, dash, dash and then we'll paste them there and un-indent them so that they're root of the project.  o import these from our playbook -  instead of having vars, we'll have vars_files and there we'll just do -./vars/vars.yml. So pretty simple way to start organizing the variables.
+The `symfony_secret` variable needs to be secret! I don't want to commit things
+like this to my repository in plain text!
 
-Now go over to your terminal and go to your terminal tab ... Make sure your ssh onto your machine. I'm moving the var/www/project. And I'm going to cat the app/config/parameters.yml file. This is a file I used by symphony to store things like database, password ... And other sensitive configuration parameters that need change from machine to machine. Now I notice there's one call that's secret. In symfony this is supposed to be a unique string that is different at every install and its used to secure couple of names cryptographically. Right now ours is set to the default ThisTokenNotSoSecretChangeIt. Obviously we have not actually changed it yet.
+## Creating the Vault
 
-So we need to do is one, we need to deploy ... We need to set this to something secret. To do that, in my vars file; I'm going to create a new variable called symfony_secret. And we are going to set that to udderlysecretstring. In symfony, you can actually set this symfony secret to a random string; as long as it's something secret - it's good. Then our symfony boot strap file, remember is being imported ... We can use that variable to modify the file. So create a new set symfony secret end parameters yml. We use the line in file module. And here we use symfony_root_dir one of the variables we have set in our vars file. /app/config/parameters/yml then we will use the (regexp) reg expression; carat, one, two, three, four secret: - What we are looking for here is the four spaces before the secret. So we'll match exactly that and then we'll replace that with one, two, three, four, secret : space and then symfony_secret. Then don't forget to add the tags deploy on the end of that. So, its a pretty simple but cool use of variables and aligning file.
+One really cool solution to this is the *vault*: an *encrypted* variables file.
 
-Now before you even try that, I want to go a step further. As I mentioned, the symfony secret - Needs to be something unique and it needs to be something that's kept secret. It's probably okay to actually commit this to[inaudible 00:04:27]But if you want to be extra safe, you can actually encrypt this. In more broadly, you're going to have situations where inside of your ansible file. You have sensitive things like passwords or API keys; that you don't want to commit to your repository. Meaning we don't want to have them directly here in plain text but we still want to use ansible and we need to get ansible access to those. The way to do that is with something called devault. Devault is a way to create a variables file like this, that is encrypted. Meaning not stored in plain text.
+To create a vault file, go back to your main machine's terminal and run
 
-To create a devault file. Go back to your main machine and run ansible-vault to create ansible/vars/vault.yml. So create a new vault.yml file. When you run [inaudible 00:05:22]ask you for a vault password used to encrypt it. I used beefpass - And this password is what you need to remember it's going to be the only way for you to decrypt this file. Once your inside of here it will open up inside an editor you can even control what editor opens inside of. You're going to treat this like any other variables files. We'll do the three dashes, and I'm goin to create a new variable called vault_symfony_secret. I am purposely starting that - Variable with the word vault. I'm going to start all variables inside of a vault file with vault_ and I will show you why in a second. Then here I will say "udderly secret string" and then I will do :wq, to save. As soon as we do that, we have a vars/vault.yml file, it says not human [inaudible 00:06:24] anymore; it is now encrypted. If you want to you can actually use ansible vault again to either view it. By using ansivle/vault.view and it will ask you for the password; so, beefpass - Or you can edit it to get back into the editor. Of course, every time its going to ask you for that password.
+```terminal
+ansible-vault create ansible/vars/vault.yml
+```
 
-The cool thing is - we can bring in this vault.yml file as if it were a plain text, variables file. And the way we are going to that is we're going to replace symfony_secret and vars.yml with {{vault_symfony_secret}}. To import the file, in our playbook, above vars/vars.yml we'll bring in ./vars/vault.yml. What's going to happen here is ... It's first going to bring in the vault.yml file which will set the vault_symfony_secret and then in vars we'll set vault_symfony_secret to symfony_secret. And then symfony_secret is actually what we use inside of our playbook. Now the reason it's done this way is - if you are unable to read the vault.yml file, then you don't know what variables are ... Created in there. Prefixing all the vault variables with vault_, it becomes very obvious. We can reference symfony_secret and if we go track down what that is, we'll find it. And then say oh - This is something that's set in vault.
+It'll ask you to create a vault password. We'll use - of course - `beefpass`. Keep
+this handy: it's needed to *decrypt* the vault.
 
-Now to run your playbook, it's going to be exact same thing you had before. Dash t, deploy, now you need --ask-vault-pass. So when we run ansible this time, it's going to ask us for the vault password; we'll fill in beefpass. Then everything will run as before. This time I will do in the prad environment ... When you see set symfony secret and parameters.yml showed up as changed. If we move over to our virtual machine and cat that file, now you see the utterly secret string; which is perfect.
+Nice! It opens up an editor. Once you're inside, treat this like a normal variable
+file: add `---`, then a new variable: `vault_symfony_secret`. I am purposely starting
+the variable name with `vault_` - we'll talk about why in a minute.
 
-Now I should be able to flip back, take off the app_...php - And things still work. Let's see another example of this. Inside of our app/config/parameters.yml file; we also have something called loggly token. Which is used inside of config_prod.yml - Basically you want to run the prod environment when there's an error those errors are sent to loggly; which is a software service log collector. So we can view our logs there. Right now if I go to my loggly account, and hit dashboard. We find nothing; so we're starting with an empty slate. The only thing we need to do to get this to work is once again, we need the parameters of yml file on server to have the real value. Obviously, I don't want to hard [inaudible 00:11:07]loggly token into my playbook. Instead we're going to use the vault.
+Then, set the value to `udderly secret $tring`. Save with `:wq` Enter.
 
-Let's go back to our machine. We use ansible-vault edit ansible/var/vault.yml. In here we'll create a new thing called vault_loggly_token. I will paste in the token for my account, then hit save. Now that we have that; we know that we can go to our vars.yml and we can set a new thing called loggly_token and that's set to curly, curly vault_loggly_token, end curly, curly, end double quote and finally we can take loggly_token and we can go into our symfony dash bootstrap and we can do another line and file module where we set that. I'll copy the original line file, we'll say it's set loggly token parameters.yml. We're looking for the same file. This time we're looking for loggly_token and we need to set loggly_token to our loggly_token variable. All right lets try that. Flip back over - lets run our playbook with --ask-vault-pass; fill in our vault password. Once again we'll do it in prod environment.
+As *soon* as we do that, we have a `vars/vault.yml` file... and it is *not* human-readable:
+it's encrypted. You can use the vault again to view it:
 
-Once it's finish, I'll flip back over; I'll cat app/config/parameters.yml one more time. This time we'll see the loggly token is there. So lets try it out.[inaudible 00:13:59]refresh that [inaudible 00:14:02] should hit loggly. So if I refresh my dashboard ... I actually don't see it. An issue here is actually a small mistake or something we didn't actually think through in our playbook. And as that - We're clearing our cache only when our code has changed; but in this situation it's actually our parameters at yml has changed. Our code is not changed but our parameters have changed and that is one of the ingredients that goes into clearing the cache. In other words, this isn't working cause our cache hasn't been cleared. Again, you need to make the decision that's best for your application. You're balancing speed versus predictability. I'm a comment out when code changed on cache clears, that it always clears.
+```terminal
+ansible-vault view ansible/vars/vault.yml
+```
 
-Just for right now, I'll go onto my virtual machine and I'll say .bin/console cache:clear--env=prod to clear it manually. If you get an error about permissions, that's fine - That's just having problems clearing out old cache directory. You can just sudo and delete that. We'll flip back. Refresh our page. Then go back to our loggly dashboard ... And there it is! It might take a second to show up so you might need to refresh a couple times. But now we got it.
+It, of course, needs your password: `beefpass`. Or, you can edit it.
 
+## Importing the vault File
+
+In `vars.yml`, we can now remove the secret string and use the variable instead:
+`{{ vault_symfony_secret }}`. To make that variable available, import it like a normal
+variable file: `vars/vault.yml`. Make sure the vault is loaded first so we can use
+its variables inside `vars.yml`.
+
+Let's walk through this: import `vault.yml`, then in `vars.yml` use the `vault_symfony_secret`
+variable to set `symfony_secret`. Then, *that* variable is used elsewhere.
+
+Why the big dance? Why not just call the variable `symfony_secret` in the vault?
+Well, the `vault_` prefix is nice because it's really easy to know that it came from
+the *vault*. That makes it easier to track things down.
+
+## Running a Vaulted Playbook
+
+Let's try it! Run the playbook like before, with `-t deploy` and a new flag:
+`--ask-vault-pass`:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t tags --ask-vault-pass
+```
+
+Nice! Enter `beefpass` for the password, use the `prod` environment, then let it
+run! Nice! The "Set Symfony secret in parameters.yml" task reported Changed!
+
+In the VM, let's check out that file:
+
+```terminal
+cat app/config/parameters.yml
+```
+
+Woohoo! There's our ridiculous secret string.
+
+## Using a Secret Loggly Token
+
+Let's do one more fun example. In your browser, remove the `app_dev.php` from the
+URL. It still works!
+
+Now, open `app/config/parameters.yml`. The last key is called `loggly_token`. This
+is used in `config_prod.yml`. Basically, in the `prod` environment, the system is
+already setup to send *all* logs to Loggly: a cloud log collector. Right now... there's
+not too much in my account.
+
+The only thing *we* need to do to get this to work is replace this line in `parameters.yml`
+with a working Loggly token. That's perfect for the vault!
+
+## Adding more to the Vault
+
+Edit the vault!
+
+```terminal
+ansible-vault edit ansible/vars/vault.yml
+```
+
+Add a new variable - `vault_loggly_token`. I'll paste a real token for my account
+and save. And as much fun as it would be for me to to see all of *your* logs, you'll
+need to create your own token - I'll revoke this one after recording.
+
+We know the next step: open `vars.yml` and set `loggly_token` to `vault_loggly_token`.
+
+And finally, we can use `loggly_token` in `symfony-bootstrap.yml`. Copy the previous
+`lineinfile` task, paste it, and rename it to "Set Loggly token in parameters.yml".
+
+Update the keys to `loggly_token`, and the variable to `loggly_token`.
+
+Ok, try it!
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t tags --ask-vault-pass
+```
+
+Fill in `beefpass` and use the `prod` environment again.
+
+Ding! Head to your VM and look at the `parameters.yml` file:
+
+```terminal
+cat app/config/parameters.yml
+```
+
+Nice! So... it should work, right? Refresh Mootube to fill in some logs. Now, reload
+the Loggly dashboard. Hmm... nothing! What's going on?
+
+Actually, we have another mistake in our playbook. Once again, I got too smart! We
+*only* clear the cache when the code has changed. But in this situation, `parameters.yml`
+changed... which is not technically part of our code. In other words, this isn't working
+because we have not *yet* cleared our prod cache. 
+
+I'll comment out the `when` under "Cache Clear" to make it *always* clear. Then,
+just for right now, in the VM, clear the cache manually:
+
+```terminal
+bin/console cache:clear --env=prod
+```
+
+If you get an error about permissions, that's fine: it's just having problems clearing
+out the old cache directory. You can delete that:
+
+```terminal
+sudo rm -rf var/cache/pro~
+```
+
+Let's see if that was the problem! Refresh MooTube. Then, try the Loggly dashboard.
+Got it! So cool! If you're coding with me, it might take a few minutes to show up,
+so be patient!
+
+Our playbook is really powerful. Could we use it to deploy to a cloud server like
+AWS? Why not!? Let's do it!

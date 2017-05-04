@@ -35,10 +35,10 @@ Setting the directory permissions to 777 is easy... and perfectly fine for a dev
 machine. But if this were a *production* machine, well, 777 isn't ideal... though
 honestly, a *lot* of people do this.
 
-What's better? In a few minutes, we'll add a task to clear and warm up up Symfony's
+What's better? In a few minutes, we'll add a task to clear and warm up Symfony's
 cache. On a production machine, after you've done that, you can set the `var/cache`
 permissions *back* to be non-writeable, so 555. In theory, that should just work!
 But in practice, you'll probably need to tweak a few other settings to use non-filesystem
-cached - like making annotations cache in APC. 
+cache - like making annotations cache in APC. 
 
 But, that's more about deployment - which we'll save for a different course!

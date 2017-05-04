@@ -1,28 +1,78 @@
-# 3rd Party Roles
+# Using a 3rd Party to Install Redis
 
-Now the one last really cool thing about roles, is that there's a lot of third party roles that you can actually download into your project to get stuff done. Right now if we refresh our page in that environment ... you'll see that it's taking two seconds to load this page. And the reason it's taking two seconds, is because our project ... instead of default controller, uses Redis. So in a nutshell, this goes out and looks for a couple keys called Total Video Uploads, Total Video Uploads Count, etc. We don't have Redis installed on the server right now, so this is actually failing ... and when it fails, we are just inventing those numbers, if you file this count, Total Video Uploads that's down here, and we're adding a sleep.
+The *best* part about roles is they're *shareable*. There are a *ton* of third-party
+roles that you can download to give your playbook free stuff! I love free stuff!
 
-So in other words, we've made the site so if you don't have Redis, it doesn't fail, but it does take a really long time to simulate how it would be if Redis wasn't there. It's a long way of saying it's time for us to install Redis on our server.
+Refresh the page in the "dev" environment. The page took over *2* seconds to load!
+Why? In `DefaultController`, our app is trying to use Redis. But, it's not installed!
+So, this fails... and just for a good example, our code rescues thing but sleeps
+for 2 seconds to "fake" the page being really slow.
 
-Now we already have all the skills to do that, but one of the things I always like to do is see if somebody else has already done the work for me. So, I'm going to search for Redis Ansible role, and we're going to find a role called the David Wittman Ansible Redis. And it has a decent number of stars. It looks like it's fairly reputable, it's active, so that's good. So in a nutshell, this role looks just like ours. It has templates, it has vars, it has handlers, it has a few other things like defaults.
+In other words, without Redis, our site is slow. But after we install it, the page
+should be super quick!
 
-So, if we could download this into our project, we could just call this role. And the way you do that is by using a command called Ansible-galaxy, which I'll copy from the command line. Then I move over here ... and we'll run Ansible-galaxy install DavidWittman.Redis. In my case, that's already installed.
+## Installing the Redis Role
 
-By default, Ansible-galaxy installs these tasks, roles globally to your machine, and when you tell Ansible to load a role, it looks not only in your local directory for your roles, it also looks in that global spot on your file system for roles. Now if you want to, instead of installing things globally ... you can add --help to Ansible-galaxy command ... you can also pass a -P option ... and tell it to download the role directly into your project. Which sometimes is better, because then you can have the role directly in your project, though then you need to commit it to your project.
+We already have all the skills needed to install Redis. But... maybe someone already
+did the work for us? Google for "Redis Ansible role". Hello `DavidWittman/ansible-redis`!
+This role helps install Redis... and it looks fairly active. And check it out: it
+looks like *our* role, with `templates`, `vars`, `handlers` and a few other things.
 
-Once you have it installed, whichever way you choose to have ... we'll activate it in basically the same way. Down here ... instead of saying Engine X, we'll now use the DavidWittman.Redis role. And I actually use a slightly longer tap thing here. I'll say role: DavidWittman.Redis, and when you try this, you'll notice that that role needs to have become true. We didn't have to have that with the Engine X role, because it's task add the become true on their own.
+So... if we could download this into our project, we could activate the role and
+get free stuff! The way to do that is by using a command called `ansible-galaxy`.
+Copy it! Then, find your terminal and paste!
 
-So let's go back ... and run our entire playbook in the DEV environment. And while we're waiting for that to finish, I'm going to flip back over to documentation. And without talking too much about roles, what you're going to see here is that there are vars that you can set. Like Redis Bind. Obviously with roles, you're going to need to configure their behavior. The way that's done is internally that role uses variables, and then we have the ability to override those variables when we call ... the role.
+```terminal
+ansible-galaxy install DavidWittman.redis
+```
 
-Now the only downside to external roles, is that they can add a lot of bloat to your playbook. You'll see here, there's actually running a lot of tasks, and those tasks are taking a decent amount of time. The reason it's doing this, is roles are usually built to run on different machines. So, it's doing a number of tasks here to figure out which version of Ubuntu are we running? What types of utilities do we have available? So that it knows how to properly configure our system. So it makes the role really, really flexible, because it will work on most systems. But, it also adds extra overhead, because it's going to run those every single time. And a good role will try to skip as many things as it can, but it still takes some time.
+In my case, it's already installed.
 
-In this case, the first time we run it, it's going to take a lot of time, because it actually needs to install and compile Redis.
+By default, `ansible-galaxy` downloads *roles* to a global directory. When you tell
+Ansible to load a role, it looks in your local directory but also looks in that
+global spot to find possible roles.
 
-...
+You could also download the role *locally* in your project. Add `--help` to the
+command. The `-P` option is the key! Downloading the role *might* be even better
+than downloadig to globally. When it's in your project, you can commit it to your
+repository and manage its version.
 
-And then it finally gets into our stuff.
+## Activate & Configure the Role
 
-...
+With the role downloaded, all we need to do is activate it! Easy! Copy the role name.
+Under our `roles`, I'll use a longer syntax: `role: DavidWittman.redis` then
+`become: true`.
 
-Beautiful. So let's flip back, to our MooTube at DEV environment. Refresh ... and on the second refresh, it takes only 29 milliseconds. Because it's actually loading from Redis. That works because our application is configured already, to look at the local server for Redis. So as soon as it was installed, our application just picked it up.
+If you tried the role, you'd find out you need that. We didn't need it for the `nginx`
+role because we had the `become: true` lines internally.
 
+Ok team, run the *entire* playbook in the `dev` environment:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+```
+
+While we're waiting for someone else to install Redis for us - thanks David - head
+back to the documentation. The main way to control how a role works is via variables,
+like `redis:bind` in this example. It's cool how it works: internally, the role sets
+some variables and then uses them. We, of course, can override them. Simple, but
+powerful.
+
+There *is* one downside to third-party roles: they can add some serious bloat to
+your playbook. Yea, it's running a *lot* of tasks. Often, a role is designed to work
+on multiple operating systems and versions. Some of these tasks are determining facts
+about the environment, like what Ubuntu version we have or what utilities are available.
+The role is really flexible, but takes extra time to run.
+
+And, this first execution will take a *long* time: it's installing Redis!
+
+Finally... it gets into our stuff.
+
+Ding! Let's try it! Refresh MooTube. Then, refresh again. Yes! 29 milliseconds!
+Amazing! So much faster!
+
+This works because our application is already configured to look for Redis on localhost.
+So as soon as it was installed, our app picked it up.
+
+Next, let's talk more about configuration and how you might control things like
+the Redis host or database password.
