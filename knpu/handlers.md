@@ -20,7 +20,7 @@ and `state` to `restarted`:
 
 [[[ code('89bfb71655') ]]]
 
-**TIP
+***TIP
 We could also just reload Nginx - that's enough for most changes.
 ***
 
