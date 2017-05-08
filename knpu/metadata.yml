@@ -27,4 +27,5 @@ chapters:
     - variables-parameters
     - variable-vault
     - ec2-deploy-group-vars
+    - host-group-vars
     - launch-cloud-instance

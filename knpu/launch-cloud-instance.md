@@ -1,42 +1,151 @@
-# Launch Cloud Instance
+# Launch a Cloud Instance!
 
-So far I've used Ansible to set up a existing server, but actually Ansible can be a lot more powerful than that in at least two ways. First, we already know that in our playbook instead of having just one big play that sets up one server, we could actually have multiple plays. One play that sets up our web servers and another play that sets up our database servers and another play that sets up our Redis servers, if you want.
+Alas, this is our *final* chapter. So, I want to do something fun, and also talk
+about how Ansible can be pushed further.
 
-Each server host group can actually have multiple servers below it. Also, Ansible can actually be responsible for creating those servers in the first place. A second ago when we deployed to Amazon, we actually went into the EC2 console and manually launched an instance. I want to have Ansible do that for me.
+First, our Ansible setup could be a lot more powerful. We already learned that
+instead of having one big play in our playbook, we could have *multiple* plays.
+One play might setup the web servers, another play might provision the database
+servers, and one final play could configure all of the Redis instances. We're
+using one play because - in our smaller setup - all of that lives on the same host.
 
-The way we're going to do this is via the Ansible EC2 module, a module that's really good with interacting with EC2 instances. Actually, if you click the cloud module section on the left, you'll see that there are a lot of modules dealing with EC2 and other things like IAM, RDS, S3, all the different AWS services, and other things like Azure and Digital Ocean and so on.
+Also, each host group can have *multiple* servers below it. We could launch 10
+EC2 instances and provision all of them at once.
 
-One weird thing is that in this case ... So far when we've been executing Ansible, we've been having the commands that have been executed executed on our remote host, our virtual machine, for example, but in this case, we don't need that. We actually can have the commands run locally because the purpose of these commands is to talk to Amazon's API. It doesn't really matter where we run these commands.
+And finally, Ansible can even be used to *launch* the instances themselves! A few
+minutes ago, we manually launched the EC2 instance through the web interface.
+Lame! Let's teach Ansible to do that.
 
-We're going to run them locally, which means locally, we need to make sure we have Python installed and something called Boto, which is an extension for Python, which you might need to install based on your system. If you get an error about Boto when you try to run this, then you need to look into installing it.
+## Launching EC2 Instances?
 
-Since what we're doing here is so different than what we've been doing in our playbook, for simplicity, I'm actually going to create a new playbook file. In the Ansible director, I'm going to create an aws.yml file. In a second, we'll talk about how this could, in a real application be integrated with the playbook.yml.
+How? A module of course! The `ec2` module. This module is really good at interacting
+with EC2 instances. Actually, if you click the [Cloud Modules](http://docs.ansible.com/ansible/list_of_cloud_modules.html)
+section on the left, you'll find a *ton* of modules for dealing with EC2 and many
+other services, like `IAM`, `RDS` and `S3`. And of course, modules exist for all
+of the major cloud providers. Ansible rocks!
 
-Inside here, we're going to start just as we always do with host, and this time set to local so it runs in our local machine. Below that, I'm going to say gather facts false. You may notice whenever we run our playbook, there's a module that runs before all the other ones called setup. Setup module's gathering information about the host machine and setting those as variables, which is cool because we can use those variables in our tasks to do different things. Since we're just running this against our local machine, we don't need to gather any facts, so we can set gather facts to false just to save time.
+So far, our playbook has been executing commands on the remote hosts - like our virtual
+machine. But, in this case... we don't need to do that. Yea, we can run the `ec2`
+module *locally*... because the purpose of this module is to talk to the AWS API.
+In other words, it doesn't matter what host we execute it from!
 
-In order for the EC2 module to work, we're going to need to use our AWS access key and AWS secret key. These can actually be fetched inside of the IAM section of AWS's dashboard. Under your users, you can see your access credentials there. I already have mine prepared, so I'm just going to go straight to use them.
+Wherever you decide to execute these tasks, you need to make sure that something
+called [Boto](https://github.com/boto/boto) is installed. It's an extension for
+Python... which you might also need to install locally. So far, Python has already
+come pre-installed on our VM and EC2 instances.
 
-Obviously, we know that we don't want to hard code our credentials directly into our playbook, so instead, we're going to use our vault. Let's go over onto your local machine and we'll run ansible-vault edit ansible/vars/vault.yml. We'll type in our [inaudible 04:12] password. Then here, I'm going to paste in two new variables, vault_aws_access_key and vault_aws_secret_key. Then I'll save that.
+If you're not sure if you have this Boto thing, just try it. If you get an error
+about Boto, check into installing it. 
 
-At this point, you guys know the drill. Now that I've put those into the vault, we're going to put them also into vars with a different name. Here we'll say aws_access_key is equal to vault_aws_access_key, and I'll paste that and we'll create one for the secret key as well. To use that, just like in our main playbook, we're going to load in those two vars files. Perfect.
+## Creating the Playbook
 
-To use these with the EC2 module, you have two options. First, you can pass the access key and secret key directly as options to the EC2 module, or you can set up environment variables, like AWS access key and AWS secret key. In fact, if those environment variables are already set in your system, then you don't need to do anything because Ansible will just pick those up.
+Since these new tasks will run against a new host - localhost - we can organize them
+as a new *play* in our playbook... or create a new playbook file entirely. To keep
+things simple, I'll create a new playbook file - `aws.yml`.
 
-I'm actually going to use Ansible to set those environment variables, which means just like before, I'll use the environment key and we'll say AWS access key is going to be set to AWS access key variable. The same thing on the next line. AWS_secret key is set to our secret key. Now we're totally ready to start using our module.
+Inside, you know the drill: start with the host, set to `local`. Below that, set
+`gather_facts` to `false`. What's that? Each time we run the playbook, the first
+task is called "Setup". That task gathers information about the host and creates
+some "facts"... which is cool, because we can use those facts in our tasks.
 
-These two module [inaudible 06:19] is pretty straightforward. We're just going to give it lots of information about the image that we want to boot, like, for example, the AMI image that we want to use, the security group that it's going to be in, the region that it's going to be in, and so forth.
+But since we're simply running against our local machine, we're not going to need
+these facts. This saves time.
 
-In our playbook, we'll add the tasks and we'll add a task called create an instance. We use the EC2 module and we'll just start filling in those details. What I'm going to do is copy all the same details that we used before.
+## EC2 Auth: AWS Secret Key
 
-We'll use a t2 micro instance, we'll use the AMI that you can see here, and we'll use the same security group and key pair. For instance_type, we'll use t2.micro. The image, we'll use ami-41d48e24. We'll set wait to yes. That's not that important, but it tells Ansible to wait until the machine gets into a booted state. We'll set the security group to web access testing. We'll boot just one server. We'll set our key name to ansible_aws_tmp, same [inaudible 07:37] as before, and we'll set the region to us east-2. We'll also set an instance tag called name to move to instance. That'll be the name of the instance.
+For the EC2 module to work, we need an AWS acesss key and secret key. You can find
+these inside of the IAM section of AWS under "Users". I already have mine prepared.
+Let's use them!
 
-Just like all modules, we can register a variable at the bottom. We'll register a variable called EC2, which is going to be useful because that will have information about the IP address of the instance. To see what it looks like, we use debug. We'll say var=ec2. That's an even shorter version of the debug module that we've seen so far.
+But wait! We *probably* don't want to hardcode the secret key directly in our playbook.
+Nope, let's use the vault!
 
-All right. Moment of truth. Let's flip over. We'll run our playbook just like before, ansible-playbook ansible/aws.yml-I ansible/host.ini--ask-vault-pass. It skipped the setup task. It went straight to creating an instance. If you get an error here about Bobo, either it doesn't exist or it can't find your region, you may need to either install Bobo or upgrade your Bobo extension. I was able to install on us east 1 fine, but when I went to install on us east 2, I actually needed to upgrade it.
+```terminal
+ansible-vault edit ansible/vars/vault.yml
+```
 
-Boom. Check this out. Green. We have an instance ID. We have lots of information about it, including its public IP address, which is amazing. If I flip over to my management console and refresh this page, and get rid of my search filter, you'll see that I have two instances, including one that we just created. That's awesome.
+Type in `beefpass`. Then, I'll paste in 2 new variables: `vault_aws_access_key`
+and `vault_aws_secret_key`. Save and quit!
 
-Ansible can be used for lots of things. If you wanted to connect this idea of creating instances with then provisioning them, that is something you can absolutely do. It takes a little bit more work, because ultimately, we want to be able to take this public IP address that was created here and add it as a new host under our AWS. With our current and traditional setup, the host.ini inventory file is static, it's hard covered, it's something we manage, but there are ways for you to have dynamic host file, which means that as you boot servers into the cloud, when you're on Ansible, it will automatically see what servers you have booted onto the cloud and use that as the source for your inventory.
+Just like before, open `vars.yml` and create two new variables: `aws_access_key`
+set to `vault_aws_access_key` and `aws_secret_key` set to `vault_aws_secret_key`.
 
-All right guys. Hope you enjoyed this. See you next time.
+Finally, open up `playbook.yml` so we can steal the `vars_files` section. Paste
+that into the new playbook.
 
+To use the keys, you have two options: pass them directly as options to the `ec2`
+module, or set them as environment variables: `AWS_ACCESS_KEY` and `AWS_SECRET_KEY`.
+In fact, if those environment variables are already setup on your system, you don't
+need to do anything! The module will just pick them up!
+
+Let's *set* the environment variables... because it's a bit more interesting. Just
+like before, use the `environment` key. Then set `AWS_ACCESS_KEY` to `{{ aws_access_key }}`.
+Repeat for `AWS_SECRET_KEY` set to `{{ aws_secret_key }}`.
+
+Boom! We are ready to start *crushing* it with this module... or any of those AWS
+modules.
+
+## Using the ec2 Module
+
+And actually, using the module is pretty simple! We're just going to give it a lot
+of info about the image we want, the security group to use, the region and so on.
+
+Add a new task called "Create an Instance". Use the `ec2` module and start filling
+in those details.
+
+For `instance_type`, use `t2.micro` and set `image` to `ami-41d48e24`. That's the
+exact image we used when we launched the instance manually.
+
+Next, set `wait` to `yes` - that's not important for us, but it tells Ansible to
+wait until the machine gets into a "booted" state. If you're going to do more setup
+afterwards, you'll need this.
+
+Then, `group: web_access_testing`, `count: 1`, `key_name: Ansible_AWS_tmp`,
+`region: us-east-2` and `instance_tags` with `Name: MooTube instance`. Obviously,
+tweak whatever you need!
+
+Just like any other module, we can register the output to a variable. I wonder
+what that looks like in this case? Add `register: ec2` to find out. Then, debug it:
+`debug: var=ec2`. 
+
+Give it a try!
+
+```terminal
+ansible-playbook ansible/aws.yml -i ansible/host.ini --ask-vault-pass
+```
+
+Cool, it skipped the setup task and went straight to work! If you get an error about
+Boto - either it doesn't exist, or it can't find the region - you may need to install
+or upgrade it. I *did* have to upgrade mine - I could use the `us-east-1` region,
+but not `us-east-2`. Weird, right? Upgrading for me meant running:
+
+```terminal
+easy_install -U boto
+```
+
+And, done! Yes! It's green! And the variable is *awesome*: it gives us an instance
+id and a lot of other great info, like the public IP address. If I refresh my EC2
+console, and remove the search filter... yes! Two instances running.
+
+I can feel the power!
+
+## Boot and then Provision?
+
+We now have 2 playbooks: one for booting the instances, and another for provisioning
+them. If you wanted Ansible to boot the instances and then provision them, that's
+totally possible! Ultimately, we could take this public IP address and add it as
+a new host under the `aws` group. 
+
+Of course... with our current setup, the `hosts.ini` inventory file is static: each
+time we launch a new instance, we would need to manually put its IP address here.
+But, there *are* ways to have a *dynamic* hosts file. Imagine a setup where Ansible
+automatically looks at the services booted in the cloud and uses *them* for your
+inventory. That's beyond the scope of this tutorial, but if you need that, go for
+it!
+
+Woh, we're done! Thanks for sticking with me to cover this huge, but *super* powerful
+tool! When you finally figure out how to get Ansible to do your laundry for you,
+send me your playbook. Or better, create a re-usable role and share it with the
+world.
+
+All right guys, seeya next time.

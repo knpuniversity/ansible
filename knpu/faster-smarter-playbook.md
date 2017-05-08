@@ -12,7 +12,7 @@ In other words: let's *not* download Composer if it already exists!
 
 So that's the first mission: figure out if the `/usr/local/bin/composer` file exists.
 To do that, we can use a really handy module called `stat`. It's similar to the
-Linux `stat` command... which gives you a ton of info about a file.
+Unix `stat` command... which gives you a ton of info about a file.
 
 Before we download composer, add a new task called "Check for Composer". Use the
 `stat` module and set the path to `/usr/local/bin/composer`. Then, `register` a

@@ -113,7 +113,7 @@ pre-task! In the playbook, I've put `pre_tasks` first, then `roles` and then `ta
 And that's the order they run it. But it's not because of how I ordered them in
 my YAML file: Ansible always executes `pre_tasks`, then `roles` then `tasks`.
 
-So how can we upgrade the apt repository cache first? Just move those two tasks
+So how can we update the apt repository cache first? Just move those two tasks
 into `pre_tasks`.
 
 Done! Next, let's download a third-party role for free playbook functionality!

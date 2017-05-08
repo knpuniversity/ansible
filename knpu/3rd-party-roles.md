@@ -33,8 +33,8 @@ Ansible to load a role, it looks in your local directory but also looks in that
 global spot to find possible roles.
 
 You could also download the role *locally* in your project. Add `--help` to the
-command. The `-P` option is the key! Downloading the role *might* be even better
-than downloadig to globally. When it's in your project, you can commit it to your
+command. The `-P` option is the key! Downloading the role locally *might* be even
+better than downloading it globally. When it's in your project, you can commit it to your
 repository and manage its version.
 
 ## Activate & Configure the Role

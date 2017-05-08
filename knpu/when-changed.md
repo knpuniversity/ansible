@@ -20,7 +20,7 @@ We'll use the `set_fact` module from earlier. This time, create a new variable c
 `code_changed` set to, very simply, `repo_code.changed`.
 
 The *only* reason we're doing this is to make our `when` statements a little cleaner.
-Add our tag onto that so that.
+Add our tag onto that.
 
 Down below, under "Install Composer's Dependencies", add `when: code_changed`. Ah,
 so nice. Copy that and put it anywhere else it makes sense like "Execute migrations"

@@ -13,10 +13,11 @@ the task at the top of the `task` section?
 Nothing! Well, nothing yet. But later, when we talk about *roles* - ooh roles are
 fancy - there *will* be a difference: pre tasks run before roles.
 
-Anywho, in this pre task, we basically want to re-set the `symfony_env` to a lowercased
-version of itself. To do that, we'll use a new module: `set_fact`. We already know
-that we can set variables in 3 different ways: with `vars`, `vars_prompt` or
-by using the `register` key below a task. The `set_fact` module is yet *another* way.
+Anywho, in this pre task, we basically want to re-set the `symfony_env` variable
+to a lowercased version of itself. To do that, we'll use a new module: `set_fact`.
+We already know that we can set variables in 3 different ways: with `vars`, `vars_prompt`
+or by using the `register` key below a task. The `set_fact` module is yet *another*
+way.
 
 ## Facts versus Variables
 
@@ -80,7 +81,7 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t deploy
 Use the `prod` environment. As we just saw, the `vars_prompt` runs *always*: it
 doesn't need a tag. Then, our "pre task" should run thanks to the `always` tag.
 By the time the "Composer Install" task executes, it should run with `no_dev: yes`,
-and then hopefully it'll skip data fixtures and "Clear cache".
+and then hopefully it'll skip data fixtures and change "Clear cache".
 
 The "Install Composer's dependencies" *does* show as *changed*: that's a good sign:
 it should have installed less packages than before. And yea! It's skipping the fixtures!
@@ -89,7 +90,7 @@ In the VM, try to `ls vendor/sensio`.  Ok cool! One of the `require-dev` depende
 is `sensio/generator-bundle`. That is *not* here, proving that the dev dependencies
 did NOT install this time. We are in business!
 
-And before we move on, under the "Clear Cache" task, add `changed_when: false`.
+And before we continue, under the "Clear Cache" task, add `changed_when: false`.
 That's not critical, it'll just prevent it from showing up as changed on every run.
 
 Now, let's create a faster, smarter playbook by skipping some redundant tasks!
