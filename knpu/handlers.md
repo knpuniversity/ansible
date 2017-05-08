@@ -10,18 +10,25 @@ option... a more *awesome* option.
 
 ## Hello Handlers
 
-At the bottom of the playbook, add a new section called `handlers`. A handler is
-written *just* like any task: give it a name - "Restart Nginx" - use `become: true`,
-and then choose the module we want: `service`. Set the name to `nginx` and `state`
-to `restarted`.
+At the bottom of the playbook, add a new section called `handlers`:
 
-**TIP
+[[[ code('a6a7c553c2') ]]]
+
+A handler is written *just* like any task: give it a name - "Restart Nginx" - use
+`become: true`, and then choose the module we want: `service`. Set the name to `nginx`
+and `state` to `restarted`:
+
+[[[ code('89bfb71655') ]]]
+
+***TIP
 We could also just reload Nginx - that's enough for most changes.
 ***
 
 Here's the deal with handlers: unlike tasks, they are *not* automatically called.
 Nope, instead, you find a task - like the task where we create the symbolic link
-to `sites-enabled` and, at the bottom, add `notify: Restart Nginx`.
+to `sites-enabled` and, at the bottom, add `notify: Restart Nginx`:
+
+[[[ code('6d6c27a39d') ]]]
 
 Now, when this task runs, it will "notify" the "Restart Nginx" handler so that it
 will execute. Actually, that's kind of a lie - but just go with it for now.
@@ -73,19 +80,29 @@ on our fancy debuggin' hat, let's add the "Restart Nginx" notify everywhere else
 it's needed.
 
 For example, if we decide to change the template, we need Nginx to restart, or reload
-if you prefer. Up further, when we *first* install Nginx, if this changes because
-of a new Nginx version, we also want to restart.
+if you prefer:
+
+[[[ code('d0d6f85cd7') ]]]
+
+Up further, when we *first* install Nginx, if this changes because of a new Nginx version,
+we also want to restart:
+
+[[[ code('6c3a5f94bf') ]]]
 
 ## Restarting PHP-FPM
 
 The *other* thing we might need to restart is PHP-FPM, like when we update `php.ini`.
 At the bottom, copy the handler and make a new one called "Restart PHP-FPM". Then,
-just replace the name - `nginx` with `php7.1-fpm`.
+just replace the name - `nginx` with `php7.1-fpm`:
+
+[[[ code('ba2449dfa6') ]]]
 
 Copy the name of the handler.
 
 We *definitely* need to run this if any PHP extensions are installed or updated.
-And also if we update `php.ini`.
+And also if we update `php.ini`:
+
+[[[ code('952f5a7a24') ]]]
 
 Beautiful! Since we have *not* restarted php-fpm yet, I'll go to my VM so we can
 make one of these tasks change. Open `php.ini`:
@@ -94,8 +111,18 @@ make one of these tasks change. Open `php.ini`:
 sudo vim /etc/php/7.1/fpm/php.ini
 ```
 
-I'll search for `timezone` and set this back to an empty string. Now, re-run the
-playbook!
+I'll search for `timezone` and set this back to an empty string:
+
+```ini
+; ...
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+date.timezone =
+; ...
+```
+
+Now, re-run the playbook!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
@@ -113,7 +140,11 @@ tail /var/log/nginx/mootube.l_error.log
 Ah ha! It doesn't see our socket file! That's because I messed up! The *true* socket
 path is `/var/run/php/php7.1-fpm.sock`.
 
-Easy fix: in `symfony.conf`, add `/php` in both places. Start up the playbook again!
+Easy fix: in `symfony.conf`, add `/php` in both places:
+
+[[[ code('a1ccb9f23b') ]]]
+
+Start up the playbook again!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini

@@ -5,16 +5,36 @@ Our app is a *big* 500 error because Symfony can't write to its cache directory.
 This is an easy fix... well mostly. Let's start with the easy part: if we 777 the
 `var/` directory, we should be good.
 
-Add a new task at the end: "Fix var directory permissions". To refer to the `var/`
-directory, I'll create another variable: `symfony_var_dir` set to `{{ symfony_root_dir }}/var`.
+Add a new task at the end: "Fix var directory permissions":
+
+[[[ code('6b9a78b39a') ]]]
+
+To refer to the `var/` directory, I'll create another variable: `symfony_var_dir`
+set to `{{ symfony_root_dir }}/var`:
+
+[[[ code('c1964eab94') ]]]
+
 Back at the bottom, use the `file` module, set the `path` to the new variable,
-and state to `directory`. That'll create the directory if it doesn't exist, but,
-it should. Then, they key part: `mode: 0777` and `recurse: yes`.
+and state to `directory`:
+
+[[[ code('3866bc062d') ]]]
+
+That'll create the directory if it doesn't exist, but, it should. Then, they key part:
+`mode: 0777` and `recurse: yes`:
+
+[[[ code('85bc8e6f30') ]]]
 
 ***TIP
 If you're going to 777 your `var/` directory, make sure that you've uncommented
-the `umask` calls in `app_dev.php` and `bin/console`. You can see this in the
-finished code download.
+the `umask` calls in `app.php`, `app_dev.php` and `bin/console`:
+
+[[[ code('94883bc1b1') ]]]
+
+[[[ code('95d706d0e3') ]]]
+
+[[[ code('76ebf2ebf2') ]]]
+
+You can see this in the finished code download.
 ***
 
 Ok, run the playbook!
