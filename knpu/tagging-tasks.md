@@ -24,8 +24,12 @@ In that case, we would know that re-running the *entire* playbook should fix thi
 But... couldn't we run *just* this *one* task? Yep! And a *great* way to do that
 is via *tags*.
 
-Below the task, add `tags`, and then `permissions`. Now, from the command line,
-tell Ansible to *only* execute tasks with this tag: `-t permissions`:
+Below the task, add `tags`, and then `permissions`:
+
+[[[ code('c743dd89df') ]]]
+
+Now, from the command line, tell Ansible to *only* execute tasks with this tag:
+`-t permissions`:
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t permissions
@@ -46,11 +50,17 @@ In the future - when we make changes to the code - we might want to *just* deplo
 that code... without going through all the server setup tasks. Let's add a new
 tag - `deploy` - to every step involved in deployment. See the task that creates
 the project directory? Yep, give it the `deploy` tag. Add it to "Checkout Git Repository"
-and also to the three tasks that install Composer. Actually, this is debatable:
-you might consider Composer as a "Server setup" task, not deployment. It's up to you.
+and also to the three tasks that install Composer:
+
+[[[ code('3d4f10dada') ]]]
+
+Actually, this is debatable: you might consider Composer as a "Server setup" task,
+not deployment. It's up to you.
 
 Keep going! I'll add the task to everything that I want to run for *each* code update.
-It's not an exact science.
+It's not an exact science:
+
+[[[ code('736d1dee7a') ]]]
 
 Let's see if it works! In the virtual machine, I'm going to manually edit a file:
 
@@ -63,7 +73,9 @@ to save. In the browser, that won't show up immediately - because we're in Symfo
 `prod` environment. But if you add `app_dev.php` to the URL... yep! "Filter by Tag!".
 
 By the way, going to `app_dev.php` only works because I've already modified some
-security logic in that file to allow me to access it.
+security logic in that file to allow me to access it:
+
+[[[ code('a65e8ec22f') ]]]
 
 Ok, back in our local machine, run the playbook... this time with `-t deploy`:
 
@@ -72,7 +84,11 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t deploy
 ```
 
 Oh, much, much faster! Try the browser! Code deployed! You can also use `--skip-tags`
-if you want to get crazy and do the opposite.
+if you want to get crazy and do the opposite:
+
+```terminal
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini --skip-tags deploy
+```
 
 Next, let's talk about how we can "fix" the fact that some tasks say "Changed" *every*
 time we run them. Eventually, this will help us speed up our playbook.
