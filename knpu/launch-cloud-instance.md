@@ -111,7 +111,7 @@ what that looks like in this case? Add `register: ec2` to find out. Then, debug 
 Give it a try!
 
 ```terminal
-ansible-playbook ansible/aws.yml -i ansible/host.ini --ask-vault-pass
+ansible-playbook ansible/aws.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
 Cool, it skipped the setup task and went straight to work! If you get an error about
@@ -139,7 +139,7 @@ a new host under the `aws` group.
 Of course... with our current setup, the `hosts.ini` inventory file is static: each
 time we launch a new instance, we would need to manually put its IP address here.
 But, there *are* ways to have a *dynamic* hosts file. Imagine a setup where Ansible
-automatically looks at the services booted in the cloud and uses *them* for your
+automatically looks at the servers booted in the cloud and uses *them* for your
 inventory. That's beyond the scope of this tutorial, but if you need that, go for
 it!
 

@@ -11,7 +11,7 @@ Want to properly deploy with Ansible? Check out [Ansistrano](https://github.com/
 
 ## Manually Launching an EC2 Instance
 
-I'm already on my EC2 dashboard. In the next chapter, we're going to use Ansible
+I'm already on my EC2 dashboard. In a few minutes, we're going to use Ansible
 to actually *launch* a new instance. But for now, just hit "Launch Instance" to
 do it by hand. I'm looking for an image that's similar to what we're using with
 Vagrant: Ubuntu 14.04. Select that image, use the micro instance size, and just
@@ -96,7 +96,7 @@ the process!
 
 Let's *try* to be patient... but also fast forward!
 
-Done! And beautiful - it finished with no errors. That's kind of amazing: we launche
+Done! And beautiful - it finished with no errors. That's kind of amazing: we launched
 a new cloud server from scratch... with no changes. Refresh the page. Got it! Welcome
 to MooTube, hosted on our fancy new EC2 instance. Notice that there's no data because
 we loaded in the `prod` environment: so the fixtures didn't run.
