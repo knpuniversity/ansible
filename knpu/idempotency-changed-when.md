@@ -100,8 +100,8 @@ Ah, ha! Copy the "already exists. Skipped" part. We can use this in our playbook
 to know whether or not the task did anything.
 
 How? Instead of saying `changed_when: false`, use an expression:
-`not {{ db_create_result.stdout }}` - `stdout` is the key in the variable - 
-`not {{ db_create_result.stdout|search('already exists. Skipped') }}`:
+`not db_create_result.stdout` - `stdout` is the key in the variable - 
+`not db_create_result.stdout|search('already exists. Skipped')`:
 
 [[[ code('b81e0036d8') ]]]
 
