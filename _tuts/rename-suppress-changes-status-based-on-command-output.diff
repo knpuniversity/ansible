@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 721a117..0ecd74e 100644
+index 721a117..b12d32a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -169,21 +169,20 @@
@@ -11,14 +11,14 @@ index 721a117..0ecd74e 100644
 -
 -    - debug:
 -        var: db_create_result
-+      changed_when: "not {{ db_create_result.stdout|search('already exists. Skipped') }}"
++      changed_when: "not db_create_result.stdout|search('already exists. Skipped')"
        tags:
          - deploy
  
      - name: Execute migrations
        command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
 +      register: db_migrations_result
-+      changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
++      changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
        tags:
          - deploy
  

@@ -1,5 +1,5 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index 1bb1b7b..a2a7621 100644
+index 455856b..f5ddda9 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -26,6 +26,14 @@

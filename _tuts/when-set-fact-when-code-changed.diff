@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 223ec06..e413dd0 100644
+index 0768155..7e19410 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -145,10 +145,9 @@
@@ -25,7 +25,7 @@ index 223ec06..e413dd0 100644
      - name: Fix var directory permissions
        file:
 @@ -219,6 +219,7 @@
-       changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
+       changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
        tags:
          - deploy
 +      when: code_changed

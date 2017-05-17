@@ -1,6 +1,6 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
 new file mode 100644
-index 0000000..1dc9bcb
+index 0000000..b575b76
 --- /dev/null
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -0,0 +1,49 @@
@@ -28,14 +28,14 @@ index 0000000..1dc9bcb
 +- name: Create DB if not exists
 +  command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
 +  register: db_create_result
-+  changed_when: "not {{ db_create_result.stdout|search('already exists. Skipped') }}"
++  changed_when: "not db_create_result.stdout|search('already exists. Skipped')"
 +  tags:
 +    - deploy
 +
 +- name: Execute migrations
 +  command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
 +  register: db_migrations_result
-+  changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
++  changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
 +  tags:
 +    - deploy
 +  when: code_changed
@@ -54,7 +54,7 @@ index 0000000..1dc9bcb
 +    - deploy
 +  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index e413dd0..9b37a59 100644
+index 7e19410..904d6de 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -186,54 +186,8 @@
@@ -84,14 +84,14 @@ index e413dd0..9b37a59 100644
 -    - name: Create DB if not exists
 -      command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
 -      register: db_create_result
--      changed_when: "not {{ db_create_result.stdout|search('already exists. Skipped') }}"
+-      changed_when: "not db_create_result.stdout|search('already exists. Skipped')"
 -      tags:
 -        - deploy
 -
 -    - name: Execute migrations
 -      command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
 -      register: db_migrations_result
--      changed_when: "not {{ db_migrations_result.stdout|search('No migrations to execute') }}"
+-      changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
 -      tags:
 -        - deploy
 -      when: code_changed

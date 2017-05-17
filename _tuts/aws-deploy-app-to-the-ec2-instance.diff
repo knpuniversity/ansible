@@ -13,7 +13,7 @@ index dae3556..351e571 100644
 +vb
 +aws
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 41cc172..9a4579d 100644
+index bd55a5d..0d65636 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -1,5 +1,5 @@
