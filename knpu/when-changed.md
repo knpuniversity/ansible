@@ -9,7 +9,11 @@ our composer dependencies. After all, if the code didn't change, how would the
 composer dependencies need to change? And we could skip other things, like running
 the migration or even clearing the cache.
 
-Under the "Git" task, register a new variable: `repo_code`. We already know from
+Under the "Git" task, register a new variable: `repo_code`:
+
+[[[ code('b4eb384d36') ]]]
+
+We already know from
 the output that we're looking for the `changed` key on this variable. That means,
 we could use `repo_code.changed` in the `when` option of some tasks to skip them.
 
@@ -17,14 +21,21 @@ we could use `repo_code.changed` in the `when` option of some tasks to skip them
 
 But, we can get fancier! Below this task, add a new one called "Register code_changed variable".
 We'll use the `set_fact` module from earlier. This time, create a new variable called
-`code_changed` set to, very simply, `repo_code.changed`.
+`code_changed` set to, very simply, `repo_code.changed`:
+
+[[[ code('bdf1003634') ]]]
 
 The *only* reason we're doing this is to make our `when` statements a little cleaner.
 Add our tag onto that.
 
-Down below, under "Install Composer's Dependencies", add `when: code_changed`. Ah,
-so nice. Copy that and put it anywhere else it makes sense like "Execute migrations"
-and "Clear Cache"
+Down below, under "Install Composer's Dependencies", add `when: code_changed`:
+
+[[[ code('acd4c0ebbd') ]]]
+
+Ah, so nice. Copy that and put it anywhere else it makes sense like "Execute migrations"
+and "Clear Cache":
+
+[[[ code('1b09a9e35f') ]]]
 
 Phew! Ok, run the playbook - but take off the verbose flag:
 
