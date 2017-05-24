@@ -41,7 +41,7 @@ You could also download the role *locally* in your project. Add `--help` to the
 command:
 
 ```terminal
-ansible-galaxy install DavidWittman.redis
+ansible-galaxy install DavidWittman.redis --help
 ```
 
 The `-p` option is the key! Downloading the role locally *might* be even better than
