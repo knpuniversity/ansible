@@ -64,6 +64,7 @@ if you want to use the `safe` upgrade option for installed packages. Just add on
 your playbook before upgrading:
 
 ```yaml
+# ansible/playbook.yml
 ---
 - hosts: vb
   # ...

@@ -7,7 +7,7 @@ like this to my repository in plain text!
 
 One really cool solution to this is the *vault*: an *encrypted* variables file.
 
-To create a vault file, go back to your main machine's terminal and run
+To create a vault file, go back to your main machine's terminal and run:
 
 ```terminal
 ansible-vault create ansible/vars/vault.yml
@@ -20,6 +20,7 @@ Nice! It opens up an editor. Once you're inside, treat this like a normal variab
 file: add `---`, then a new variable: `vault_symfony_secret`:
 
 ```yaml
+# ansible/vars/vault.yml
 ---
 vault_symfony_secret: 
 ```
@@ -30,6 +31,7 @@ in a minute.
 Then, set the value to `udderly secret $tring`:
 
 ```yaml
+# ansible/vars/vault.yml
 ---
 vault_symfony_secret: "udderly secret $tring"
 ```
@@ -79,7 +81,7 @@ Let's try it! Run the playbook like before, with `-t deploy` and a new flag:
 `--ask-vault-pass`:
 
 ```terminal
-ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t tags --ask-vault-pass
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -t deploy --ask-vault-pass
 ```
 
 Nice! Enter `beefpass` for the password, use the `prod` environment, then let it
@@ -92,6 +94,7 @@ cat app/config/parameters.yml
 ```
 
 ```yaml
+# app/config/parameters.yml
 # This file is auto-generated during the composer install
 parameters:
     # ...
@@ -109,6 +112,7 @@ URL. It still works!
 Now, open `app/config/parameters.yml`. The last key is called `loggly_token`:
 
 ```yaml
+# app/config/parameters.yml
 # This file is auto-generated during the composer install
 parameters:
     # ...
