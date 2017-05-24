@@ -18,8 +18,12 @@ Before we download composer, add a new task called "Check for Composer". Use the
 `stat` module and set the path to `/usr/local/bin/composer`. Then, `register` a
 new variable called `composer_stat`. And don't forget the `deploy` tag!
 
+[[[ code('2a2098f62f') ]]]
+
 To see what goodies that variable has in it, add a `debug` task to print `composer_stat`.
-Give that the `deploy` tag too.
+Give that the `deploy` tag too:
+
+[[[ code('205929f0bd') ]]]
 
 Ok! Change over to your terminal and run the playbook with `-t deploy`:
 
@@ -35,10 +39,15 @@ Remove the `debug` task.
 ## Skipping Tasks
 
 Our goal is to *skip* the next three tasks if that file exists. Like before, use
-the `when` key set to `not composer_stat.stat.exists`. In other words, check the
-`stat.exists` key, and if that is true, we want to *not* run this.
+the `when` key set to `not composer_stat.stat.exists`:
 
-Copy that and put it below "Move Composer globally", and also "Set Permissions on Composer".
+[[[ code('fc5fb3b734') ]]]
+
+In other words, check the `stat.exists` key, and if that is true, we want to *not* run this.
+
+Copy that and put it below "Move Composer globally", and also "Set Permissions on Composer":
+
+[[[ code('e21f2a5978') ]]]
 
 I think we're ready! Try it:
 
@@ -55,13 +64,17 @@ new features mean new complexity. Thanks to this... the Composer executable will
 eventually become *really* old and out-of-date. We need to make sure it's upgraded
 to the latest version.
 
-Below the set permissions task, add a new one called
-"Make sure Composer is at its latest version". This time we can use the `composer`
-module. Set `working_dir` to `{{ symfony_root_dir }}`... though that doesn't matter
-in this case... because we'll use `self-update` to upgrade Composer.
+Below the set permissions task, add a new one called "Make sure Composer is at its
+latest version". This time we can use the `composer` module. Set `working_dir` to
+`{{ symfony_root_dir }}`... though that doesn't matter in this case... because we'll
+use `self-update` to upgrade Composer:
+
+[[[ code('3a9f83e4e1') ]]]
 
 We can even add `when: composer_stat.stat.exists` to avoid running this if Composer
-was just downloaded. Give it our favorite `deploy` tag.
+was just downloaded. Give it our favorite `deploy` tag:
+
+[[[ code('8ac03b1c08') ]]]
 
 Ok, run it! But this time, add a `--verbose` flag:
 
@@ -80,7 +93,9 @@ So it worked! But like with other tasks... it's reporting as "Changed" even thou
 it did *not* actually change anything! We already know how to fix that. Scroll down
 to the "Create DB" task and copy its `changed_when`. Scroll back up and paste it
 under this task. Register a new variable - `composer_self_update` - and use that
-in `changed_when`. Then, all we need to do is search for `You are already using composer version`.
+in `changed_when`. Then, all we need to do is search for `You are already using composer version`:
+
+[[[ code('9ab6dac87b') ]]]
 
 If that shows up in the command, then we know nothing changed. Paste that into the
 `search` filter.
