@@ -48,7 +48,7 @@ Create a new task: "Set Symfony secret in parameters.yml". Use our favorite `lin
 module with `dest` set to `{{ symfony_root_dir }}` - that's a variable from our vars
 file - `{{ symfony_root_dir }}/app/config/parameters.yml`:
 
-[[[ code('') ]]]
+[[[ code('d44629e925') ]]]
 
 For `regexp`, use `^    secret:`. Yep, we're looking for 4 spaces then `secret:`.
 For `line`, 4 spaces again then `secret: {{ symfony_secret }}`:
