@@ -4,9 +4,14 @@ The *best* part about roles is they're *shareable*. There are a *ton* of third-p
 roles that you can download to give your playbook free stuff! I love free stuff!
 
 Refresh the page in the "dev" environment. The page took over *2* seconds to load!
-Why? In `DefaultController`, our app is trying to use Redis. But, it's not installed!
-So, this fails... and just for a good example, our code rescues thing but sleeps
-for 2 seconds to "fake" the page being really slow.
+Why? In `DefaultController`, our app is trying to use Redis:
+
+[[[ code('87a41bb9b3') ]]]
+
+But, it's not installed! So, this fails... and just for a good example, our code rescues
+thing but sleeps for 2 seconds to "fake" the page being really slow:
+
+[[[ code('9f83993b64') ]]]
 
 In other words, without Redis, our site is slow. But after we install it, the page
 should be super quick!
@@ -33,15 +38,23 @@ Ansible to load a role, it looks in your local directory but also looks in that
 global spot to find possible roles.
 
 You could also download the role *locally* in your project. Add `--help` to the
-command. The `-P` option is the key! Downloading the role locally *might* be even
-better than downloading it globally. When it's in your project, you can commit it to your
-repository and manage its version.
+command:
+
+```terminal
+ansible-galaxy install DavidWittman.redis
+```
+
+The `-p` option is the key! Downloading the role locally *might* be even better than
+downloading it globally. When it's in your project, you can commit it to your repository
+and manage its version.
 
 ## Activate & Configure the Role
 
 With the role downloaded, all we need to do is activate it! Easy! Copy the role name.
 Under our `roles`, I'll use a longer syntax: `role: DavidWittman.redis` then
-`become: true`.
+`become: true`:
+
+[[[ code('834787a299') ]]]
 
 If you tried the role, you'd find out you need that. We didn't need it for the `nginx`
 role because we had the `become: true` lines internally.
@@ -54,9 +67,19 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
 
 While we're waiting for someone else to install Redis for us - thanks David - head
 back to the documentation. The main way to control how a role works is via variables,
-like `redis:bind` in this example. It's cool how it works: internally, the role sets
-some variables and then uses them. We, of course, can override them. Simple, but
-powerful.
+like `redis_bind` in this example:
+
+```yaml
+\-\-\-
+- hosts: redis01.example.com
+  vars:
+    - redis_bind: 127.0.0.1
+  roles:
+    - DavidWittman.redis
+```
+
+It's cool how it works: internally, the role sets some variables and then uses them.
+We, of course, can override them. Simple, but powerful.
 
 There *is* one downside to third-party roles: they can add some serious bloat to
 your playbook. Yea, it's running a *lot* of tasks. Often, a role is designed to work
