@@ -70,7 +70,7 @@ back to the documentation. The main way to control how a role works is via varia
 like `redis_bind` in this example:
 
 ```yaml
-\-\-\-
+---
 - hosts: redis01.example.com
   vars:
     - redis_bind: 127.0.0.1

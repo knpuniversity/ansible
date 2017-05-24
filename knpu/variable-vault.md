@@ -20,7 +20,7 @@ Nice! It opens up an editor. Once you're inside, treat this like a normal variab
 file: add `---`, then a new variable: `vault_symfony_secret`:
 
 ```yaml
-\-\-\-
+---
 vault_symfony_secret: 
 ```
 
@@ -30,7 +30,7 @@ in a minute.
 Then, set the value to `udderly secret $tring`:
 
 ```yaml
-\-\-\-
+---
 vault_symfony_secret: "udderly secret $tring"
 ```
 
@@ -137,7 +137,7 @@ ansible-vault edit ansible/vars/vault.yml
 Add a new variable - `vault_loggly_token`:
 
 ```yaml
-\-\-\-
+---
 # ...
 vault_loggly_token:
 ```
@@ -145,7 +145,7 @@ vault_loggly_token:
 I'll paste a real token for my account and save:
 
 ```yaml
-\-\-\-
+---
 # ...
 vault_loggly_token: fb4aa5b2-30a3-4bd8-8902-1aba5a683d62
 ```
