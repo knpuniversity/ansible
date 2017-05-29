@@ -2,11 +2,11 @@
 
 So far, we've been deploying to a virtual machine. But... there's nothing stopping
 us from deploying to... the CLOUD! Let's try it - let's deploy to Amazon EC2. This
-isn't an exhaustive tutorial about using EC2... but let's at least get our feet wet
+is not an exhaustive tutorial about using EC2... but let's at least get our feet wet
 and see if we can get into some trouble!
 
 ***TIP
-Want to properly deploy with Ansible? Check out [Ansistrano](https://github.com/ansistrano/deploy).
+Want to properly deploy with Ansible? Check out [Ansistrano][ansistrano].
 ***
 
 ## Manually Launching an EC2 Instance
@@ -39,13 +39,18 @@ Ok, *now* launch the instance! Cool! Click to view its progress.
 While it's loading, let's get to work!
 
 This new server represents a new *host*. In `hosts.ini` we have a `local` group
-with one server and a `vb` group with one server. Create a new group called `aws`.
+with one server and a `vb` group with one server. Create a new group called `aws`:
+
+[[[ code('9559c09239') ]]]
+
 Below, we need the IP to the server. Wait for it to boot.
 
 When it's ready, copy its public IP address, go back to the hosts file, and paste!
 This time, set `ansible_user` to `ubuntu`: that's the user that's setup for this
 image. And instead of a password, use `ansible_ssh_private_key_file=` and
-put the path to your downloaded private key: `~/.ssh/Ansible_AWS_tmp.pem` for me.
+put the path to your downloaded private key: `~/.ssh/Ansible_AWS_tmp.pem` for me:
+
+[[[ code('76089293e8') ]]]
 
 ## Host Group Children
 
@@ -53,16 +58,27 @@ Here's where things get cool! I want to run our playbook against the virtual mac
 *and* my EC2 instance. Because... it's totally valid to build two servers at once!
 That's where Ansible shines!
 
-Right now, each lives under its own host group - `vb` and `aws`. Inside of our playbook,
-we've configured the play to only run against the `vb` group. How could we run that
-against the hosts in the `vb` group *and* in the `aws` group?
+Right now, each lives under its own host group - `vb` and `aws`:
+
+[[[ code('778e260715') ]]]
+
+Inside of our playbook, we've configured the play to only run against the `vb` group:
+
+[[[ code('31d2560104') ]]]
+
+How could we run that against the hosts in the `vb` group *and* in the `aws` group?
 
 With a host group... group! Check it out: create a new group called `webserver`,
 but add a `:children` after. That special `children` syntax allows us to list other
-host *groups* below this: `vb` and `aws`. Yep, we now have a new group - `webserver` -
-that's a combination of these two.
+host *groups* below this: `vb` and `aws`:
 
-Back in the playbook, change `vb` to `webserver`.
+[[[ code('52a90da4d7') ]]]
+
+Yep, we now have a new group - `webserver` - that's a combination of these two.
+
+Back in the playbook, change `vb` to `webserver`:
+
+[[[ code('10e2e4ed8b') ]]]
 
 ## Running the Playbook
 
@@ -87,7 +103,14 @@ open a new terminal tab and edit the `/etc/hosts` file:
 vim /etc/hosts
 ```
 
-To test thing, update `mootube.l` to point to the IP address of the EC2 instance.
+To test thing, update `mootube.l` to point to the IP address of the EC2 instance:
+
+```text
+# ...
+#192.168.33.10 mootube.l
+54.205.128.194 mootube.l
+```
+
 Then, save, quit and close the tab.
 
 Even though Ansible is still working, if I go to `http://mootube.l` right now, I
@@ -103,3 +126,6 @@ we loaded in the `prod` environment: so the fixtures didn't run.
 
 The only weird thing is that after changing my hosts file, I can't access MooTube
 on my VM anymore. But, we can solve that with host group vars.
+
+
+[ansistrano]: https://github.com/ansistrano/deploy
