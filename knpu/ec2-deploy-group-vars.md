@@ -106,6 +106,7 @@ sudo vim /etc/hosts
 To test thing, update `mootube.l` to point to the IP address of the EC2 instance:
 
 ```text
+# /etc/hosts
 # ...
 #192.168.33.10 mootube.l
 54.205.128.194 mootube.l

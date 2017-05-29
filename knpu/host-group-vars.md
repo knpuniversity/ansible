@@ -23,6 +23,7 @@ sudo vim /etc/hosts
 ```
 
 ```text
+# /etc/hosts
 # ...
 192.168.33.10 mootube.l
 54.205.128.194 mootube.ec2
