@@ -100,7 +100,7 @@ While we're waiting, let's go copy the IP address to the new server again. Tempo
 open a new terminal tab and edit the `/etc/hosts` file:
 
 ```terminal
-vim /etc/hosts
+sudo vim /etc/hosts
 ```
 
 To test thing, update `mootube.l` to point to the IP address of the EC2 instance:

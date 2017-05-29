@@ -8,11 +8,25 @@ What if instead, we setup the VM to be `mootube.l` and the EC2 instance to be
 `mootube.ec2`? That would fix it! How can we do that?
 
 The problem is that in our `roles/nginx/vars/main.yml` file, we have a `server_name`
-variable... but it's just hardcoded to `mootube.l`. I want to override that variable
-to a different value for each host group. And that is totally possible.
+variable... but it's just hardcoded to `mootube.l`:
+
+[[[ code('28e6666da6') ]]]
+
+I want to override that variable to a different value for each host group. And that
+is totally possible.
 
 But first, re-open  `/etc/hosts` and point `mootube.l` back to the virtual machine
-IP. Then, add a new `mootube.ec2` entry that points to the EC2 instance.
+IP. Then, add a new `mootube.ec2` entry that points to the EC2 instance:
+
+```terminal
+sudo vim /etc/hosts
+```
+
+```text
+# ...
+192.168.33.10 mootube.l
+54.205.128.194 mootube.ec2
+```
 
 Nice! 
 
@@ -24,10 +38,14 @@ by having this exact directory and filename, whenever the `aws` group is execute
 it will automatically load this file and use the variables inside. But those variables
 will *only* apply to the `aws` group.
 
-Inside, create a new `host_server_name` variable set to `mootube.ec2`.
+Inside, create a new `host_server_name` variable set to `mootube.ec2`:
+
+[[[ code('f5f773e399') ]]]
 
 Copy that variable name. Next, open `roles/nginx/vars/main.yml`, replace the hardcoded
-`mootube.l` with something fancier: `{{ host_server_name|default('mootube.l') }}`.
+`mootube.l` with something fancier: `{{ host_server_name|default('mootube.l') }}`:
+
+[[[ code('8034556105') ]]]
 
 This says: use `host_server_name` if it exists. But if it doesn't, default to `mootube.l`.
 This should give us a unique `host_name` variable for each group.
