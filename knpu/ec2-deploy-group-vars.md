@@ -17,7 +17,7 @@ do it by hand. I'm looking for an image that's similar to what we're using with
 Vagrant: Ubuntu 14.04. Select that image, use the micro instance size, and just
 use the default settings on the next screens.
 
-**TIP
+***TIP
 The instance id we used is `ami-41d48e24` if you need to find it manually.
 ***
 
