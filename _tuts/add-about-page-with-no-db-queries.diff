@@ -1,0 +1,85 @@
+diff --git a/app/Resources/views/default/about.html.twig b/app/Resources/views/default/about.html.twig
+new file mode 100644
+index 0000000..0a2c7ed
+--- /dev/null
++++ b/app/Resources/views/default/about.html.twig
+@@ -0,0 +1,9 @@
++{% extends 'base.html.twig' %}
++
++{% block content %}
++    <div class="text-center">
++        <h2>Welcome to MooTube!</h2>
++        <h3>As a cattle, you will find *tons* of free video for everyone ;)</h3>
++        <div><a class="btn btn-explore btn-lg" href="{{ path('homepage') }}">Explore the content</a></div>
++    </div>
++{% endblock %}
+diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
+index dce6b78..dcc68fc 100644
+--- a/src/AppBundle/Controller/DefaultController.php
++++ b/src/AppBundle/Controller/DefaultController.php
+@@ -47,6 +47,16 @@ class DefaultController extends Controller
+     }
+ 
+     /**
++     * NOTE: This page should not query the DB!
++     *
++     * @Route("/about", name="about")
++     */
++    public function aboutAction()
++    {
++        return $this->render('default/about.html.twig');
++    }
++
++    /**
+      * @param Video[] $videos
+      *
+      * @return array
+diff --git a/web/css/styles.css b/web/css/styles.css
+index bed9dcf..573fd9c 100644
+--- a/web/css/styles.css
++++ b/web/css/styles.css
+@@ -59,24 +59,41 @@ nav > ul {
+     border: 1px solid #C3272B;
+     margin-left: 10px;
+ }
++.btn-explore {
++    display: inline-block;
++    background: #4bc32d;
++    border: 1px solid #60a050;
++    padding: 15px 25px;
++    margin: 50px 0;
++}
+ 
+ .btn-login:hover {
+     background: #4B77BE;
+     border: 1px solid lightblue;
+ }
+-
+-
+ .btn-upload:hover {
+     background: #CF000F;
+     border: 1px solid #C3272B;
+     margin-left: 10px;
+ }
++.btn-explore:hover {
++    background: #45af2c;
++    border: 1px solid #609b51;
++}
+ 
+-.btn > a {
++.btn > a, .btn {
+     color: #fff;
+     text-decoration: none;
+ }
+ 
++.btn-lg {
++    font-size: 1.5em;
++}
++
++.text-center {
++    text-align: center;
++}
++
+ .headline {
+     color: #fff;
+     text-shadow: 2px 1px 2px rgba(150, 150, 150, 1);

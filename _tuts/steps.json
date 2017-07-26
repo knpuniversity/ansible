@@ -344,7 +344,17 @@
             "id": "upgrade-to-symfony-3-3",
             "name": "Upgrade to Symfony 3.3",
             "description": null
+        },
+        {
+            "id": "add-about-page-with-no-db-queries",
+            "name": "Add about page with no DB queries",
+            "description": null
+        },
+        {
+            "id": "add-phpunit-tests",
+            "name": "Add PHPUnit tests",
+            "description": null
         }
     ],
-    "sha": "8d89384c8a7561b846571cad5128602708f54b90"
+    "sha": "9d2e7bbd06ffbf6fd96d3a753eac151ef5d3c69e"
 }
