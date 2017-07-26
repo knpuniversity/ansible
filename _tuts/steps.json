@@ -354,7 +354,12 @@
             "id": "add-phpunit-tests",
             "name": "Add PHPUnit tests",
             "description": null
+        },
+        {
+            "id": "handle-assets-with-webpack-encore",
+            "name": "Handle assets with Webpack Encore",
+            "description": null
         }
     ],
-    "sha": "9d2e7bbd06ffbf6fd96d3a753eac151ef5d3c69e"
+    "sha": "1a00bb58c7c232c9100aa7698976f413ac346302"
 }
