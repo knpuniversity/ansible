@@ -359,7 +359,12 @@
             "id": "handle-assets-with-webpack-encore",
             "name": "Handle assets with Webpack Encore",
             "description": null
+        },
+        {
+            "id": "create-circleci-config",
+            "name": "Create CircleCI config",
+            "description": null
         }
     ],
-    "sha": "1a00bb58c7c232c9100aa7698976f413ac346302"
+    "sha": "133a251e65e083db441659f8f95bb33ef5bbb0dc"
 }
