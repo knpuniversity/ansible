@@ -1,12 +1,12 @@
 diff --git a/.gitignore b/.gitignore
-index 0805091..df374cf 100644
+index f51e794..3f56fb8 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -17,3 +17,5 @@
+@@ -17,4 +17,4 @@
  /web/bundles/
  
- /.vagrant/
-+/node_modules/
+ /node_modules/
+-/web/build/
 +/web/build
 diff --git a/app/Resources/views/base.html.twig b/app/Resources/views/base.html.twig
 index 62c845c..c1971c8 100644
