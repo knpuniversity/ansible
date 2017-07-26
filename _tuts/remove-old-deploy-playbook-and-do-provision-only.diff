@@ -1,0 +1,133 @@
+diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
+deleted file mode 100644
+index f5ddda9..0000000
+--- a/ansible/includes/symfony-bootstrap.yml
++++ /dev/null
+@@ -1,65 +0,0 @@
+----
+-- name: Install Composer's dependencies
+-  composer:
+-    working_dir: "{{ symfony_root_dir }}"
+-    no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
+-  tags:
+-    - deploy
+-  when: code_changed
+-
+-- name: Fix var directory permissions
+-  file:
+-    path: "{{ symfony_var_dir }}"
+-    state: directory
+-    mode: 0777
+-    recurse: yes
+-  changed_when: false
+-  tags:
+-    - permissions
+-    - deploy
+-
+-- name: Set Symfony secret in parameters.yml
+-  lineinfile:
+-    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
+-    regexp: "^    secret:"
+-    line: "    secret: {{ symfony_secret }}"
+-  tags:
+-    - deploy
+-
+-- name: Set Loggly token in parameters.yml
+-  lineinfile:
+-    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
+-    regexp: "^    loggly_token:"
+-    line: "    loggly_token: {{ loggly_token }}"
+-  tags:
+-    - deploy
+-
+-# Symfony console commands
+-- name: Create DB if not exists
+-  command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+-  register: db_create_result
+-  changed_when: "not db_create_result.stdout|search('already exists. Skipped')"
+-  tags:
+-    - deploy
+-
+-- name: Execute migrations
+-  command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
+-  register: db_migrations_result
+-  changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
+-  tags:
+-    - deploy
+-  when: code_changed
+-
+-- name: Load data fixtures
+-  command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
+-  when: symfony_env != "prod"
+-  changed_when: false
+-  tags:
+-    - deploy
+-
+-- name: Clear cache
+-  command: '{{ symfony_console_path }} cache:clear --env={{ symfony_env }}'
+-  changed_when: false
+-  tags:
+-    - deploy
+-  when: code_changed
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 769a095..1fc9753 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -5,26 +5,12 @@
+     - ./vars/vault.yml
+     - ./vars/vars.yml
+ 
+-  vars_prompt:
+-    - name: symfony_env
+-      prompt: "Enter the environment for your Symfony app (prod|dev|test)"
+-      default: prod
+-      private: no
+-
+-  environment:
+-    SYMFONY_ENV: "{{ symfony_env|lower }}"
+-
+   pre_tasks:
+-    - name: Convert entered Symfony environment to lowercase
+-      set_fact:
+-        symfony_env: "{{ symfony_env|lower }}"
+-      tags:
+-        - always
+-
+     - name: Update APT package manager repositories cache
+       become: true
+       apt:
+         update_cache: yes
++        cache_valid_time: 3600
+ 
+     - name: Install aptitude
+       become: true
+@@ -114,19 +100,6 @@
+       tags:
+         - deploy
+ 
+-    - name: Checkout Git repository
+-      git:
+-        repo: https://github.com/knpuniversity/ansible.git
+-        dest: "{{ symfony_root_dir }}"
+-        force: yes
+-      register: repo_code
+-      tags:
+-        - deploy
+-
+-    - name: Register code_changed variable
+-      set_fact:
+-        code_changed: repo_code.changed
+-
+     - name: Check for Composer
+       stat:
+         path: /usr/local/bin/composer
+@@ -164,9 +137,6 @@
+       tags:
+         - deploy
+ 
+-    # Bootstrap Symfony app
+-    - include: ./includes/symfony-bootstrap.yml
+-
+   handlers:
+     - name: Restart PHP-FPM
+       become: true

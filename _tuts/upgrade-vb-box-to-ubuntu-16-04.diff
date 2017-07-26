@@ -1,0 +1,90 @@
+diff --git a/Vagrantfile b/Vagrantfile
+index 6ed2518..94f2cc8 100644
+--- a/Vagrantfile
++++ b/Vagrantfile
+@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
+ 
+   # Every Vagrant development environment requires a box. You can search for
+   # boxes at https://atlas.hashicorp.com/search.
+-  config.vm.box = "ubuntu/trusty64"
++  config.vm.box = "ubuntu/xenial64"
+ 
+   # Disable automatic box update checking. If you disable this, then
+   # boxes will only be checked for updates when the user runs
+@@ -43,13 +43,16 @@ Vagrant.configure("2") do |config|
+   # backing providers for Vagrant. These expose provider-specific options.
+   # Example for VirtualBox:
+   #
+-  # config.vm.provider "virtualbox" do |vb|
+-  #   # Display the VirtualBox GUI when booting the machine
+-  #   vb.gui = true
+-  #
+-  #   # Customize the amount of memory on the VM:
+-  #   vb.memory = "1024"
+-  # end
++  config.vm.provider "virtualbox" do |vb|
++    # Display the VirtualBox GUI when booting the machine
++    #vb.gui = true
++
++    # Customize the amount of memory on the VM:
++    #vb.memory = "1024"
++
++    # Store box's log file in var/ directory
++    vb.customize [ "modifyvm", :id, "--uartmode1", "file", File.join(Dir.pwd, "var/ubuntu-xenial-16.04-cloudimg-console.log") ]
++  end
+   #
+   # View the documentation for the provider you are using for more
+   # information on available options.
+diff --git a/ansible/group_vars/aws.yml b/ansible/group_vars/aws.yml
+index e6a33e1..1ddb1ef 100644
+--- a/ansible/group_vars/aws.yml
++++ b/ansible/group_vars/aws.yml
+@@ -1,2 +1,5 @@
+ ---
++ansible_user: ubuntu
++ansible_ssh_private_key_file: ~/.ssh/KnpU-Tutorial.pem
++ansible_python_interpreter: /usr/bin/python3
+ host_server_name: ec2-54-205-128-194.compute-1.amazonaws.com
+diff --git a/ansible/group_vars/vb.yml b/ansible/group_vars/vb.yml
+new file mode 100644
+index 0000000..b65823f
+--- /dev/null
++++ b/ansible/group_vars/vb.yml
+@@ -0,0 +1,4 @@
++---
++ansible_user: ubuntu
++ansible_ssh_private_key_file: ./.vagrant/machines/default/virtualbox/private_key
++ansible_python_interpreter: /usr/bin/python3
+diff --git a/ansible/hosts.ini b/ansible/hosts.ini
+index 351e571..297aee5 100644
+--- a/ansible/hosts.ini
++++ b/ansible/hosts.ini
+@@ -2,10 +2,10 @@
+ 127.0.0.1 ansible_connection=local
+ 
+ [vb]
+-192.168.33.10 ansible_user=vagrant ansible_ssh_pass=vagrant
++192.168.33.10
+ 
+ [aws]
+-54.205.128.194 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/KnpU-Tutorial.pem
++54.205.128.194
+ 
+ [webserver:children]
+ vb
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 0d65636..769a095 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -26,6 +26,11 @@
+       apt:
+         update_cache: yes
+ 
++    - name: Install aptitude
++      become: true
++      apt:
++        name: aptitude
++
+     - name: Upgrade installed packages
+       become: true
+       apt:
