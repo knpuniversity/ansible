@@ -27,18 +27,18 @@ Ok, terminology garbage done. Let's do something! The simplest way to execute a 
 is from the command line. `ansible localhost` means that - for now - we're going to
 run this module against our local machine. Then, `-m command` to run the "command"
 module - the simplest module in Ansible that allows you to... well... just run a
-command directly on the server. Then, add `-a "bin/echo 'Hello Ansible'"` to pass
+command directly on the server. Then, add `-a "/bin/echo 'Hello Ansible'"` to pass
 that as an argument to the `command` module:
 
 ```terminal
-ansible localhost -m command -a "bin/echo 'Hello Ansible'"
+ansible localhost -m command -a "/bin/echo 'Hello Ansible'"
 ```
 
 Try it! We see some output and... Hello Ansible! Congrats! You just ran your first
 module: `command`. In this case, we can even remove the `-m` option:
 
 ```terminal
-ansible localhost -a "bin/echo 'Hello Ansible'"
+ansible localhost -a "/bin/echo 'Hello Ansible'"
 ```
 
 The `command` module is so fundamental, it's the *default* module... if we don't pass one.
