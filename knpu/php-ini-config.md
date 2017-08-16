@@ -130,6 +130,11 @@ With the `line` option, the *entire* line will be replaced - not just the part t
 was matched from the `regexp` option. That means the comment at the beginning of the
 line *will* be removed.
 
+***TIP
+There is also an `ini_file` module, which makes modifying `.ini` files even easier.
+For an example, see: http://bit.ly/knpu-ini-module
+***
+
 Now, copy that entire task and paste it. In Ubuntu, there are 2 different `php.ini`
 files: rename this one to `Set date.timezone for FPM`. Change the `dest` path
 from `cli/` to `fpm/`. That's the correct path inside the VM:
