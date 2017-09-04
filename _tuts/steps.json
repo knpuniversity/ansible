@@ -369,7 +369,37 @@
             "id": "create-circleci-config",
             "name": "Create CircleCI config",
             "description": null
+        },
+        {
+            "id": "create-deploy-playbook-and-include-ansistrano-role",
+            "name": "Create deploy playbook and include Ansistrano role",
+            "description": null
+        },
+        {
+            "id": "git-setup-deploy-repo-and-branch",
+            "name": "Git: Setup deploy repo and branch",
+            "description": null
+        },
+        {
+            "id": "git-setup-deploy-key",
+            "name": "Git: Setup deploy key",
+            "description": null
+        },
+        {
+            "id": "hooks-setup-infrastructure-related-parameters",
+            "name": "Hooks: Setup infrastructure-related parameters",
+            "description": null
+        },
+        {
+            "id": "hooks-install-composer-deps",
+            "name": "Hooks: Install Composer deps",
+            "description": null
+        },
+        {
+            "id": "hooks-clear-and-warm-up-the-cache",
+            "name": "Hooks: Clear and warm up the cache",
+            "description": null
         }
     ],
-    "sha": "b97e38b77e34d6445484e22bb680c38a179a9536"
+    "sha": "8453b55ec7506e5b27035cd6d2eae4804873ba56"
 }

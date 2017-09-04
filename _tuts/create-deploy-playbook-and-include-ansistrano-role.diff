@@ -1,0 +1,11 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+new file mode 100644
+index 0000000..9fb8907
+--- /dev/null
++++ b/ansible/deploy.yml
+@@ -0,0 +1,5 @@
++---
++- hosts: webservers
++
++  roles:
++    - carlosbuenosvinos.ansistrano-deploy

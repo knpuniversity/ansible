@@ -1,0 +1,13 @@
+diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
+index 8d94796..126f3b1 100644
+--- a/ansible/deploy/after-symlink-shared.yml
++++ b/ansible/deploy/after-symlink-shared.yml
+@@ -3,3 +3,8 @@
+   template:
+     src: '{{ playbook_dir }}/templates/parameters.yml.dist'
+     dest: '{{ playbook_dir }}/../app/config/parameters.yml'
++
++- name: Install Composer dependencies
++  composer:
++    command: install
++    working_dir: '{{ symfony_root_dir }}'
