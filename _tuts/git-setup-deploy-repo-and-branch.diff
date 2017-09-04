@@ -1,17 +1,16 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 9fb8907..f18856f 100644
+index 6c4c6e7..7ab79a5 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -1,5 +1,12 @@
- ---
- - hosts: webservers
- 
-+  vars:
+@@ -8,6 +8,11 @@
+   vars:
+     # Ansistrano vars
+     ansistrano_deploy_to: '{{ project_deploy_dir }}' # Base path to deploy to.
 +    ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
 +
 +    # Variables used in the Git deployment strategy
 +    ansistrano_git_repo: 'git@github.com:knpuniversity/ansible.git' # Location of the git repository
 +    ansistrano_git_branch: master # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
-+
+ 
    roles:
      - carlosbuenosvinos.ansistrano-deploy

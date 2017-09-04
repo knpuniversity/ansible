@@ -376,6 +376,11 @@
             "description": null
         },
         {
+            "id": "vars-setup-some-initial-vars",
+            "name": "Vars: Setup some initial vars",
+            "description": null
+        },
+        {
             "id": "git-setup-deploy-repo-and-branch",
             "name": "Git: Setup deploy repo and branch",
             "description": null
@@ -401,5 +406,5 @@
             "description": null
         }
     ],
-    "sha": "8453b55ec7506e5b27035cd6d2eae4804873ba56"
+    "sha": "b9f1474805c3129bc28d9bfa54759a52d425ef03"
 }

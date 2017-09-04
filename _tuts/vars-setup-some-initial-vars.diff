@@ -1,0 +1,18 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index 9fb8907..6c4c6e7 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -1,5 +1,13 @@
+ ---
+ - hosts: webservers
+ 
++  vars_files:
++    - ./vars/vault.yml
++    - ./vars/vars.yml
++
++  vars:
++    # Ansistrano vars
++    ansistrano_deploy_to: '{{ project_deploy_dir }}' # Base path to deploy to.
++
+   roles:
+     - carlosbuenosvinos.ansistrano-deploy

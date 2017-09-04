@@ -70,7 +70,7 @@ index f5ddda9..0000000
 -    - deploy
 -  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 769a095..1fc9753 100644
+index 769a095..bc4aa88 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,26 +5,12 @@
@@ -101,6 +101,15 @@ index 769a095..1fc9753 100644
  
      - name: Install aptitude
        become: true
+@@ -106,7 +92,7 @@
+     - name: Create project directory and set its permissions
+       become: true
+       file:
+-        path: "{{ symfony_root_dir }}"
++        path: "{{ project_deploy_dir }}"
+         state: directory
+         owner: "{{ ansible_user }}"
+         group: "{{ ansible_user }}"
 @@ -114,19 +100,6 @@
        tags:
          - deploy
@@ -121,7 +130,15 @@ index 769a095..1fc9753 100644
      - name: Check for Composer
        stat:
          path: /usr/local/bin/composer
-@@ -164,9 +137,6 @@
+@@ -157,16 +130,13 @@
+ 
+     - name: Make sure composer is at its latest version
+       composer:
+-        working_dir: "{{ symfony_root_dir }}"
++        working_dir: "{{ project_deploy_dir }}"
+         command: self-update
+       register: composer_self_update
+       changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
        tags:
          - deploy
  
@@ -131,3 +148,18 @@ index 769a095..1fc9753 100644
    handlers:
      - name: Restart PHP-FPM
        become: true
+diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
+index d8faf67..4fa1cfd 100644
+--- a/ansible/vars/vars.yml
++++ b/ansible/vars/vars.yml
+@@ -1,9 +1,6 @@
+ ---
+-symfony_root_dir: /var/www/project
+-symfony_web_dir: "{{ symfony_root_dir }}/web"
+-symfony_var_dir: "{{ symfony_root_dir }}/var"
+-symfony_console_path: "{{ symfony_root_dir }}/bin/console"
+ symfony_secret: "{{ vault_symfony_secret }}"
+ loggly_token: "{{ vault_loggly_token }}"
+ aws_access_key: "{{ vault_aws_access_key }}"
+ aws_secret_key: "{{ vault_aws_secret_key }}"
++project_deploy_dir: /var/www/project

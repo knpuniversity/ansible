@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index f18856f..374bb59 100644
+index 7ab79a5..7fa74a7 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -7,6 +7,7 @@
+@@ -13,6 +13,7 @@
      # Variables used in the Git deployment strategy
      ansistrano_git_repo: 'git@github.com:knpuniversity/ansible.git' # Location of the git repository
      ansistrano_git_branch: master # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name

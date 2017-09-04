@@ -1,5 +1,18 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index 2fafc1c..82a5530 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -6,6 +6,8 @@
+     - ./vars/vars.yml
+ 
+   vars:
++    deploy_project_dir: '{{ ansistrano_release_path.stdout }}'
++
+     # Ansistrano vars
+     ansistrano_deploy_to: '{{ project_deploy_dir }}' # Base path to deploy to.
+     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 8d94796..126f3b1 100644
+index 8d94796..99e0526 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -3,3 +3,8 @@
@@ -10,4 +23,4 @@ index 8d94796..126f3b1 100644
 +- name: Install Composer dependencies
 +  composer:
 +    command: install
-+    working_dir: '{{ symfony_root_dir }}'
++    working_dir: '{{ deploy_project_dir }}'

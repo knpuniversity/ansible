@@ -1,11 +1,11 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 126f3b1..6507142 100644
+index 99e0526..f2cfc16 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -8,3 +8,9 @@
    composer:
      command: install
-     working_dir: '{{ symfony_root_dir }}'
+     working_dir: '{{ deploy_project_dir }}'
 +
 +- name: Clear the cache
 +  command: '{{ deploy_console_path }} cache:clear --no-warmup --env=prod'
