@@ -1,0 +1,67 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 1fc9753..def36bc 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -16,11 +16,7 @@
+       become: true
+       apt:
+         name: aptitude
+-
+-    - name: Upgrade installed packages
+-      become: true
+-      apt:
+-        upgrade: safe
++        state: latest
+ 
+   roles:
+     - nginx
+@@ -76,17 +72,19 @@
+ 
+     - name: Set date.timezone for CLI
+       become: true
+-      lineinfile:
+-        dest: /etc/php/7.1/cli/php.ini
+-        regexp: "date.timezone ="
+-        line: "date.timezone = UTC"
++      ini_file:
++        path: /etc/php/7.1/cli/php.ini
++        section: Date
++        option: date.timezone
++        value: UTC
+ 
+     - name: Set date.timezone for FPM
+       become: true
+-      lineinfile:
+-        dest: /etc/php/7.1/fpm/php.ini
+-        regexp: "date.timezone ="
+-        line: "date.timezone = UTC"
++      ini_file:
++        path: /etc/php/7.1/fpm/php.ini
++        section: Date
++        option: date.timezone
++        value: UTC
+       notify: Restart PHP-FPM
+ 
+     - name: Create project directory and set its permissions
+@@ -128,7 +126,7 @@
+       tags:
+         - deploy
+ 
+-    - name: Make sure composer is at its latest version
++    - name: Make sure Composer is at its latest version
+       composer:
+         working_dir: "{{ symfony_root_dir }}"
+         command: self-update
+@@ -137,6 +135,12 @@
+       tags:
+         - deploy
+ 
++  post_tasks:
++    - name: Upgrade installed packages
++      become: true
++      apt:
++        upgrade: safe
++
+   handlers:
+     - name: Restart PHP-FPM
+       become: true
