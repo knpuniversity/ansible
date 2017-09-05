@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 9fb8907..6c4c6e7 100644
+index 9fb8907..854f753 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -1,5 +1,13 @@
@@ -12,7 +12,18 @@ index 9fb8907..6c4c6e7 100644
 +
 +  vars:
 +    # Ansistrano vars
-+    ansistrano_deploy_to: '{{ project_deploy_dir }}' # Base path to deploy to.
++    ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
 +
    roles:
      - carlosbuenosvinos.ansistrano-deploy
+diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
+index e67e1be..eb965fe 100644
+--- a/ansible/vars/vars.yml
++++ b/ansible/vars/vars.yml
+@@ -4,4 +4,5 @@ loggly_token: "{{ vault_loggly_token }}"
+ aws_access_key: "{{ vault_aws_access_key }}"
+ aws_secret_key: "{{ vault_aws_secret_key }}"
+ project_deploy_dir: /var/www/project
+-server_document_root: /var/www/project/web
++ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
++server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"

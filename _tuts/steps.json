@@ -404,7 +404,12 @@
             "id": "hooks-clear-and-warm-up-the-cache",
             "name": "Hooks: Clear and warm up the cache",
             "description": null
+        },
+        {
+            "id": "aws-update-credentials-dns-name-and-public-ip",
+            "name": "AWS: Update credentials, DNS name and public IP",
+            "description": null
         }
     ],
-    "sha": "b9f1474805c3129bc28d9bfa54759a52d425ef03"
+    "sha": "4f6669faf2de00c2ebb0992ba656a3f7288ed956"
 }
