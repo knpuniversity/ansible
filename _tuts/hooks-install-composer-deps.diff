@@ -1,11 +1,24 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index b75bfc2..18ae26c 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -18,5 +18,8 @@
+     # Hooks: custom tasks if you need them
+     ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"
+ 
++  environment:
++    SYMFONY_ENV: prod
++
+   roles:
+     - carlosbuenosvinos.ansistrano-deploy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 8d94796..9a53d74 100644
+index 065d17b..a27a7bf 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -3,3 +3,8 @@
    template:
      src: '{{ playbook_dir }}/templates/parameters.yml.dist'
-     dest: '{{ playbook_dir }}/../app/config/parameters.yml'
+     dest: '{{ ansistrano_release_path.stdout }}/app/config/parameters.yml'
 +
 +- name: Install Composer dependencies
 +  composer:

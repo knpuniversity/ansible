@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index bc4aa88..d2b3e90 100644
+index a254b93..db6aef2 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -16,11 +16,7 @@
@@ -42,17 +42,17 @@ index bc4aa88..d2b3e90 100644
 +        value: UTC
        notify: Restart PHP-FPM
  
-     - name: Create project directory and set its permissions
-@@ -128,7 +126,7 @@
+     - name: Check for Composer
+@@ -117,7 +115,7 @@
        tags:
          - deploy
  
 -    - name: Make sure composer is at its latest version
 +    - name: Make sure Composer is at its latest version
        composer:
-         working_dir: "{{ project_deploy_dir }}"
+         working_dir: "/home/{{ ansible_user }}"
          command: self-update
-@@ -137,6 +135,12 @@
+@@ -126,6 +124,12 @@
        tags:
          - deploy
  

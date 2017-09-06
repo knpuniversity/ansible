@@ -1,10 +1,10 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 9fb8907..854f753 100644
+index c5d0441..0150fbf 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -1,5 +1,13 @@
  ---
- - hosts: webservers
+ - hosts: webserver
  
 +  vars_files:
 +    - ./vars/vault.yml

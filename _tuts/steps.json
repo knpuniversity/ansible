@@ -406,10 +406,30 @@
             "description": null
         },
         {
+            "id": "hooks-setup-permissions",
+            "name": "Hooks: Setup permissions",
+            "description": null
+        },
+        {
             "id": "aws-update-credentials-dns-name-and-public-ip",
             "name": "AWS: Update credentials, DNS name and public IP",
             "description": null
+        },
+        {
+            "id": "assets-install-bundles-assets",
+            "name": "Assets: Install bundles assets",
+            "description": null
+        },
+        {
+            "id": "assets-install-node-deps",
+            "name": "Assets: Install Node deps",
+            "description": null
+        },
+        {
+            "id": "assets-install-webpack-encore-deps",
+            "name": "Assets: Install Webpack Encore deps",
+            "description": null
         }
     ],
-    "sha": "4f6669faf2de00c2ebb0992ba656a3f7288ed956"
+    "sha": "0add58eb2d8193d8738e30fca7ed74a20a33466e"
 }

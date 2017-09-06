@@ -70,7 +70,7 @@ index f5ddda9..0000000
 -    - deploy
 -  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 769a095..bc4aa88 100644
+index 769a095..a254b93 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,26 +5,12 @@
@@ -101,19 +101,21 @@ index 769a095..bc4aa88 100644
  
      - name: Install aptitude
        become: true
-@@ -106,7 +92,7 @@
-     - name: Create project directory and set its permissions
-       become: true
-       file:
--        path: "{{ symfony_root_dir }}"
-+        path: "{{ project_deploy_dir }}"
-         state: directory
-         owner: "{{ ansible_user }}"
-         group: "{{ ansible_user }}"
-@@ -114,19 +100,6 @@
-       tags:
-         - deploy
+@@ -103,30 +89,6 @@
+         line: "date.timezone = UTC"
+       notify: Restart PHP-FPM
  
+-    - name: Create project directory and set its permissions
+-      become: true
+-      file:
+-        path: "{{ symfony_root_dir }}"
+-        state: directory
+-        owner: "{{ ansible_user }}"
+-        group: "{{ ansible_user }}"
+-        recurse: yes
+-      tags:
+-        - deploy
+-
 -    - name: Checkout Git repository
 -      git:
 -        repo: https://github.com/knpuniversity/ansible.git
@@ -130,12 +132,12 @@ index 769a095..bc4aa88 100644
      - name: Check for Composer
        stat:
          path: /usr/local/bin/composer
-@@ -157,16 +130,13 @@
+@@ -157,16 +119,13 @@
  
      - name: Make sure composer is at its latest version
        composer:
 -        working_dir: "{{ symfony_root_dir }}"
-+        working_dir: "{{ project_deploy_dir }}"
++        working_dir: "/home/{{ ansible_user }}"
          command: self-update
        register: composer_self_update
        changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
