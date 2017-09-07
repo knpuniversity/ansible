@@ -444,7 +444,27 @@
             "id": "db-run-migrations",
             "name": "DB: Run migrations",
             "description": null
+        },
+        {
+            "id": "db-safe-migrations-todo",
+            "name": "DB: Safe migrations TODO",
+            "description": null
+        },
+        {
+            "id": "hooks-clean-the-web-dir-from-sensitive-scripts",
+            "name": "Hooks: Clean the web\/ dir from sensitive scripts",
+            "description": null
+        },
+        {
+            "id": "make-tiny-change-in-template",
+            "name": "Make tiny change in template",
+            "description": null
+        },
+        {
+            "id": "sharing-share-logs",
+            "name": "Sharing: Share logs",
+            "description": null
         }
     ],
-    "sha": "fb200723c651618fed0e0bfb71060064f4414c8b"
+    "sha": "fd99867a5e2d1c0377c8ba28d89ed12131335c31"
 }
