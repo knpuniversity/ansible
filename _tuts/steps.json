@@ -429,7 +429,22 @@
             "id": "assets-install-webpack-encore-deps",
             "name": "Assets: Install Webpack Encore deps",
             "description": null
+        },
+        {
+            "id": "db-create-db",
+            "name": "DB: Create DB",
+            "description": null
+        },
+        {
+            "id": "db-create-db-schema",
+            "name": "DB: Create DB schema",
+            "description": null
+        },
+        {
+            "id": "db-run-migrations",
+            "name": "DB: Run migrations",
+            "description": null
         }
     ],
-    "sha": "0add58eb2d8193d8738e30fca7ed74a20a33466e"
+    "sha": "fb200723c651618fed0e0bfb71060064f4414c8b"
 }
