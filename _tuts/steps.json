@@ -464,7 +464,17 @@
             "id": "sharing-share-logs",
             "name": "Sharing: Share logs",
             "description": null
+        },
+        {
+            "id": "specify-releases-number-to-keep",
+            "name": "Specify releases number to keep",
+            "description": null
+        },
+        {
+            "id": "setup-github-oauth-token-for-composer",
+            "name": "Setup GitHub OAuth token for Composer",
+            "description": null
         }
     ],
-    "sha": "fd99867a5e2d1c0377c8ba28d89ed12131335c31"
+    "sha": "218712ac10eb43c089c0b948ca7a15e3c885fa93"
 }
