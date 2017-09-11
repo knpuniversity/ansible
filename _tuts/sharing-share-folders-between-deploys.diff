@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index e4e74dd..62c9170 100644
+index d50b392..2c98677 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -14,6 +14,23 @@
+@@ -20,6 +20,24 @@
  
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
@@ -22,6 +22,7 @@ index e4e74dd..62c9170 100644
 +    #   - path/to/file.txt
 +    ansistrano_shared_paths:
 +      - var/logs
++      - var/sessions
 +
      ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
  

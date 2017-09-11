@@ -386,6 +386,11 @@
             "description": null
         },
         {
+            "id": "git-specify-branch-with-prompt-var",
+            "name": "Git: Specify branch with prompt var",
+            "description": null
+        },
+        {
             "id": "git-setup-deploy-key",
             "name": "Git: Setup deploy key",
             "description": null
@@ -461,8 +466,8 @@
             "description": null
         },
         {
-            "id": "sharing-share-logs",
-            "name": "Sharing: Share logs",
+            "id": "sharing-share-folders-between-deploys",
+            "name": "Sharing: Share folders between deploys",
             "description": null
         },
         {
@@ -476,5 +481,5 @@
             "description": null
         }
     ],
-    "sha": "218712ac10eb43c089c0b948ca7a15e3c885fa93"
+    "sha": "c82fbb048127102c116b1afcb04d8e2ebd14112c"
 }

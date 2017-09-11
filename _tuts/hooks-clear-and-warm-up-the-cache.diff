@@ -1,9 +1,9 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 18ae26c..c46b54e 100644
+index 30ba3a3..bffbeb2 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -6,6 +6,8 @@
-     - ./vars/vars.yml
+@@ -12,6 +12,8 @@
+       private: no
  
    vars:
 +    release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
