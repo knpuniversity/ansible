@@ -1,9 +1,7 @@
 ---
-symfony_root_dir: /var/www/project
-symfony_web_dir: "{{ symfony_root_dir }}/web"
-symfony_var_dir: "{{ symfony_root_dir }}/var"
-symfony_console_path: "{{ symfony_root_dir }}/bin/console"
 symfony_secret: "{{ vault_symfony_secret }}"
 loggly_token: "{{ vault_loggly_token }}"
 aws_access_key: "{{ vault_aws_access_key }}"
 aws_secret_key: "{{ vault_aws_secret_key }}"
+project_deploy_dir: /var/www/project
+server_document_root: /var/www/project/web
