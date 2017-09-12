@@ -67,3 +67,12 @@
         dest: /etc/php/7.1/fpm/php.ini
         regexp: "date.timezone ="
         line: "date.timezone = UTC"
+
+    - name: Create project directory and set its permissions
+      become: true
+      file:
+        path: "/var/www/project"
+        state: directory
+        owner: "vagrant"
+        group: "vagrant"
+        recurse: yes
