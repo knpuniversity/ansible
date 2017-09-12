@@ -87,6 +87,14 @@
         value: UTC
       notify: Restart PHP-FPM
 
+    # Allows Ansistrano to remove cache files that have 0664 permissions and www-data owner/group
+    - name: Add current user to the www-data group
+      become: true
+      user:
+        name: '{{ ansible_user }}'
+        groups: www-data
+        append: yes
+
     - name: Check for Composer
       stat:
         path: /usr/local/bin/composer
