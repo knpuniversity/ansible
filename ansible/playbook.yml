@@ -172,6 +172,13 @@
       tags:
         - deploy
 
+    - name: Make sure composer is at its latest version
+      composer:
+        working_dir: "{{ symfony_root_dir }}"
+        command: self-update
+      tags:
+        - deploy
+
     - name: Install Composer's dependencies
       composer:
         working_dir: "{{ symfony_root_dir }}"
