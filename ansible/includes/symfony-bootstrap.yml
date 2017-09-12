@@ -18,6 +18,14 @@
     - permissions
     - deploy
 
+- name: Set Symfony secret in parameters.yml
+  lineinfile:
+    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
+    regexp: "^    secret:"
+    line: "    secret: {{ symfony_secret }}"
+  tags:
+    - deploy
+
 # Symfony console commands
 - name: Create DB if not exists
   command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
