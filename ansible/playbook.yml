@@ -25,12 +25,6 @@
         - always
 
   tasks:
-    - debug:
-        var: ansible_env
-
-    - debug:
-        var: symfony_env
-
     - ping: ~
 
     - name: Update APT package manager repositories cache
