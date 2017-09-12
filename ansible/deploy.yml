@@ -1,0 +1,5 @@
+---
+- hosts: webserver
+
+  roles:
+    - carlosbuenosvinos.ansistrano-deploy
