@@ -12,6 +12,8 @@
       private: no
 
   vars:
+    release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
+
     # Ansistrano vars
     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
