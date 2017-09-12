@@ -119,7 +119,7 @@
 
     - name: Checkout Git repository
       git:
-        repo: https://github.com/symfony/symfony-standard.git
+        repo: https://github.com/knpuniversity/ansible.git
         dest: "{{ symfony_root_dir }}"
         force: yes
 
