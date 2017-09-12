@@ -19,6 +19,7 @@
     # Variables used in the Git deployment strategy
     ansistrano_git_repo: "git@github.com:knpuniversity/ansible.git" # Location of the git repository
     ansistrano_git_branch: "{{ git_branch }}" # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+    ansistrano_git_identity_key_path: "{{ playbook_dir }}/id_rsa" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
 
   roles:
     - carlosbuenosvinos.ansistrano-deploy
