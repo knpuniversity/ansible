@@ -12,7 +12,7 @@
     - name: Upgrade installed packages
       become: true
       apt:
-        upgrade: dist
+        upgrade: safe
 
     - name: Install cowsay - it's probably important
       become: true
