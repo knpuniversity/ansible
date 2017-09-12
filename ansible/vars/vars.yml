@@ -3,6 +3,7 @@ symfony_secret: "{{ vault_symfony_secret }}"
 loggly_token: "{{ vault_loggly_token }}"
 aws_access_key: "{{ vault_aws_access_key }}"
 aws_secret_key: "{{ vault_aws_secret_key }}"
+github_oauth_token: "{{ vault_github_oauth_token }}"
 project_deploy_dir: /var/www/project
 ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
 server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"
