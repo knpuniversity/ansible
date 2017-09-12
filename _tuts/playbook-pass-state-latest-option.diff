@@ -1,9 +1,0 @@
-diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index cc29de8..1089456 100644
---- a/ansible/playbook.yml
-+++ b/ansible/playbook.yml
-@@ -23,3 +23,4 @@
-       become: true
-       apt:
-         name: git
-+        state: latest

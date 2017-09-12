@@ -1,9 +1,0 @@
-diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 9743447..3df22f2 100644
---- a/ansible/playbook.yml
-+++ b/ansible/playbook.yml
-@@ -110,3 +110,4 @@
-     - name: Install Composer's dependencies
-       composer:
-         working_dir: "{{ symfony_root_dir }}"
-+        no_dev: no
