@@ -16,11 +16,7 @@
       become: true
       apt:
         name: aptitude
-
-    - name: Upgrade installed packages
-      become: true
-      apt:
-        upgrade: safe
+        state: latest
 
   roles:
     - nginx
@@ -76,17 +72,19 @@
 
     - name: Set date.timezone for CLI
       become: true
-      lineinfile:
-        dest: /etc/php/7.1/cli/php.ini
-        regexp: "date.timezone ="
-        line: "date.timezone = UTC"
+      ini_file:
+        path: /etc/php/7.1/cli/php.ini
+        section: Date
+        option: date.timezone
+        value: UTC
 
     - name: Set date.timezone for FPM
       become: true
-      lineinfile:
-        dest: /etc/php/7.1/fpm/php.ini
-        regexp: "date.timezone ="
-        line: "date.timezone = UTC"
+      ini_file:
+        path: /etc/php/7.1/fpm/php.ini
+        section: Date
+        option: date.timezone
+        value: UTC
       notify: Restart PHP-FPM
 
     - name: Check for Composer
@@ -117,7 +115,7 @@
       tags:
         - deploy
 
-    - name: Make sure composer is at its latest version
+    - name: Make sure Composer is at its latest version
       composer:
         working_dir: "/home/{{ ansible_user }}"
         command: self-update
@@ -125,6 +123,12 @@
       changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
       tags:
         - deploy
+
+  post_tasks:
+    - name: Upgrade installed packages
+      become: true
+      apt:
+        upgrade: safe
 
   handlers:
     - name: Restart PHP-FPM
