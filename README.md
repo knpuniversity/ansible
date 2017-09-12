@@ -51,6 +51,16 @@ If you get an error that the database exists, that should
 be ok. But if you have problems, completely drop the
 database (`doctrine:database:drop --force`) and try again.
 
+**Build Assets**
+
+The assets are built with Webpack Encore. First, make sure
+you have [yarn](https://yarnpkg.com/en/docs/install) installed. Then:
+
+```
+yarn
+yarn encore dev
+```
+
 **Start the built-in web server**
 
 You can use Nginx or Apache, but the built-in web server works
