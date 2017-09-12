@@ -1,0 +1,8 @@
+---
+- name: Remove sensitive scripts from web/ dir
+  file:
+    path: '{{ release_web_path }}/{{ item }}'
+    state: absent
+  with_items:
+    - app_dev.php
+    - config.php
