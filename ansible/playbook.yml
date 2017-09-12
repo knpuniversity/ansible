@@ -26,6 +26,11 @@
       apt:
         update_cache: yes
 
+    - name: Install aptitude
+      become: true
+      apt:
+        name: aptitude
+
     - name: Upgrade installed packages
       become: true
       apt:
