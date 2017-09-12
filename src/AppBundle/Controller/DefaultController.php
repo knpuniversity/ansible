@@ -47,6 +47,16 @@ class DefaultController extends Controller
     }
 
     /**
+     * NOTE: This page should not query the DB!
+     *
+     * @Route("/about", name="about")
+     */
+    public function aboutAction()
+    {
+        return $this->render('default/about.html.twig');
+    }
+
+    /**
      * @param Video[] $videos
      *
      * @return array
