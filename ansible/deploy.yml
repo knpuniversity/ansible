@@ -1,5 +1,13 @@
 ---
 - hosts: webserver
 
+  vars_files:
+    - ./vars/vault.yml
+    - ./vars/vars.yml
+
+  vars:
+    # Ansistrano vars
+    ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
+
   roles:
     - carlosbuenosvinos.ansistrano-deploy
