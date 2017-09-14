@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index fd1a2b8..9548a2e 100644
+index 0689ea7..0d4e5f8 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -17,8 +17,9 @@

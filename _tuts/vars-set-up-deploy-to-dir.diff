@@ -1,10 +1,10 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index c5d0441..116e54e 100644
+index ae05bd1..01955cf 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -1,5 +1,9 @@
  ---
- - hosts: webserver
+ - hosts: aws
  
 +  vars:
 +    # Ansistrano vars

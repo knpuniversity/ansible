@@ -371,6 +371,11 @@
             "description": null
         },
         {
+            "id": "update-the-readme",
+            "name": "Update the README",
+            "description": null
+        },
+        {
             "id": "create-deploy-playbook-and-include-ansistrano-role",
             "name": "Create deploy playbook and include Ansistrano role",
             "description": null
@@ -486,5 +491,5 @@
             "description": null
         }
     ],
-    "sha": "364054cd4120d8a15826d504120bd30cd1795c7a"
+    "sha": "c0742581c93dd91f666b6a42f7daef7da724647b"
 }
