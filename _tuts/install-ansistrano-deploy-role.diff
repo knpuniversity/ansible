@@ -1,8 +1,10 @@
 diff --git a/ansible/requirements.yml b/ansible/requirements.yml
-new file mode 100644
-index 0000000..22588cf
---- /dev/null
+index 3cf4a67..96389a8 100644
+--- a/ansible/requirements.yml
 +++ b/ansible/requirements.yml
-@@ -0,0 +1,2 @@
+@@ -1,2 +1,5 @@
+ - src: DavidWittman.redis
+   version: 1.2.4
++
 +- src: carlosbuenosvinos.ansistrano-deploy
 +  version: 2.7.0

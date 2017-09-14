@@ -371,6 +371,11 @@
             "description": null
         },
         {
+            "id": "manage-third-party-roles-with-requirements-file",
+            "name": "Manage third-party roles with requirements file",
+            "description": null
+        },
+        {
             "id": "update-the-readme",
             "name": "Update the README",
             "description": null
@@ -496,5 +501,5 @@
             "description": null
         }
     ],
-    "sha": "c0749016341c568cad3311a8c56b45b66c7560f7"
+    "sha": "3de450064e97181f131e8ce54feea3a6bd1f8e21"
 }
