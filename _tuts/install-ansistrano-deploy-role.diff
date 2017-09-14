@@ -1,0 +1,8 @@
+diff --git a/ansible/requirements.yml b/ansible/requirements.yml
+new file mode 100644
+index 0000000..22588cf
+--- /dev/null
++++ b/ansible/requirements.yml
+@@ -0,0 +1,2 @@
++- src: carlosbuenosvinos.ansistrano-deploy
++  version: 2.7.0

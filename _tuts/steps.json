@@ -376,6 +376,11 @@
             "description": null
         },
         {
+            "id": "install-ansistrano-deploy-role",
+            "name": "Install Ansistrano deploy role",
+            "description": null
+        },
+        {
             "id": "create-deploy-playbook-and-include-ansistrano-role",
             "name": "Create deploy playbook and include Ansistrano role",
             "description": null
@@ -491,5 +496,5 @@
             "description": null
         }
     ],
-    "sha": "c0742581c93dd91f666b6a42f7daef7da724647b"
+    "sha": "c0749016341c568cad3311a8c56b45b66c7560f7"
 }
