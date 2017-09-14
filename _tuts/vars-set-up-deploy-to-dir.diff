@@ -1,0 +1,24 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index c5d0441..116e54e 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -1,5 +1,9 @@
+ ---
+ - hosts: webserver
+ 
++  vars:
++    # Ansistrano vars
++    ansistrano_deploy_to: "/var/www/project" # Base path to deploy to.
++
+   roles:
+     - carlosbuenosvinos.ansistrano-deploy
+diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
+index e67e1be..c5da100 100644
+--- a/ansible/vars/vars.yml
++++ b/ansible/vars/vars.yml
+@@ -3,5 +3,4 @@ symfony_secret: "{{ vault_symfony_secret }}"
+ loggly_token: "{{ vault_loggly_token }}"
+ aws_access_key: "{{ vault_aws_access_key }}"
+ aws_secret_key: "{{ vault_aws_secret_key }}"
+-project_deploy_dir: /var/www/project
+ server_document_root: /var/www/project/web

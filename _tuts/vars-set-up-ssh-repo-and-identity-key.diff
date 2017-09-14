@@ -1,10 +1,13 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index ef5fbef..9548a2e 100644
+index fd1a2b8..9548a2e 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -19,6 +19,7 @@
+@@ -17,8 +17,9 @@
+     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
+ 
      # Variables used in the Git deployment strategy
-     ansistrano_git_repo: "git@github.com:knpuniversity/ansible.git" # Location of the git repository
+-    ansistrano_git_repo: "https://github.com/knpuniversity/ansible.git" # Location of the git repository
++    ansistrano_git_repo: "git@github.com:knpuniversity/ansible.git" # Location of the git repository
      ansistrano_git_branch: "{{ git_branch }}" # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 +    ansistrano_git_identity_key_path: "{{ playbook_dir }}/id_rsa" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
  

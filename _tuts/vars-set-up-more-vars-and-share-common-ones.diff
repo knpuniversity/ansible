@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index c5d0441..0150fbf 100644
+index d66aaa0..2fd86f9 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -1,5 +1,13 @@
+@@ -1,9 +1,13 @@
  ---
  - hosts: webserver
  
@@ -10,20 +10,22 @@ index c5d0441..0150fbf 100644
 +    - ./vars/vault.yml
 +    - ./vars/vars.yml
 +
-+  vars:
-+    # Ansistrano vars
+   vars:
+     # Ansistrano vars
+-    ansistrano_deploy_to: "/var/www/project" # Base path to deploy to.
 +    ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
-+
-   roles:
-     - carlosbuenosvinos.ansistrano-deploy
+     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
+ 
+     # Variables used in the Git deployment strategy
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index e67e1be..eb965fe 100644
+index c5da100..4bb8889 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
-@@ -4,4 +4,5 @@ loggly_token: "{{ vault_loggly_token }}"
+@@ -3,4 +3,6 @@ symfony_secret: "{{ vault_symfony_secret }}"
+ loggly_token: "{{ vault_loggly_token }}"
  aws_access_key: "{{ vault_aws_access_key }}"
  aws_secret_key: "{{ vault_aws_secret_key }}"
- project_deploy_dir: /var/www/project
 -server_document_root: /var/www/project/web
-+ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
++project_deploy_dir: /var/www/project
++ansistrano_current_dir: current # Softlink name. You should rarely changed it.
 +server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"

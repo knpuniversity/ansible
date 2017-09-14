@@ -40,7 +40,7 @@ index 0000000..228b251
 +  "http-basic": {}
 +}
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index eb965fe..d5824a1 100644
+index 4bb8889..00f7c19 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
 @@ -3,6 +3,7 @@ symfony_secret: "{{ vault_symfony_secret }}"
@@ -49,7 +49,7 @@ index eb965fe..d5824a1 100644
  aws_secret_key: "{{ vault_aws_secret_key }}"
 +github_oauth_token: "{{ vault_github_oauth_token }}"
  project_deploy_dir: /var/www/project
- ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
+ ansistrano_current_dir: current # Softlink name. You should rarely changed it.
  server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"
 diff --git a/ansible/vars/vault.yml b/ansible/vars/vault.yml
 index 8799468..827c123 100644

@@ -376,28 +376,33 @@
             "description": null
         },
         {
-            "id": "vars-setup-some-initial-vars",
-            "name": "Vars: Setup some initial vars",
+            "id": "vars-set-up-deploy-to-dir",
+            "name": "Vars: Set up deploy to dir",
             "description": null
         },
         {
-            "id": "git-setup-deploy-repo-and-branch",
-            "name": "Git: Setup deploy repo and branch",
+            "id": "vars-set-up-git-https-repo-and-branch",
+            "name": "Vars: Set up Git HTTPS repo and branch",
             "description": null
         },
         {
-            "id": "git-specify-branch-with-prompt-var",
-            "name": "Git: Specify branch with prompt var",
+            "id": "vars-set-up-more-vars-and-share-common-ones",
+            "name": "Vars: Set up more vars and share common ones",
             "description": null
         },
         {
-            "id": "git-setup-deploy-key",
-            "name": "Git: Setup deploy key",
+            "id": "vars-set-up-branch-with-a-prompt-var",
+            "name": "Vars: Set up branch with a prompt var",
             "description": null
         },
         {
-            "id": "hooks-setup-infrastructure-related-parameters",
-            "name": "Hooks: Setup infrastructure-related parameters",
+            "id": "vars-set-up-ssh-repo-and-identity-key",
+            "name": "Vars: Set up SSH repo and identity key",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-infrastructure-related-parameters",
+            "name": "Hooks: Set up infrastructure-related parameters",
             "description": null
         },
         {
@@ -411,8 +416,8 @@
             "description": null
         },
         {
-            "id": "hooks-setup-permissions",
-            "name": "Hooks: Setup permissions",
+            "id": "hooks-set-up-permissions",
+            "name": "Hooks: Set up permissions",
             "description": null
         },
         {
@@ -476,10 +481,10 @@
             "description": null
         },
         {
-            "id": "setup-github-oauth-token-for-composer",
-            "name": "Setup GitHub OAuth token for Composer",
+            "id": "set-up-github-oauth-token-for-composer",
+            "name": "Set up GitHub OAuth token for Composer",
             "description": null
         }
     ],
-    "sha": "de4df86eb3049e517e671a45045a7bffab35f165"
+    "sha": "364054cd4120d8a15826d504120bd30cd1795c7a"
 }
