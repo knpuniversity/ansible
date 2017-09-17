@@ -41,10 +41,10 @@ index cd2dc82..89dea4a 100644
 +  become: true
 +  command: 'find {{ release_sessions_path }} -type d -exec chmod 0777 {} \;'
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index abcad86..c729d8a 100644
+index f0ce01b..fe2f25c 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -94,6 +94,14 @@
+@@ -96,6 +96,14 @@
          value: UTC
        notify: Restart PHP-FPM
  

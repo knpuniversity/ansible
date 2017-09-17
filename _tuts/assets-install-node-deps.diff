@@ -17,10 +17,10 @@ index 5f54860..9ce043b 100644
    become: true
    command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index c729d8a..3750491 100644
+index fe2f25c..29d8f85 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -139,6 +139,40 @@
+@@ -141,6 +141,40 @@
        tags:
          - deploy
  

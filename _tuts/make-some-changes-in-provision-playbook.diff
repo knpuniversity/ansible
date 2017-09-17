@@ -1,27 +1,28 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a254b93..abcad86 100644
+index a254b93..f0ce01b 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -16,11 +16,14 @@
+@@ -16,11 +16,16 @@
        become: true
        apt:
          name: aptitude
 +        state: latest
  
 -    - name: Upgrade installed packages
--      become: true
++    - name: Create project directory
+       become: true
 -      apt:
 -        upgrade: safe
-+    - name: Create project directory
-+      path: '{{ project_deploy_dir }}'
-+      state: directory
-+      owner: '{{ ansible_user }}'
-+      group: '{{ ansible_user }}'
-+      mode: 0775
++      file:
++        path: '{{ project_deploy_dir }}'
++        state: directory
++        owner: '{{ ansible_user }}'
++        group: '{{ ansible_user }}'
++        mode: 0775
  
    roles:
      - nginx
-@@ -76,17 +79,19 @@
+@@ -76,17 +81,19 @@
  
      - name: Set date.timezone for CLI
        become: true
@@ -49,7 +50,7 @@ index a254b93..abcad86 100644
        notify: Restart PHP-FPM
  
      - name: Check for Composer
-@@ -117,7 +122,7 @@
+@@ -117,7 +124,7 @@
        tags:
          - deploy
  
@@ -58,7 +59,7 @@ index a254b93..abcad86 100644
        composer:
          working_dir: "/home/{{ ansible_user }}"
          command: self-update
-@@ -126,6 +131,12 @@
+@@ -126,6 +133,12 @@
        tags:
          - deploy
  

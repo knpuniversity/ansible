@@ -381,6 +381,11 @@
             "description": null
         },
         {
+            "id": "setup-change-vhost-to-mootube-example-com",
+            "name": "Setup: Change vhost to mootube.example.com",
+            "description": null
+        },
+        {
             "id": "install-ansistrano-deploy-role",
             "name": "Install Ansistrano deploy role",
             "description": null
@@ -501,5 +506,5 @@
             "description": null
         }
     ],
-    "sha": "ecf212027badbe5f0700f8fbe1de5bb3b08ef474"
+    "sha": "48bac47b0faf76746db13538777b1a488a47dc4e"
 }
