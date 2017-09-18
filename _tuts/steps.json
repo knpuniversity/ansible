@@ -446,6 +446,11 @@
             "description": null
         },
         {
+            "id": "hooks-simple-permissions",
+            "name": "Hooks: Simple permissions",
+            "description": null
+        },
+        {
             "id": "hooks-set-up-permissions",
             "name": "Hooks: Set up permissions",
             "description": null
@@ -516,5 +521,5 @@
             "description": null
         }
     ],
-    "sha": "a4afa621f7288a6b1a919d1ea09ad59238a26767"
+    "sha": "4e1425a8205da1af0a4d4b93bb8fb4b2ed5e7b82"
 }
