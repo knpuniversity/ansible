@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index ab65e75..791b8a3 100644
+index 55c5377..838c9b8 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -13,6 +13,9 @@
+@@ -14,6 +14,9 @@
  
    vars:
      release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
@@ -41,10 +41,10 @@ index cd2dc82..89dea4a 100644
 +  become: true
 +  command: 'find {{ release_sessions_path }} -type d -exec chmod 0777 {} \;'
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f0ce01b..fe2f25c 100644
+index 67e2eaa..f7d956a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -96,6 +96,14 @@
+@@ -95,6 +95,14 @@
          value: UTC
        notify: Restart PHP-FPM
  

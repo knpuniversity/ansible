@@ -17,12 +17,11 @@ index bcce246..cf925c2 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index e67e1be..5e8426d 100644
+index 63d5e1f..20d76d9 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
-@@ -4,4 +4,6 @@ loggly_token: "{{ vault_loggly_token }}"
- aws_access_key: "{{ vault_aws_access_key }}"
- aws_secret_key: "{{ vault_aws_secret_key }}"
+@@ -1,3 +1,5 @@
+ ---
  project_deploy_dir: /var/www/project
 -server_document_root: /var/www/project/web
 +ansistrano_current_dir: current # Softlink name. You should rarely changed it.

@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index c8cfc99..2876b2e 100644
+index 05cf184..a7cb65b 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -20,6 +20,24 @@
+@@ -21,6 +21,24 @@
  
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.

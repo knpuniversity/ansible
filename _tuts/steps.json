@@ -386,6 +386,11 @@
             "description": null
         },
         {
+            "id": "setup-simplify-separate-playbook-vars",
+            "name": "Setup: Simplify\/separate playbook vars",
+            "description": null
+        },
+        {
             "id": "install-ansistrano-deploy-role",
             "name": "Install Ansistrano deploy role",
             "description": null
@@ -511,5 +516,5 @@
             "description": null
         }
     ],
-    "sha": "addec3e293045677910caa90989ecd38a6f63cc3"
+    "sha": "a4afa621f7288a6b1a919d1ea09ad59238a26767"
 }
