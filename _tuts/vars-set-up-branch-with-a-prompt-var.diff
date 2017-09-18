@@ -1,21 +1,21 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 748b7ae..0689ea7 100644
+index cf925c2..1a4ad79 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -5,6 +5,12 @@
-     - ./vars/vault.yml
+@@ -4,6 +4,12 @@
+   vars_files:
      - ./vars/vars.yml
  
 +  vars_prompt:
 +    - name: git_branch
-+      prompt: 'Enter a branch of Git repository (can be the full SHA-1 hash, a branch name, or a tag name)'
++      prompt: 'Enter a branch to deploy'
 +      default: master
 +      private: no
 +
    vars:
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
-@@ -12,7 +18,7 @@
+@@ -11,7 +17,7 @@
  
      # Variables used in the Git deployment strategy
      ansistrano_git_repo: "https://github.com/knpuniversity/ansible.git" # Location of the git repository

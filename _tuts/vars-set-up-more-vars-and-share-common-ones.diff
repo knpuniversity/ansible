@@ -1,13 +1,12 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index bcce246..748b7ae 100644
+index bcce246..cf925c2 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -1,9 +1,13 @@
+@@ -1,9 +1,12 @@
  ---
  - hosts: aws
  
 +  vars_files:
-+    - ./vars/vault.yml
 +    - ./vars/vars.yml
 +
    vars:
@@ -18,14 +17,14 @@ index bcce246..748b7ae 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index c5da100..4bb8889 100644
+index e67e1be..5e8426d 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
-@@ -3,4 +3,6 @@ symfony_secret: "{{ vault_symfony_secret }}"
- loggly_token: "{{ vault_loggly_token }}"
+@@ -4,4 +4,6 @@ loggly_token: "{{ vault_loggly_token }}"
  aws_access_key: "{{ vault_aws_access_key }}"
  aws_secret_key: "{{ vault_aws_secret_key }}"
+ project_deploy_dir: /var/www/project
 -server_document_root: /var/www/project/web
-+project_deploy_dir: /var/www/project
 +ansistrano_current_dir: current # Softlink name. You should rarely changed it.
 +server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"
++

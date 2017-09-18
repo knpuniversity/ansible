@@ -426,6 +426,11 @@
             "description": null
         },
         {
+            "id": "hooks-parameters-variables",
+            "name": "Hooks: parameters variables",
+            "description": null
+        },
+        {
             "id": "hooks-install-composer-deps",
             "name": "Hooks: Install Composer deps",
             "description": null
@@ -506,5 +511,5 @@
             "description": null
         }
     ],
-    "sha": "48bac47b0faf76746db13538777b1a488a47dc4e"
+    "sha": "addec3e293045677910caa90989ecd38a6f63cc3"
 }

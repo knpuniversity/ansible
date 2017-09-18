@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 0689ea7..0d4e5f8 100644
+index 1a4ad79..58dcb24 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -17,8 +17,9 @@
+@@ -16,8 +16,9 @@
      ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
  
      # Variables used in the Git deployment strategy
