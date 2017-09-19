@@ -1,0 +1,9 @@
+chapters:
+    - server-provision
+    - ansistrano-role-install
+    - ansistrano-deploy
+    - git-deploy
+    - deploy-keys
+    - deploy-hooks-parameters
+    - secret-config
+    - composer-cache-permissions
