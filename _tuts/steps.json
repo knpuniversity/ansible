@@ -369,7 +369,157 @@
             "id": "create-circleci-config",
             "name": "Create CircleCI config",
             "description": null
+        },
+        {
+            "id": "manage-third-party-roles-with-requirements-file",
+            "name": "Manage third-party roles with requirements file",
+            "description": null
+        },
+        {
+            "id": "update-the-readme",
+            "name": "Update the README",
+            "description": null
+        },
+        {
+            "id": "setup-change-vhost-to-mootube-example-com",
+            "name": "Setup: Change vhost to mootube.example.com",
+            "description": null
+        },
+        {
+            "id": "setup-simplify-separate-playbook-vars",
+            "name": "Setup: Simplify\/separate playbook vars",
+            "description": null
+        },
+        {
+            "id": "install-ansistrano-deploy-role",
+            "name": "Install Ansistrano deploy role",
+            "description": null
+        },
+        {
+            "id": "create-deploy-playbook-and-include-ansistrano-role",
+            "name": "Create deploy playbook and include Ansistrano role",
+            "description": null
+        },
+        {
+            "id": "vars-set-up-deploy-to-dir",
+            "name": "Vars: Set up deploy to dir",
+            "description": null
+        },
+        {
+            "id": "vars-set-up-git-https-repo-and-branch",
+            "name": "Vars: Set up Git HTTPS repo and branch",
+            "description": null
+        },
+        {
+            "id": "vars-set-up-more-vars-and-share-common-ones",
+            "name": "Vars: Set up more vars and share common ones",
+            "description": null
+        },
+        {
+            "id": "vars-set-up-branch-with-a-prompt-var",
+            "name": "Vars: Set up branch with a prompt var",
+            "description": null
+        },
+        {
+            "id": "vars-set-up-ssh-repo-and-identity-key",
+            "name": "Vars: Set up SSH repo and identity key",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-infrastructure-related-parameters",
+            "name": "Hooks: Set up infrastructure-related parameters",
+            "description": null
+        },
+        {
+            "id": "hooks-parameters-variables",
+            "name": "Hooks: parameters variables",
+            "description": null
+        },
+        {
+            "id": "hooks-install-composer-deps",
+            "name": "Hooks: Install Composer deps",
+            "description": null
+        },
+        {
+            "id": "hooks-clear-and-warm-up-the-cache",
+            "name": "Hooks: Clear and warm up the cache",
+            "description": null
+        },
+        {
+            "id": "hooks-simple-permissions",
+            "name": "Hooks: Simple permissions",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-permissions",
+            "name": "Hooks: Set up permissions",
+            "description": null
+        },
+        {
+            "id": "aws-update-credentials-dns-name-and-public-ip",
+            "name": "AWS: Update credentials, DNS name and public IP",
+            "description": null
+        },
+        {
+            "id": "assets-install-bundles-assets",
+            "name": "Assets: Install bundles assets",
+            "description": null
+        },
+        {
+            "id": "assets-install-node-deps",
+            "name": "Assets: Install Node deps",
+            "description": null
+        },
+        {
+            "id": "assets-install-webpack-encore-deps",
+            "name": "Assets: Install Webpack Encore deps",
+            "description": null
+        },
+        {
+            "id": "db-create-db",
+            "name": "DB: Create DB",
+            "description": null
+        },
+        {
+            "id": "db-create-db-schema",
+            "name": "DB: Create DB schema",
+            "description": null
+        },
+        {
+            "id": "db-run-migrations",
+            "name": "DB: Run migrations",
+            "description": null
+        },
+        {
+            "id": "db-safe-migrations-todo",
+            "name": "DB: Safe migrations TODO",
+            "description": null
+        },
+        {
+            "id": "hooks-clean-the-web-dir-from-sensitive-scripts",
+            "name": "Hooks: Clean the web\/ dir from sensitive scripts",
+            "description": null
+        },
+        {
+            "id": "make-tiny-change-in-template",
+            "name": "Make tiny change in template",
+            "description": null
+        },
+        {
+            "id": "sharing-share-folders-between-deploys",
+            "name": "Sharing: Share folders between deploys",
+            "description": null
+        },
+        {
+            "id": "specify-releases-number-to-keep",
+            "name": "Specify releases number to keep",
+            "description": null
+        },
+        {
+            "id": "set-up-github-oauth-token-for-composer",
+            "name": "Set up GitHub OAuth token for Composer",
+            "description": null
         }
     ],
-    "sha": "b97e38b77e34d6445484e22bb680c38a179a9536"
+    "sha": "de0a8e21828f89ba57e328a0869df9c18eb11184"
 }

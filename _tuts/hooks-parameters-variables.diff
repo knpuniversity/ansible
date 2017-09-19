@@ -1,0 +1,91 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index 08b20ed..15f9435 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -2,7 +2,9 @@
+ - hosts: aws
+ 
+   vars_files:
++    - ./vars/deploy_vault.yml
+     - ./vars/vars.yml
++    - ./vars/deploy_vars.yml
+ 
+   vars_prompt:
+     - name: git_branch
+diff --git a/ansible/templates/parameters.yml.dist b/ansible/templates/parameters.yml.dist
+index 3d64fe2..a850c7e 100644
+--- a/ansible/templates/parameters.yml.dist
++++ b/ansible/templates/parameters.yml.dist
+@@ -2,11 +2,11 @@
+ # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+ # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+ parameters:
+-    database_host:     127.0.0.1
++    database_host:     "{{ database_host }}"
+     database_port:     ~
+     database_name:     mootube
+-    database_user:     root
+-    database_password: ~
++    database_user:     "{{ database_user }}"
++    database_password: "{{ database_password }}"
+     # You should uncomment this if you want use pdo_sqlite
+     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
+ 
+@@ -16,7 +16,7 @@ parameters:
+     mailer_password:   ~
+ 
+     # A secret key that's used to generate certain security-related tokens
+-    secret:            ThisTokenIsNotSoSecretChangeIt
++    secret:            "{{ symfony_secret }}"
+ 
+     redis_host:        localhost
+-    loggly_token:      12345
++    loggly_token:      "{{ loggly_token }}"
+diff --git a/ansible/vars/deploy_vars.yml b/ansible/vars/deploy_vars.yml
+new file mode 100644
+index 0000000..9d2da48
+--- /dev/null
++++ b/ansible/vars/deploy_vars.yml
+@@ -0,0 +1,6 @@
++---
++symfony_secret: "{{ vault_symfony_secret }}"
++loggly_token: "{{ vault_loggly_token }}"
++database_host: "{{ vault_database_host }}"
++database_user: "{{ vault_database_user }}"
++database_password: "{{ vault_database_password }}"
+\ No newline at end of file
+diff --git a/ansible/vars/deploy_vault.yml b/ansible/vars/deploy_vault.yml
+new file mode 100644
+index 0000000..27dcf85
+--- /dev/null
++++ b/ansible/vars/deploy_vault.yml
+@@ -0,0 +1,15 @@
++$ANSIBLE_VAULT;1.1;AES256
++37633866356562303665643432386636313937613063373666613739313732313130633364333138
++3635376437663463326538633961663931393136643962610a636635363630656264343630613731
++30323432303666373366366237393637333932373962373730626465663330326462396532363330
++3561346639616234610a353530366337616164633864363038336437623165623534663166633966
++31656536326665613063343537333564656334616638663866653934373566303232323036653566
++63366436346139333966316364656265633462303233623162353630626661353930343939396661
++36326338383538363138633836636235663734303464396236396132306430636362393232366264
++34653762303761356262316234333631386262396666313037643661653336613133396439313362
++61326464323131646132393538333236643664356539636464373937666530366334313335663637
++62383230653762396662653265613133343137336264353233303932313330663831316565636134
++35646135303966333639616361306236393134656263386666643532353534313662376232653566
++64393665343230353362643363663031636334626466656130616562363038396335323530613135
++36313232323766663564666638646562366437616233376632323164303635356631346361376633
++6231386263646661383539313439316663333231643261653834
+diff --git a/app/config/parameters.yml.dist b/app/config/parameters.yml.dist
+index 3d64fe2..b7385fb 100644
+--- a/app/config/parameters.yml.dist
++++ b/app/config/parameters.yml.dist
+@@ -16,7 +16,7 @@ parameters:
+     mailer_password:   ~
+ 
+     # A secret key that's used to generate certain security-related tokens
+-    secret:            ThisTokenIsNotSoSecretChangeIt
++    secret:            "{{ symfony_secret }}"
+ 
+     redis_host:        localhost
+-    loggly_token:      12345
++    loggly_token:      "{{ loggly_token }}"

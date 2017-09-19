@@ -1,0 +1,26 @@
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index 916f92e..05cf184 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -30,6 +30,7 @@
+ 
+     # Hooks: custom tasks if you need them
+     ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"
++    ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/deploy/before-symlink.yml"
+ 
+   environment:
+     SYMFONY_ENV: prod
+diff --git a/ansible/deploy/before-symlink.yml b/ansible/deploy/before-symlink.yml
+new file mode 100644
+index 0000000..f2cc892
+--- /dev/null
++++ b/ansible/deploy/before-symlink.yml
+@@ -0,0 +1,8 @@
++---
++- name: Remove sensitive scripts from web/ dir
++  file:
++    path: '{{ release_web_path }}/{{ item }}'
++    state: absent
++  with_items:
++    - app_dev.php
++    - config.php
