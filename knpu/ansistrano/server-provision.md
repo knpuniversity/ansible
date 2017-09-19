@@ -1,20 +1,20 @@
 # Setup: Server Provisioning
 
 Hey guys! Ok, here's my situation: I've built this *amazing* new app: MooTube:
-the latest *fad* thing in cow fitness. There's just one more problem so solve, before
+the latest *fad* in cow fitness. There's just one more problem to solve, before
 cattle start signing up in herds: the site *only* lives on my local computer! It's
 time to release it to the cow masses. Yep, it's time to deploy!
 
 But... how! There are probably 50 good ways to deploy! Bah! And these days, you
 can even deploy with a Platform as a Service: something like Platform.sh or Heroku.
-These takes care of almost *everything* for you. I love these, and we use Platform.sh
+These take care of almost *everything* for you. I love these, and we use Platform.sh
 for part of KnpUniversity. They *do* have some limitations, but they are the *fastest*
 way to get your app to production.
 
 In this tutorial, we're going to talk about one, *really* nice deployment tool:
 Ansistrano. It's built on top of Ansible... so if you watched our
 [Ansible tutorial](https://knpuniversity.com/screencast/ansible), you're going to
-*love* it! And if you haven't, what have you been waiting for!? Well actually,
+*love* it! And if you haven't, what are you waiting for!? Well actually,
 I'll give you all the details you need, regardless.
 
 ## Download the Project
@@ -59,13 +59,13 @@ These access keys are mine... and as much fun as it would be for me to pay for y
 servers... these keys won't work anymore. Sorry! Replace them with your own. Second,
 in `aws.yml`, see that `key_name`? You'll need to create your own "Key Pair" in
 the EC2 management console, and put its name here. The key pair will give you the
-private key needed to to SSH onto the new server.
+private key needed to SSH onto the new server.
 
 ## Server Provisioning
 
 Once you have a server... deploying is really *two* steps. Step 1: provisioning:
 the fancy word that basically means installing everything you need, like Nginx, PHP,
-PHP extension and whatever else. And *then* step 2: actually deploying.
+PHP extensions and whatever else. And *then* step 2: actually deploying.
 
 I don't care *how* you setup - or *provision* - your server. In the Ansible tutorial,
 we - of course! - used Ansible to do this, but that is *not* a requirement for using

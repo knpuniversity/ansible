@@ -31,7 +31,7 @@ you *every* single possible variable that you can override to control how Ansist
 works. This is documentation gold!
 
 The first variable we need `ansistrano_deploy_to`. Copy that. Inside `deploy.yml`,
-add a `vars` keyword and paste. Set this to the directory that's already waiting
+add a `vars` key and paste. Set this to the directory that's already waiting
 on our server: `/var/www/project`.
 
 Ok... well... we haven't done much... but let's see if it works! In your local terminal,

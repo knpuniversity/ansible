@@ -9,7 +9,7 @@ deploy our code.
 But! There's one *really* important thing I want you to understand: this new playbook
 will not use *any* of the files inside of the `ansible/` directory. So, don't worry
 or think about them: pretend that the `ansible/` directory is *completely* empty,
-except for `deploy.yml`. If you need any other files, we'll talk about them!
+except for `deploy.yml`. If you *do* need any other files, we will talk about them!
 
 To help us deploy with Ansible, we're going to - of course - use Ansistrano! Open
 up ansistrano.com in your browser. It has some cool deployment stats... but the
@@ -59,7 +59,7 @@ a host group called `aws` with the IP address to one server below it.
 ## Using the Role
 
 Back in `deploy.yml`, let's import the role! Add `roles:`, copy the name of the role,
-and tgeb paste it here: `carlosbuenosvinos.ansistrano-deploy`. If you went through
+and then paste it here: `carlosbuenosvinos.ansistrano-deploy`. If you went through
 our Ansible tutorial, then you know that a role magically gives our playbook new
 tasks! Plus, a few other things, like variables and handlers.
 
