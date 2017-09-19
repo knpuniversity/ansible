@@ -1,0 +1,28 @@
+# Composer Cache Permissions
+
+Okay, if you go back and look at the Symfony how to deploy application, we have taken care of step B. We have configured our parameters file. All we need to do now is, of course, run Composer install, which was the original reason our site wasn't working, clear our Symfony cache, and basically we're done. The dump assetics assets doesn't apply to us, but we will have to do a few things with assets.
+
+But, these are the two big things right here, right. So these are things we can do, again, inside of our hook file. So, let's do Composer first ... install composer deps. We use the Composer module. We'll tell it to run the install command. And we need to set the working dir so it knows where to run this, as the "{{ansistrano_release_path.stdout}} Perfect.
+
+Now one reminder is that, with the Composer module, it runs composer install --no-dev, which means that you require devDependencies@compose.json, are not downloaded. And typically this is a good thing, you shouldn't be relying on any of your required dev stuff on your actual production site.
+
+Now in symfony3, when you don't have the required devDependencies, some of these post install scripts will fail, unless you set an environment variable called SYMFONY_ENV=prod. This is something we talked about briefly inside our first ansistrano tutorial. Basically what that means is inside of our deploy.yml I'm going to add a new group key called environment: in order to make sure we set SYMFONY_ENV:prod. So now when we run Composer install, and those post install tasks run, they'll run in the prod environment and they won't explode because some of our devDependencies are gone.
+
+Alright, before we try this, let's tackle the last thing; clearing our symfonycache, which is basically just running two console commands. To help us out, back in our environs, on top I'll set a new variable called release_console_path. Now go and copy our "{{ansistrano_release_path.stdout}} We'll paste that here, then say "{{ansistrano_release_path.stdout}}/bin/console, so now we have a nice variable set up to point to our bin/console executable.
+
+Back in our hook file, we'll add a new task to help clear the cache, we use the command module ... to very simply say "{{ release_console_path }} cache:clear --no-warmup --env=prod". Which basically is the command that you see inside the documentation. If you're not familiar with the -- no-warmup, this is the new way of doing cache clearing in symfony4, instead of just running cache:clear and having it clear your cache and it warmup your cache, you're supposed to run cache:clear just to remove your cache and then separately run cache:warmup to warm up your cache.
+
+So run a second task called warm up the cache ... I'll copy that command with the same thing except cache:warmup and capacity--env=prod. Now technically the cache directory is not shared between deploys, so by the time we deploy the cache directory is empty. So we don't actually need to clear the cache, so you could remove this if you want to, but I'll keep it there ... but I'll keep it there.
+
+Alright guys ... let's try it. Go to your local terminal tab, run ansible-playbook. Use beef pass as the vault password, deploy the master, let's see what happens.
+
+Alright it's done. No errors, and over on our sever if you move up and then back in the current and look in the vendor directory we have vendor files! So moment of truth, move back mootube.example.com, refresh! And it still doesn't work. Dang it! Let's find out why.
+
+We can run, once again run sudo tail/var/log/ngix/mootube.example.com_err.log and if you look closely, check this out ... "PHP Fatal error: The stream or file var/logs/prod.log" could not be opened. Of course! We have permissions problems on the var directory. So fixing this is actually a very interesting topic. There is a very easy way to fix this, and there's a more complex, but more secure way to fix it.
+
+Let's fix it the simple way first because I really want to see my application work. I'm going to add a new task called Setup directory permissions for var. Very simple we use the file module ... to set the var directory to 777. Before we do that here, I'm going to go back to deploy.yml and create a new variable, just for convenience, called release_var_path: set that to the same path /var. So now on our task we can set the path to "{{ release_var_path }}" state:directory basically says to create a directory or make sure it's a directory, mode: 0777 and recurse: true. So on deploy we're going to recursively make a var directory 0777. Which is not the best option for security, but it should get our application working.
+
+So let's deploy, one more time. Type in your vault password, deploy to master and watch the magic.
+
+You can see the directory permissions task run ... and it finishes. We refresh ... Eureka! Okay it's still a 500 Error but this is Symfony's 500 Error. And actually if you go to mootube.example.com/about it should actually work. /about is a static page that does not rely on the database. Our home page is broken because we don't actually have a database yet, so it's exploding but this static page does work. It looks terrible, because we're missing our assets setup and that's something we're going to talk about it in a second. But, guys I doesn't look good but victory! Our code is getting up there, we are making sure Composer's installed, all of our directory permissions are perfect and we can deploy over and over and over again. We just have the last few things of setting up the database and getting our assests set up to take care of. So let's do that next.
+
