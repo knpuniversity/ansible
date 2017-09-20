@@ -1,24 +1,135 @@
-# Deploy Keys
+# Deploying Keys & Private Repos
 
-Before we go further, we have a few very important things to talk about. First is kind of a neat one. Right now, we're always deploying the master branch of our site, and that probably makes sense. In theory, you might sometimes want to deploy a different branch, like maybe you're actually deploying to a beta server, and you want to deploy a branch that you're currently working on. If you want to do that, you can leverage something that is just native to Ansible, and that's vars_prompt. Here, we can basically ask the user which branch they want to deploy, and it will create a new variable called git_branch. We'll say prompt, "Enter a branch to deploy." We'll default to the master, and we'll save private no. Basically says it's not a secret thing, so it's okay to see the word that we type in at the command line instead of using stars. Then, down below, you do double quotes and say git_branch.
+I want to show you a quick trick. Right now, we're always deploying the `master`
+branch. That probably make sense. But, sometimes, you might want to deploy a different
+branch, like maybe a feature branch that you're deploying to a beta server. There
+are a few ways to handle this, but one option is to leverage a native Ansible feature:
+`vars_prompt`.
 
-That's nothing amazing, but if it's useful for you, use it. The downside, it's now going to ask you a question at the beginning of every single deploy. For example, if we say ansible-playbook -i, ansible/hosts.ini, ansible/deploy.yml, when you hit Enter, it's going to ask you which branch you want to deploy to. I'll stop that so it doesn't go any further.
+With this, we can just ask the user, well, *us*, which branch we want to deploy.
+Whatever we type will become a new variable called `git_branch`. For the `prompt`,
+say: `Enter a branch to deploy`. Default the value to `master` and set `private`
+to `no`... so we can see what we type: this is not a sensitive password.
 
-All right, the next thing we need to talk to you about is deploy keys. Right now, our deploy only really works because, well, my repository is public, so of course my server can access its files. I want you to change to use the SSH version of your repository, so get at as the protocol. Update your ansistrano_git_repo to use that. Then, try to redeploy.
+Down below, use the variable: `"{{ git_branch }}"`.
 
-This time, when it gets to the git part, it fails. Check this out. It says permission denied public key, could not read from remote repository. So in order to pull from a private git repository, normally the way this works is you upload your public key to your GitHub repository. Then, locally, whenever you try to clone something from a private repository, you have the private key locally, so it's able to pull that. Basically, to be able to talk to a private repository, you need to upload a public key to GitHub for authentication. Now, even for a public repository, this is failing right now, because our server doesn't have any public or private key associated with it. So even though this repository's public, it basically has the same problems, currently, as a private repository.
+This is nothing *super* amazing, but if it's useful, awesome! The downside is that
+it will ask you a question at the beginning of *every* deploy. Try it:
 
-So I want to fix this properly, and the way to do it is with a deploy key. Here's how it works. First, locally, we're going to generate a new public/private key combination. I'm going to use ssh-keygen -the rsa -b 496 -c, then my email dress, ryan@knpuniversity.com, and then -for ansible/id_rsa. That's the path to the private key that this is about to generate. You can use a pass phrase if you want to. I won't. Then, the end result of this is that inside of our Ansible directory, we now have a new id_rsa private key and id_rsa.pub, the public key associated with that.
+```terminal
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+```
 
-So the way deploy keys work is under the repository, you go to Settings, you go down to Deploy Keys, and you hit Add Deploy Key. I'll say something like aws ans is trying to deploy. Here, you're going to actually copy in your public IP address, your public key. I'll paste the public key in there and then hit Add Key. It'll ask for your password, and then there is the key. The nice thing is this is read only, so it will only give our server access to read this. This is only half of the battle, because we somehow need to tell ansistrano that when it clones from GitHub, it needs to use this private key right here as its identity key.
+There's the prompt! I'll stop the deploy.
 
-Fortunately, ansistrano has built-in support for this, and there's actually two ways to do it. Under the variables for git, you'll see two, ansistrano_git_identity_key_path and ansistrano_git_identity_key_remote_path. Basically, you need to have that private key somewhere. It can either be on your local machine, and you can use the first variable, and then ansistrano will use that key as your identity key when you talk with GitHub. Or you can put it on your remote server and then use this remote path. In that case, you might put the private key on your remote server once and then just point to the absolute path on the remote server where it is. If I were doing this, I would do it during the provisioning process. You could even store that private key on S3, and then during provisioning, you would download that from S3 somewhere onto your server.
+## How SSH Authentication Works
 
-I'm actually going to use the first one, ansistrano_git_identity_key_path. I'm going to set that as a new variable. You actually have two options here. I can just set this to the absolute path on my file system where that private key is, but then this playbook is only going to work for my local machine. Or you can use a variable called playbook_dir and actually point directly to the file that way. Playbook_dir is actually going to point to the Ansible directory, and then id_rsa is going to point to the private key. Now, when you do it this way, that file needs to live in that directory, so you either need to make sure that you do that and ignore the id_rsa from git or you need to do something very controversial, which is to commit that to your repository. What I mean is you could actually say git add ansible/id_rsa. I'll do everything else and do a commit, adding private deploy identity key to repo.
+Now, to the *real* thing I want to talk about: deploy keys. Right now, the *only*
+reason our deploy works is that... well, our repository is *public*! The server is
+able to access my repo because *anyone* can. Go copy the `ssh` version of the URL
+and use that for `ansistrano_git_repo` instead.
 
-Now, obviously, that's a bit controversial, because I just committed a private key to my repository, which is not considered a best practice. It's also the easiest way to do this, because I didn't need to do any fancy setup, and anybody that has access to my repository automatically has access to my private key. Since that private key, the whole purpose of it is only to give you access, read-only access, to this repository, well, if they already were able to download your code, then they already have read-only access to it. Giving them access to the key doesn't really give them any extra access, but be aware of the implications of committing a private key to your repository.
+Now try the deploy:
 
-Either way, as long as we have this variable set to a local path on my file system where the private key is, we should be able to deploy. So let's run our Ansible playbook one more time. This time, it works. Once it finishes, if you scroll up a little bit, it's actually pretty cool. You can see that it actually used the local Ensure GIT deployment key is up to date, so it used our local employment key and then later says shred GIT deployment key. It actually removes it from the server. The nice thing about using the local method is that the private key is not on your server after deployment finishes. It's just used during deployment. Now, whether you have a public or a private repository, you can actually deploy with it via the git repository method.
+```terminal-silent
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+```
 
-Next, we need to continue to get our site set up, run composer install, get database credential set up, all of the things that are specific to our application.
+It starts off good... but then... error! It says:
 
+> Permission denied, public key: could not read from remote repository
+
+Woh! When you use the `ssh` protocol for git, you authenticate with an `ssh` key.
+Basically, you generate a private and public key on your machine and then *upload*
+the public key to your GitHub account. Once you do that, each time you communicate
+with GitHub, you send your public key so that GitHub knows who you are and what
+repositories you have access to. And also, behind the scenes, the private key on
+your local machine is used to *prove* that you own that public key. Actually, none
+of this is special to `git`, this is how SSH key-based authentication works anywhere.
+
+Even though our repository is still *public*, you need *some* valid SSH key pair
+in order to authenticate... and our server has nothing. That's why this is failing.
+To fix this, we'll use a *deploy* key... which will allow our server to clone the
+repository, whether it's public or private.
+
+## Creating a Deploy Key
+
+Here's how it works. First, locally, generate a new public and private key:
+`ssh-keygen -t rsa -b 4096 -C`, your email address - `ryan@knpuniversity.com` then
+`-f ansible/id_rsa`:
+
+```terminal-silent
+ssh-keygen -t rsa -b 4096 -C "ryan@knpuniversity.com" -f ansible/id_rsa
+```
+
+You can use a pass phrase if you want, but I won't. When this is done, we have two
+new fancy files inside the `ansible/` directory: `id_rsa` - the private key - and
+`id_rsa.pub` the key to your local pub. I mean, the public key.
+
+Back on GitHub, on the repository, click "Settings" and then "Deploy Keys". Add
+a deploy key and give it a name that'll help you remember why you added it. Go find
+the public key - `id_rsa.pub` - copy it, and paste it here. Add that key!
+
+Boom! The nice thing is that this will only give our server *read* access to the
+repository.
+
+## Configuring Ansistrano to use the private key
+
+But this is only one half of the equation: we need to tell Ansistrano to *use*
+the private key - `id_rsa` - when it communicates with GitHub.
+
+But that's why we use Ansistrano! They already thought about this, and exposed
+two variables to help: `ansistrano_git_identity_key_path` and
+`ansistrano_git_identity_key_remote_path`. Basically, we need to store the private
+key *somewhere*: it can live on our local machine where we *execute* Ansible - that's
+the first variable - or you can put it on the server and use the second variable.
+
+Let's use the first option and store the key locally. Copy the first variable:
+`ansistrano_git_identity_key_path`. Set it to `{{ playbook_dir }}/id_rsa`.
+`playbook_dir` is an Ansible variable, and it points to the `ansible/` directory:
+the directory that holds the playbook file. As *soon* as we do this, Ansistrano will
+use this private key when it talks to GitHub. And because we've added its partner
+public key as a deploy key to the repo, it *will* have access!
+
+## Storing the Private Key
+
+Of course, this means that you *need* to make sure that the `id_rsa` file exists.
+You can either do this manually somehow... or you can do something a bit more controversial:
+commit it to your repository. I'll do that: add the file, then commit: "adding private
+deploy identity key to repo".
+
+```terminal-silent
+git add ansible/id_rsa
+git commit -m "adding private deploy identity key to repo"
+```
+
+This is controversial because I *just* committed a private key to my repository!
+That's like committing a password! Why did I do this? Mostly, simplicity! Thanks
+to this, the private key will *always* exist.
+
+How bad of a security issue is this? Well, this key only gives you read-only access
+to the repository. And, if you were already able to download the code... then you
+were *already* able to access it. This key doesn't give you any *new* access. But,
+if you *remove* someone from your GitHub repository... they could still use this
+key to continue accessing it in the future. *That's* the security risk.
+
+An alternative would be to store the private key on S3, then use the S3 Ansible
+module to download that onto the server during deployment. Make the decision that's
+best for you.
+
+Whatever you choose, the point is: the variable is set to a local path on our filesystem
+where the private key lives. This means... we can deploy again! Try it:
+
+```terminal-silent
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+```
+
+It's working... working... and ... it's done! Scroll up a little. Cool! It ran a
+few new tasks: "Ensure Git deployment key is up to date" and then later
+"shred Git deployment key". It uses the key, but then removes it from the server
+after. Nice!
+
+The server can now pull down our code... even if the repository is private.
+
+Next! Deployment is *not* working yet: we still need to setup `parameters.yml`
+and do a few other things.

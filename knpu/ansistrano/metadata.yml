@@ -3,7 +3,9 @@ chapters:
     - ansistrano-role-install
     - ansistrano-deploy
     - git-deploy
+    - virtualhost-setup
     - deploy-keys
-    - deploy-hooks-parameters
+    - ansistrano-stages-shared
+    - parameters-file
     - secret-config
     - composer-cache-permissions

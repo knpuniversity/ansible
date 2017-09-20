@@ -1,30 +1,60 @@
-# Git Deploy
+# Deploy with git
 
-The first job of deployment is we need to actually get our code up there. And by default, Ansistrano does that via rsync, but it has a bunch of options. If you look at the variable ansistrano_deploy_via, it defaults to rsync, but it also has copy, git, svn, s3 if you want to take it from an s3 bucket, or download. We're actually gonna use the git strategy. And below this you can see most of the other variables are variables that are specific to the different deploy strategies.
+Our *first* deployment task is simple: we need to get our code to the server!
+By default, Ansistrano does that via rsync... but it has a *bunch* of options!
+Check out the `ansistrano_deploy_via` variable. Beyond `rsync`, you can use `copy`,
+`git`, `svn`, `s3` - if you want to fetch your code from an S3 bucket - and `download`.
+We're going to use the `git` strategy! And most of the rest of the variables in
+docs are specific to your deploy strategy.
 
-All right, so since we're gonna deploy via git I'm going to go over to our repository, locally, and commit everything. You might need to type "git init" to actually create a new git repository. I've already committed things, so I just need to commit my changes ... Perfect. Now we actually need a git repository somewhere. Doesn't matter where you create it, but I'm gonna go to github.com ... and create a new ... repository under my public account. I am gonna make this public, but we are gonna talk about how you deploy private repositories very soon, so don't worry about that. So I'll create the repository, copy these two lines down here, go back to our repository, set that as the remote, and push ... And as soon as that's done we can refresh, and yes! All of our code is up here on GitHub.
+## Setting up the git Repo
 
-All right, so to deploy via git the first thing we need to do is override the ansistrano_deploy_via. We'll set that to "git" ... and then under the section the two things we need is we to say what the repository are and what the branch are. So we need ansistrano_git_repo, and we're gonna set that to the URL to our repository. Now actually for now I want you to use the HTTPS version. We are gonna change to the SSH version in a second, but use the HTTPS version to begin with. And then the last variable is ansistrano_git_branch. We don't need to set this because it defaults to "master", but I'll set that to "master".
+Ok, so we're going to deploy via `git`... which means... well, we should probably
+create a git repository! First, I'll commit everything locally. You may even need
+to initialize your git repository with `git init`. I already have a repo, so I'll
+just commit:
 
-All right. Moment of truth. Let's go back over and let's run our playbook again. (silence) This time we can see some tasks running for git. (silence) And it finishes without any problems. So let's see what we got. I'll go back to my tab that's on server, move out of the current directory, because that directory ... that symbolic link just changed. Now you can see we have two things in releases, and the symbolic link points at the new one. And in current, there is our project. Yes! Course we're missing things like database credentials and many other steps, but we'll get those. Our code is up there.
+```terminal-silent
+git add .
+git commit -m "I'm king of the world!"
+```
 
-Now the only problem is that the document root is /var/www/project/current/web, and if you remember from earlier, I have a virtual host setup to just /var/www/project/web. So this needs to be /var/www/project/current/web. So we need to actually make a small change to our server to reflect this. To help do that, I'm actually in my playbook going to add a new "vars_files" line. I'm actually gonna load in a file called vars/vars.yml. This very small file holds two variables which point to where the project is actually deployed, where the project will live. This variables file is actually used by my provisioning playbook, and the first variable tells it where to create the root directory and the server_document_root, that is what's actually used to configure nginx. So instead of just changing that directly on the server I'm gonna update our provisioning script.
+Perfect! Next, we need to host our Git repository somewhere. It doesn't matter where,
+but I'll use GitHub. Create a brand new repository! Woo! I'm making this *public*,
+but we *will* talk soon about how to deploy *private* repositories.
 
-Now first, because I'm now including this vars/vars.yml I can actually make use of this project_deploy_dir inside of my playbook. That doesn't change anything. It just reduces a little bit of duplication.
+Copy the 2 lines to add the remote and push our code. Then, in your terminal,
+paste them. Progress!
 
-Now in vars.yml I need to change the server_document_root. But hold on. I'm gonna do it a little bit fancier. One of the variables inside of Ansistrano is called ansistrano_current_dir. This very simply is name of the directory that is the current directory. It defaults to "current". I'm actually gonna put this inside of our vars.yml, set to "current", because that's gonna allow us to make this server_document_root variable fully dynamic. So instead of /var/www/project/web we can say "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web". Make sense?
+Back on GitHub, refresh! There is our beautiful code!
 
-So after all these changes we didn't actually change our deploy script at all, but we did change how our server is provisioned. So I'm gonna go over here and actually rerun ... our provision script. ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -l aws. And in your case you could just modify the nginx virtual host if you wanted to, and then reload nginx.
+## Configuring the Deploy
 
-While we're waiting for that ... No ... (silence) Perfect. If you move over to our server now, the end result of that is ... Yes! Our root is actually pointed at the correct spot, which is awesome!
+Back in Ansistrano land, the first thing we need to do is configure that
+`ansistrano_deploy_via` variable. Set it to `git`. For the git-specific variables,
+we need to configure two: the URL to the repo and what *branch* to deploy. Copy
+`ansistrano_git_repo` first and paste it. For the URL, go back to GitHub and
+click on "Clone or download". For now, use the `https` version of the URL. We're
+going to change this in a few minutes - but this makes life simpler to start.
 
-So remember what we're downloading here is mootube.example.com. In a perfect world I would set up a DNS record that would point to this IP address, and you can do that, if you're using Amazon, inside of Amazon's Route 53. But in this case that's not a real domain, so I'm just going to locally edit the etc/hosts file, and down here I'm gonna put the IP address of our server, so I'll go copy that from our hosts.ini file, and we'll say "mootube.example.com".
+Now copy the last variable: `ansistrano_git_branch`. We don't *really* need to set
+this... because it defaults to `master`. But let's set it anyways.
 
-All right, so, at this point our code is up on the server, and our virtual host is actually pointing at our code. We have the absolute basics taken care of. So try it out in your browser. Go to http://mootube.example.com, and we get a 500 error! Okay, that should not be very surprising.
+Moment of truth! Go back to your terminal and run the playbook again:
 
-To debug that I'm gonna go into my server, and actually if you look at my virtual host you can see down here the error_log entry that will show you where our error logs are. I'll copy that, and I'll say, "sudo tail that", and you can see the problem. If you look closely ... lookit: "Failed opening required vendor/autoload.php." That makes perfect sense. We have not run "composer install" yet. In fact, we haven't configured our database credentials or anything yet. All we've done is put our code up on the server, which is awesome, but we still have more work to do. But do feel like we have some victory. We're already using a system which does a very cool thing. It creates a new "releases" directory for us, and then symbolically links that to a new "current" directory when it finishes. We already have a very robust deployment strategy happening.
+```terminal
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+```
 
-All right, but we need to do more. We need to finish setting up our project, and I also need to show you a few other things first.
+This time, we see some git-related tasks. So that's probably good! And it finishes
+without any errors.
 
+Let's go see what it did! I'll move back to my terminal that's SSH'ed onto the server.
+Move *out* of the `current` directory. That's important: the `current` symlink
+*did* change, but until you move out of it, you're still looking at the *old* release
+directory.
 
-
+Ok cool! There are two things in `releases`, and the symlink points to the new one.
+Move back into `current/`. And... there's our project! Our code is deployed! Yea,
+we *are* missing some things, like `parameters.yml`, but we'll get there. For
+now, celebrate!
