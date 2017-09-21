@@ -87,7 +87,7 @@ Yep! This fails because it can't decrypt the vault file. From now on, we need
 to add a `--ask-vault-pass` flag. And then type, `beefpass`.
 
 If this gets really annoying, you can store the password in a file and use
-`vault-password-file` to point to it. Just don't commit that file to your repository!
+`--vault-password-file` to point to it. Just don't commit that file to your repository!
 
 And... done! Let's go check it out! Move out of the `current` directory and then
 back in. Deep breath: open `parameters.yml`. Yes! Everything has its dynamic vault

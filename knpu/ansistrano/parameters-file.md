@@ -39,7 +39,7 @@ from your project into here. Big picture, here's the plan: we will use the Ansib
 `template` module, to render variables inside this file, and deploy it to the
 server. But... to start, we're going to just use these hardcoded values.
 
-Back in `after-symlink-shared.yml`, add an new task:
+Back in `after-symlink-shared.yml`, add a new task:
 "Setup infrastructure-related parameters". Use the `template` module to, for now,
 copy `{{ playbook_dir }}/templates/parameters.yml.dist` into the new release directory.
 

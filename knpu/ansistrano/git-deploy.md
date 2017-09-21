@@ -4,7 +4,7 @@ Our *first* deployment task is simple: we need to get our code to the server!
 By default, Ansistrano does that via rsync... but it has a *bunch* of options!
 Check out the `ansistrano_deploy_via` variable. Beyond `rsync`, you can use `copy`,
 `git`, `svn`, `s3` - if you want to fetch your code from an S3 bucket - and `download`.
-We're going to use the `git` strategy! And most of the rest of the variables in
+We're going to use the `git` strategy! And most of the rest of the variables in the
 docs are specific to your deploy strategy.
 
 ## Setting up the git Repo

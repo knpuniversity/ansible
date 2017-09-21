@@ -10,7 +10,7 @@ need to do some asset processing later.
 
 Let's add a new task to run `composer` install. In the hook file, add
 "Install composer deps". Use the `composer` module and tell it to run the `install`
-command. We also need to set the `working_dir`: use `{{ ansistrano_release_path.stdout}}`
+command. We also need to set the `working_dir`: use `{{ ansistrano_release_path.stdout }}`
 
 Perfect! One gotcha with the `composer` module is that, by default, it runs
 `composer install --no-dev`. That means that your `require-dev` dependencies in `composer.json`

@@ -1,7 +1,7 @@
 ## VirtualHost Setup
 
 There is one more immediate problem: the document root of the project is
-`/var/www/project/current/web`. But... you might rememebr that our Nginx virtual
+`/var/www/project/current/web`. But... you might rememeber that our Nginx virtual
 host points to  `/var/www/project/web`. This needs to change to
 `/var/www/project/current/web`.
 
@@ -17,7 +17,7 @@ These are used by the provision playbook: `playbook.yml`. The first tells it whe
 to create the directory. And the second - `server_document_root` - is used to set
 the document `root` in the Nginx virtual host!
 
-Before we chnage that variable, go back to `deploy.yml`. Now that we're including
+Before we change that variable, go back to `deploy.yml`. Now that we're including
 `vars.yml` here, we can use the `project_deploy_dir` variable.
 
 This doesn't change anything: it just kills some duplication.

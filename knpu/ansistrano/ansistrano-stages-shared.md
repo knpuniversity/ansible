@@ -39,7 +39,7 @@ should be fully functional.
 
 ## Creating parameters.yml
 
-Google "Symfony deployment basics": you should find
+Google for "Symfony deployment basics": you should find
 [Symfony's deployment article](https://symfony.com/doc/current/deployment.html).
 It lists the basic things you need to do when deploying a Symfony application, like
 upload the code, install vendor dependencies and create your `app/config/parameters.yml`
