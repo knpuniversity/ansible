@@ -53,7 +53,7 @@ ansible vault at `ansible/vars/aws_vault.yml`.
 ansible-vault edit ansible/vars/aws_vault.yml
 ```
 
-The password is `beefpass`. Yep... make sure you edit `aws_vault.yml`
+The password is `beefpass`.
 
 These access keys are mine... and as much fun as it would be for me to pay for your
 servers... these keys won't work anymore. Sorry! Replace them with your own. Second,
