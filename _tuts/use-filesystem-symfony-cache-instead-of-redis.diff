@@ -1,0 +1,185 @@
+diff --git a/app/AppKernel.php b/app/AppKernel.php
+index dbc85b4..9f7d859 100644
+--- a/app/AppKernel.php
++++ b/app/AppKernel.php
+@@ -18,7 +18,6 @@ class AppKernel extends Kernel
+             new AppBundle\AppBundle(),
+ 
+             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+-            new Snc\RedisBundle\SncRedisBundle(),
+         ];
+ 
+         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 3274d47..2be6446 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -69,11 +69,3 @@ swiftmailer:
+     username:  "%mailer_user%"
+     password:  "%mailer_password%"
+     spool:     { type: memory }
+-
+-# SncRedisBundle
+-snc_redis:
+-    clients:
+-        default:
+-            type: predis
+-            alias: default
+-            dsn: "redis://%redis_host%"
+diff --git a/composer.json b/composer.json
+index a666827..d7998b8 100644
+--- a/composer.json
++++ b/composer.json
+@@ -26,7 +26,6 @@
+         "twig/twig": "^1.0||^2.0",
+ 
+         "doctrine/doctrine-migrations-bundle": "^1.2",
+-        "snc/redis-bundle": "^2.0",
+         "predis/predis": "^1.1"
+     },
+     "require-dev": {
+diff --git a/composer.lock b/composer.lock
+index 474ecef..8a74821 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "6cb8d8275afb6fafd1f07570eeac4cbb",
++    "content-hash": "a28ae7d0f74c14050912cdce9121f254",
+     "packages": [
+         {
+             "name": "composer/ca-bundle",
+@@ -1768,71 +1768,6 @@
+             "description": "A security checker for your composer.lock",
+             "time": "2017-07-24T11:42:56+00:00"
+         },
+-        {
+-            "name": "snc/redis-bundle",
+-            "version": "2.0.2",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/snc/SncRedisBundle.git",
+-                "reference": "60b82fd31432c78d976470eae179211af7d17c60"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/60b82fd31432c78d976470eae179211af7d17c60",
+-                "reference": "60b82fd31432c78d976470eae179211af7d17c60",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "php": ">=5.3.3",
+-                "symfony/framework-bundle": "^2.7 || ^3.0",
+-                "symfony/yaml": "^2.7 || ^3.0"
+-            },
+-            "require-dev": {
+-                "doctrine/cache": "1.*",
+-                "phpunit/phpunit": "4.8.*",
+-                "predis/predis": "^1.0",
+-                "symfony/console": "^2.7 || ^3.0",
+-                "symfony/phpunit-bridge": "^2.7 || ^3.0"
+-            },
+-            "suggest": {
+-                "monolog/monolog": "If you want to use the monolog redis handler.",
+-                "predis/predis": "If you want to use predis.",
+-                "symfony/console": "If you want to use commands to interact with the redis database"
+-            },
+-            "type": "symfony-bundle",
+-            "extra": {
+-                "branch-alias": {
+-                    "dev-master": "2.x-dev"
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "Snc\\RedisBundle\\": ""
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "Henrik Westphal",
+-                    "email": "henrik.westphal@gmail.com"
+-                },
+-                {
+-                    "name": "Community contributors",
+-                    "homepage": "https://github.com/snc/SncRedisBundle/contributors"
+-                }
+-            ],
+-            "description": "A Redis bundle for Symfony",
+-            "homepage": "https://github.com/snc/SncRedisBundle",
+-            "keywords": [
+-                "nosql",
+-                "redis",
+-                "symfony"
+-            ],
+-            "time": "2017-06-15T08:51:06+00:00"
+-        },
+         {
+             "name": "swiftmailer/swiftmailer",
+             "version": "v5.4.8",
+diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
+index dcc68fc..550e1dc 100644
+--- a/src/AppBundle/Controller/DefaultController.php
++++ b/src/AppBundle/Controller/DefaultController.php
+@@ -6,6 +6,7 @@ use AppBundle\Entity\Video;
+ use Predis\Connection\ConnectionException;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
++use Symfony\Component\Cache\Simple\Psr6Cache;
+ 
+ class DefaultController extends Controller
+ {
+@@ -18,20 +19,21 @@ class DefaultController extends Controller
+             ->findAll();
+         $tags = $this->getUniqueOrderedTags($videos);
+ 
+-        // Redis cache
++        // Caching
+         try {
+-            if ($this->getRedisClient()->exists('total_video_uploads_count')) {
+-                $totalVideoUploadsCount = $this->getRedisClient()->get('total_video_uploads_count');
++            $simpleCache = $this->createSimpleCache();
++            if ($simpleCache->has('total_video_uploads_count')) {
++                $totalVideoUploadsCount = $simpleCache->get('total_video_uploads_count');
+             } else {
+                 $totalVideoUploadsCount = $this->countTotalVideoUploads();
+-                $this->getRedisClient()->set('total_video_uploads_count', $totalVideoUploadsCount, 'ex', 60); // 60s
++                $simpleCache->set('total_video_uploads_count', $totalVideoUploadsCount, 60); // 60s
+             }
+ 
+-            if ($this->getRedisClient()->exists('total_video_views_count')) {
+-                $totalVideoViewsCount = $this->getRedisClient()->get('total_video_views_count');
++            if ($simpleCache->has('total_video_views_count')) {
++                $totalVideoViewsCount = $simpleCache->get('total_video_views_count');
+             } else {
+                 $totalVideoViewsCount = $this->countTotalVideoViews();
+-                $this->getRedisClient()->set('total_video_views_count', $totalVideoViewsCount, 'ex', 60); // 60s
++                $simpleCache->set('total_video_views_count', $totalVideoViewsCount, 60); // 60s
+             }
+         } catch (ConnectionException $e) {
+             $totalVideoUploadsCount = $this->countTotalVideoUploads();
+@@ -110,11 +112,13 @@ class DefaultController extends Controller
+         return $this->get('doctrine')->getRepository(Video::class);
+     }
+ 
+-    /**
+-     * @return object|\Predis\Client
+-     */
+-    private function getRedisClient()
++    private function getAppCache()
++    {
++        return $this->get('cache.app');
++    }
++
++    private function createSimpleCache()
+     {
+-        return $this->get('snc_redis.default_client');
++        return new Psr6Cache($this->getAppCache());
+     }
+ }

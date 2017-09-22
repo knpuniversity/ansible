@@ -266,7 +266,7 @@ diff --git a/composer.lock b/composer.lock
 index 024b7dc..474ecef 100644
 --- a/composer.lock
 +++ b/composer.lock
-@@ -4,10 +4,68 @@
+@@ -4,9 +4,67 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
          "This file is @generated automatically"
      ],
@@ -274,7 +274,7 @@ index 024b7dc..474ecef 100644
 -    "content-hash": "e39f9de78a0f0c9f3aee9f8b020f2a49",
 +    "content-hash": "6cb8d8275afb6fafd1f07570eeac4cbb",
      "packages": [
-         {
++        {
 +            "name": "composer/ca-bundle",
 +            "version": "1.0.7",
 +            "source": {
@@ -333,10 +333,9 @@ index 024b7dc..474ecef 100644
 +            ],
 +            "time": "2017-03-06T11:59:08+00:00"
 +        },
-+        {
+         {
              "name": "doctrine/annotations",
              "version": "v1.2.7",
-             "source": {
 @@ -73,20 +131,20 @@
                  "docblock",
                  "parser"
@@ -819,8 +818,8 @@ index 024b7dc..474ecef 100644
 -            "name": "psr/log",
 +            "name": "psr/container",
              "version": "1.0.0",
-             "source": {
-                 "type": "git",
++            "source": {
++                "type": "git",
 +                "url": "https://github.com/php-fig/container.git",
 +                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
 +            },
@@ -917,8 +916,8 @@ index 024b7dc..474ecef 100644
 +        {
 +            "name": "psr/log",
 +            "version": "1.0.2",
-+            "source": {
-+                "type": "git",
+             "source": {
+                 "type": "git",
                  "url": "https://github.com/php-fig/log.git",
 -                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
 +                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
@@ -1845,19 +1844,19 @@ diff --git a/var/SymfonyRequirements.php b/var/SymfonyRequirements.php
 index 7e7723a..3b14a40 100755
 --- a/var/SymfonyRequirements.php
 +++ b/var/SymfonyRequirements.php
-@@ -634,12 +634,6 @@ class SymfonyRequirements extends RequirementCollection
+@@ -633,12 +633,6 @@ class SymfonyRequirements extends RequirementCollection
+             'Install and enable the <strong>mbstring</strong> extension.'
          );
  
-         $this->addRecommendation(
+-        $this->addRecommendation(
 -            function_exists('iconv'),
 -            'iconv() should be available',
 -            'Install and enable the <strong>iconv</strong> extension.'
 -        );
 -
--        $this->addRecommendation(
+         $this->addRecommendation(
              function_exists('utf8_decode'),
              'utf8_decode() should be available',
-             'Install and enable the <strong>XML</strong> extension.'
 @@ -780,7 +774,11 @@ class SymfonyRequirements extends RequirementCollection
      {
          $size = ini_get('realpath_cache_size');

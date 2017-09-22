@@ -376,6 +376,11 @@
             "description": null
         },
         {
+            "id": "use-filesystem-symfony-cache-instead-of-redis",
+            "name": "Use filesystem Symfony Cache instead of Redis",
+            "description": null
+        },
+        {
             "id": "update-the-readme",
             "name": "Update the README",
             "description": null
@@ -521,5 +526,5 @@
             "description": null
         }
     ],
-    "sha": "de0a8e21828f89ba57e328a0869df9c18eb11184"
+    "sha": "0c73be825216f910ad92404018581d36258f980b"
 }
