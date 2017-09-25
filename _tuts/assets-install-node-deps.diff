@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 5f54860..9ce043b 100644
+index a495216..ec2f4c7 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -18,6 +18,13 @@
@@ -17,10 +17,10 @@ index 5f54860..9ce043b 100644
    become: true
    command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f7d956a..3bed46b 100644
+index 21672cf..5a58cf4 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -140,6 +140,40 @@
+@@ -141,6 +141,40 @@
        tags:
          - deploy
  

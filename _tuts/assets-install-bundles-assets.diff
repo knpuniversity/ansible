@@ -11,7 +11,7 @@ index 838c9b8..916f92e 100644
      release_sessions_path: "{{ release_var_path }}/sessions"
  
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 89dea4a..5f54860 100644
+index 59e4d55..a495216 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -15,6 +15,9 @@

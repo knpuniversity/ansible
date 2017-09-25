@@ -456,8 +456,23 @@
             "description": null
         },
         {
-            "id": "hooks-set-up-permissions",
-            "name": "Hooks: Set up permissions",
+            "id": "hooks-set-up-var-permissions",
+            "name": "Hooks: Set up var permissions",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-logs-permissions",
+            "name": "Hooks: Set up logs permissions",
+            "description": null
+        },
+        {
+            "id": "hooks-use-apcu-for-doctrine-metadata-cache",
+            "name": "Hooks: Use APCu for Doctrine metadata cache",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-sessions-permissions",
+            "name": "Hooks: Set up sessions permissions",
             "description": null
         },
         {
@@ -526,5 +541,5 @@
             "description": null
         }
     ],
-    "sha": "62b27fcf0438ef34c3ef388cb0a44f26d2a7c28f"
+    "sha": "5abc5ca8fd5178712d1217bd020a75368e976b69"
 }
