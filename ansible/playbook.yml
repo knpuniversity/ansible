@@ -160,6 +160,7 @@
         state: directory
         mode: 0777
         recurse: yes
+      changed_when: false
       tags:
         - permissions
         - deploy
