@@ -1,0 +1,5 @@
+---
+- name: Set up infrastructure-related parameters
+  template:
+    src: '{{ playbook_dir }}/templates/parameters.yml.dist'
+    dest: '{{ ansistrano_release_path.stdout }}/app/config/parameters.yml'
