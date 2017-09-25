@@ -17,6 +17,13 @@
   environment:
     SYMFONY_ENV: "{{ symfony_env|lower }}"
 
+  pre_tasks:
+    - name: Convert entered Symfony environment to lowercase
+      set_fact:
+        symfony_env: "{{ symfony_env|lower }}"
+      tags:
+        - always
+
   tasks:
     - debug:
         var: ansible_env
