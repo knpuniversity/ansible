@@ -466,13 +466,13 @@
             "description": null
         },
         {
-            "id": "set-up-sessions-permissions",
-            "name": "Set up sessions permissions",
+            "id": "hooks-set-up-sessions-permissions",
+            "name": "Hooks: Set up sessions permissions",
             "description": null
         },
         {
-            "id": "use-apcu-for-doctrine-metadata-cache",
-            "name": "Use APCu for Doctrine metadata cache",
+            "id": "hooks-use-apcu-for-doctrine-metadata-cache",
+            "name": "Hooks: Use APCu for Doctrine metadata cache",
             "description": null
         },
         {
@@ -541,5 +541,5 @@
             "description": null
         }
     ],
-    "sha": "a7aba8171487b52f641fd47d02e3ea83e2fa2252"
+    "sha": "c8d130b34166deaf94cad4df4f36dcd0d7c5b7e9"
 }
