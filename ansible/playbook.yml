@@ -151,19 +151,16 @@
       tags:
         - deploy
 
-    - debug:
-        var: composer_stat
-      tags:
-        - deploy
-
     - name: Download Composer
       script: scripts/install_composer.sh
+      when: not composer_stat.stat.exists
       tags:
         - deploy
 
     - name: Move Composer globally
       become: true
       command: mv composer.phar /usr/local/bin/composer
+      when: not composer_stat.stat.exists
       tags:
         - deploy
 
