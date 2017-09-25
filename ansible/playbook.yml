@@ -141,6 +141,12 @@
         repo: https://github.com/knpuniversity/ansible.git
         dest: "{{ symfony_root_dir }}"
         force: yes
+      register: repo_code
+      tags:
+        - deploy
+
+    - debug:
+        var: repo_code
       tags:
         - deploy
 
