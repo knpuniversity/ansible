@@ -18,3 +18,8 @@
       become: true
       apt:
         name: cowsay
+
+    - name: Install Git VCS
+      become: true
+      apt:
+        name: git
