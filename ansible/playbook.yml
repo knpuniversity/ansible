@@ -8,7 +8,22 @@
     symfony_var_dir: "{{ symfony_root_dir }}/var"
     symfony_console_path: "{{ symfony_root_dir }}/bin/console"
 
+  vars_prompt:
+    - name: symfony_env
+      prompt: "Enter the environment for your Symfony app (prod|dev|test)"
+      default: prod
+      private: no
+
+  environment:
+    SYMFONY_ENV: "{{ symfony_env|lower }}"
+
   tasks:
+    - debug:
+        var: ansible_env
+
+    - debug:
+        var: symfony_env
+
     - ping: ~
 
     - name: Update APT package manager repositories cache
