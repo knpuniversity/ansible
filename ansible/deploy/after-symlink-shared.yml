@@ -15,9 +15,10 @@
 - name: Warm up the cache
   command: '{{ release_console_path }} cache:warmup --env=prod'
 
-- name: Setup directory permissions for var/
-  file:
-    path: "{{ release_var_path }}"
-    state: directory
-    mode: 0777
-    recurse: true
+- name: Setup directories permissions in var/ dir
+  become: true
+  command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
+
+- name: Setup files permissions in var/ dir
+  become: true
+  command: 'find {{ release_var_path }} -type f -exec chmod 0444 {} \;'
