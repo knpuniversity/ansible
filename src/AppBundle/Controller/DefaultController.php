@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Video;
-use Predis\Connection\ConnectionException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -18,25 +17,27 @@ class DefaultController extends Controller
             ->findAll();
         $tags = $this->getUniqueOrderedTags($videos);
 
-        // Redis cache
-        try {
-            if ($this->getRedisClient()->exists('total_video_uploads_count')) {
-                $totalVideoUploadsCount = $this->getRedisClient()->get('total_video_uploads_count');
-            } else {
-                $totalVideoUploadsCount = $this->countTotalVideoUploads();
-                $this->getRedisClient()->set('total_video_uploads_count', $totalVideoUploadsCount, 'ex', 60); // 60s
-            }
-
-            if ($this->getRedisClient()->exists('total_video_views_count')) {
-                $totalVideoViewsCount = $this->getRedisClient()->get('total_video_views_count');
-            } else {
-                $totalVideoViewsCount = $this->countTotalVideoViews();
-                $this->getRedisClient()->set('total_video_views_count', $totalVideoViewsCount, 'ex', 60); // 60s
-            }
-        } catch (ConnectionException $e) {
-            $totalVideoUploadsCount = $this->countTotalVideoUploads();
-            $totalVideoViewsCount = $this->countTotalVideoViews();
+        // Caching
+        $uploadsItem = $this->getAppCache()->getItem('total_video_uploads_count');
+        if (!$uploadsItem->isHit()) {
+            $uploadsItem->set($this->countTotalVideoUploads());
+            $uploadsItem->expiresAfter(60);
+            // defer cache item saving
+            $this->getAppCache()->saveDeferred($uploadsItem);
         }
+        $totalVideoUploadsCount = $uploadsItem->get();
+
+        $viewsItem = $this->getAppCache()->getItem('total_video_views_count');
+        if (!$viewsItem->isHit()) {
+            $viewsItem->set($this->countTotalVideoViews());
+            $viewsItem->expiresAfter(60);
+            // defer cache item saving
+            $this->getAppCache()->saveDeferred($viewsItem);
+        }
+        $totalVideoViewsCount = $viewsItem->get();
+
+        // save all deferred cache items
+        $this->getAppCache()->commit();
 
         return $this->render('default/index.html.twig', [
             'videos' => $videos,
@@ -110,11 +111,8 @@ class DefaultController extends Controller
         return $this->get('doctrine')->getRepository(Video::class);
     }
 
-    /**
-     * @return object|\Predis\Client
-     */
-    private function getRedisClient()
+    private function getAppCache()
     {
-        return $this->get('snc_redis.default_client');
+        return $this->get('cache.app');
     }
 }
