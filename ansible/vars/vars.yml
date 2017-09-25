@@ -1,3 +1,5 @@
 ---
 project_deploy_dir: /var/www/project
-server_document_root: /var/www/project/web
+ansistrano_current_dir: current # Softlink name. You should rarely changed it.
+server_document_root: "{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"
+

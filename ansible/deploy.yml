@@ -1,9 +1,12 @@
 ---
 - hosts: aws
 
+  vars_files:
+    - ./vars/vars.yml
+
   vars:
     # Ansistrano vars
-    ansistrano_deploy_to: "/var/www/project" # Base path to deploy to.
+    ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
 
     # Variables used in the Git deployment strategy
