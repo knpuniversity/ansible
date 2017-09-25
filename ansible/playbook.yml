@@ -76,3 +76,9 @@
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
         recurse: yes
+
+    - name: Checkout Git repository
+      git:
+        repo: https://github.com/symfony/symfony-standard.git
+        dest: "/var/www/project"
+        force: yes
