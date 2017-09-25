@@ -1,2 +1,2 @@
 ---
-server_name: mootube.l
+server_name: "{{ host_server_name|default('mootube.l') }}"
