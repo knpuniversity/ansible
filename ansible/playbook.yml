@@ -76,6 +76,7 @@
         - php7.1-intl
         - php7.1-mysql
         - php7.1-xml
+        - php-apcu
       notify: Restart PHP-FPM
 
     - name: Set date.timezone for CLI
