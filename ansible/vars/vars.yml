@@ -1,0 +1,5 @@
+---
+symfony_root_dir: /var/www/project
+symfony_web_dir: "{{ symfony_root_dir }}/web"
+symfony_var_dir: "{{ symfony_root_dir }}/var"
+symfony_console_path: "{{ symfony_root_dir }}/bin/console"
