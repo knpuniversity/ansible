@@ -15,6 +15,7 @@
   vars:
     release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
     release_var_path: "{{ ansistrano_release_path.stdout }}/var"
+    release_web_path: "{{ ansistrano_release_path.stdout }}/web"
     release_logs_path: "{{ release_var_path }}/logs"
     release_sessions_path: "{{ release_var_path }}/sessions"
 
