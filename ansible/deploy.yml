@@ -25,5 +25,8 @@
     # Hooks: custom tasks if you need them
     ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"
 
+  environment:
+    SYMFONY_ENV: prod
+
   roles:
     - carlosbuenosvinos.ansistrano-deploy
