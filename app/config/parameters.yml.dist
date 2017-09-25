@@ -16,7 +16,7 @@ parameters:
     mailer_password:   ~
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            "{{ symfony_secret }}"
 
     redis_host:        localhost
-    loggly_token:      12345
+    loggly_token:      "{{ loggly_token }}"

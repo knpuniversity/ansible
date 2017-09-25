@@ -2,11 +2,11 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    database_host:     127.0.0.1
+    database_host:     "{{ database_host }}"
     database_port:     ~
     database_name:     mootube
-    database_user:     root
-    database_password: ~
+    database_user:     "{{ database_user }}"
+    database_password: "{{ database_password }}"
     # You should uncomment this if you want use pdo_sqlite
     #database_path: '%kernel.project_dir%/var/data/data.sqlite'
 
@@ -16,7 +16,7 @@ parameters:
     mailer_password:   ~
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            "{{ symfony_secret }}"
 
     redis_host:        localhost
-    loggly_token:      12345
+    loggly_token:      "{{ loggly_token }}"
