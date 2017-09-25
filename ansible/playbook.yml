@@ -73,6 +73,6 @@
       file:
         path: "/var/www/project"
         state: directory
-        owner: "vagrant"
-        group: "vagrant"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
         recurse: yes
