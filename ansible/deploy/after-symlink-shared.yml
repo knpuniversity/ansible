@@ -22,7 +22,19 @@
 
 - name: Create schema if DB was just created
   command: '{{ release_console_path }} doctrine:schema:create --env=prod'
+  register: schema_create_output
   when: db_create_output|changed
+
+- name: Skip all migrations if DB schema was just created
+  command: '{{ release_console_path }} doctrine:migrations:version --add --all --no-interaction --env=prod'
+  register: skip_migrations_output
+  when: schema_create_output|changed
+
+- name: Run migrations
+  command: '{{ release_console_path }} doctrine:migrations:migrate --no-interaction --env=prod'
+  register: run_migrations_output
+  changed_when: not run_migrations_output.stdout|search('No migrations to execute')
+  when: not skip_migrations_output|changed
 
 - name: Install bundle assets
   command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
