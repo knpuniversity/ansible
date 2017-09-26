@@ -3,3 +3,7 @@
 
   tasks:
     - ping: ~
+
+    - name: Install cowsay - it's probably important
+      apt:
+        name: cowsay
