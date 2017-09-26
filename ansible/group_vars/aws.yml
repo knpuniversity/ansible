@@ -2,4 +2,4 @@
 ansible_user: ubuntu
 ansible_ssh_private_key_file: ~/.ssh/KnpU-Tutorial.pem
 ansible_python_interpreter: /usr/bin/python3
-host_server_name: ec2-54-205-128-194.compute-1.amazonaws.com
+host_server_name: mootube.example.com
