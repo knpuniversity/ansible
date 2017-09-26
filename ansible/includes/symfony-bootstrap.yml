@@ -26,6 +26,14 @@
   tags:
     - deploy
 
+- name: Set Loggly token in parameters.yml
+  lineinfile:
+    dest: "{{ symfony_root_dir }}/app/config/parameters.yml"
+    regexp: "^    loggly_token:"
+    line: "    loggly_token: {{ loggly_token }}"
+  tags:
+    - deploy
+
 # Symfony console commands
 - name: Create DB if not exists
   command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
