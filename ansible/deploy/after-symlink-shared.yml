@@ -25,6 +25,11 @@
   register: yarn_install_output
   changed_when: not yarn_install_output.stdout|search("Already up-to-date")
 
+- name: Install Webpack Encore assets
+  command: './node_modules/.bin/encore production'
+  args:
+    chdir: '{{ ansistrano_release_path.stdout }}'
+
 - name: Setup owner and group of files in var/ dir
   become: true
   file:
