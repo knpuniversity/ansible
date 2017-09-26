@@ -145,10 +145,9 @@
       tags:
         - deploy
 
-    - debug:
-        var: repo_code
-      tags:
-        - deploy
+    - name: Register code_changed variable
+      set_fact:
+        code_changed: repo_code.changed
 
     - name: Check for Composer
       stat:
@@ -193,6 +192,7 @@
         no_dev: "{{ 'yes' if ('prod' == symfony_env) else 'no' }}"
       tags:
         - deploy
+      when: code_changed
 
     - name: Fix var directory permissions
       file:
@@ -219,6 +219,7 @@
       changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
       tags:
         - deploy
+      when: code_changed
 
     - name: Load data fixtures
       command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
@@ -232,6 +233,7 @@
       changed_when: false
       tags:
         - deploy
+      when: code_changed
 
   handlers:
     - name: Restart Nginx
