@@ -31,3 +31,7 @@
 - name: Setup files permissions in var/ dir
   become: true
   command: 'find {{ release_var_path }} -type f -exec chmod 0444 {} \;'
+
+- name: Setup directories permissions in logs/ dir
+  become: true
+  command: 'find {{ release_logs_path }} -type d -exec chmod 0775 {} \;'
