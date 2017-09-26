@@ -33,5 +33,5 @@
     - name: Install PHP CLI
       become: true
       apt:
-        name: php5-cli
+        name: php7.1-cli
         state: latest
