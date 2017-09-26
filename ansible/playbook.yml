@@ -2,6 +2,7 @@
 - hosts: vb
 
   vars_files:
+    - ./vars/vault.yml
     - ./vars/vars.yml
 
   vars_prompt:
