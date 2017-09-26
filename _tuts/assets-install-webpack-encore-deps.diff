@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index ec2f4c7..11895bb 100644
+index 2eb7c6f..edfeda6 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -25,6 +25,11 @@
@@ -11,6 +11,6 @@ index ec2f4c7..11895bb 100644
 +  args:
 +    chdir: '{{ ansistrano_release_path.stdout }}'
 +
- - name: Setup directories permissions in var/ dir
+ - name: Setup owner and group of files in var/ dir
    become: true
-   command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
+   file:
