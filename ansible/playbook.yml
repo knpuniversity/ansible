@@ -169,21 +169,20 @@
     - name: Create DB if not exists
       command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
       register: db_create_result
-      tags:
-        - deploy
-
-    - debug:
-        var: db_create_result
+      changed_when: "not db_create_result.stdout|search('already exists. Skipped')"
       tags:
         - deploy
 
     - name: Execute migrations
       command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
+      register: db_migrations_result
+      changed_when: "not db_migrations_result.stdout|search('No migrations to execute')"
       tags:
         - deploy
 
     - name: Load data fixtures
       command: '{{ symfony_console_path }} hautelook_alice:doctrine:fixtures:load --no-interaction'
+      changed_when: false
       tags:
         - deploy
 
