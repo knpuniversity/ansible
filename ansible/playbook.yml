@@ -5,6 +5,7 @@
     server_name: mootube.l
     symfony_root_dir: /var/www/project
     symfony_web_dir: "{{ symfony_root_dir }}/web"
+    symfony_var_dir: "{{ symfony_root_dir }}/var"
 
   tasks:
     - ping: ~
@@ -139,6 +140,13 @@
       composer:
         working_dir: "{{ symfony_root_dir }}"
         no_dev: no
+
+    - name: Fix var directory permissions
+      file:
+        path: "{{ symfony_var_dir }}"
+        state: directory
+        mode: 0777
+        recurse: yes
 
   handlers:
     - name: Restart Nginx
