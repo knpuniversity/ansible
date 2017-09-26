@@ -186,6 +186,11 @@
       tags:
         - deploy
 
+    - name: Clear cache
+      command: '{{ symfony_console_path }} cache:clear --env=prod'
+      tags:
+        - deploy
+
   handlers:
     - name: Restart Nginx
       become: true
