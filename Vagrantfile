@@ -68,4 +68,16 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
+
+  # Run Ansible from the Vagrant Host
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "./ansible/playbook.yml"
+    ansible.groups = {
+      'vb' => ['default']
+    }
+    ansible.ask_vault_pass = true
+    ansible.extra_vars = {
+      symfony_env: "dev"
+    }
+  end
 end
