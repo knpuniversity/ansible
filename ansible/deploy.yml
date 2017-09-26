@@ -20,5 +20,8 @@
     ansistrano_git_branch: "{{ git_branch }}" # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
     ansistrano_git_identity_key_path: "{{ playbook_dir }}/id_rsa" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
 
+    # Hooks: custom tasks if you need them
+    ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"
+
   roles:
     - carlosbuenosvinos.ansistrano-deploy
