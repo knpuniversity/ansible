@@ -141,6 +141,21 @@
       tags:
         - deploy
 
+    - name: Register information about Composer home directory
+      command: composer global config home
+      register: composer_home_dir_info
+      changed_when: false
+
+    - name: Set Composer home directory variable
+      set_fact:
+        composer_home_dir: '{{ composer_home_dir_info.stdout }}'
+
+    - name: Set up GitHub OAuth token for Composer
+      become: true
+      template:
+        src: './templates/auth.json'
+        dest: '{{ composer_home_dir }}/auth.json'
+
     # Node
     - name: Register NodeJS distribution
       shell: 'curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -'
