@@ -18,6 +18,13 @@
 - name: Install bundle assets
   command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
 
+- name: Install Node dependencies
+  command: yarn install
+  args:
+    chdir: '{{ ansistrano_release_path.stdout }}'
+  register: yarn_install_output
+  changed_when: not yarn_install_output.stdout|search("Already up-to-date")
+
 - name: Setup owner and group of files in var/ dir
   become: true
   file:

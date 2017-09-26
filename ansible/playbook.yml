@@ -141,6 +141,40 @@
       tags:
         - deploy
 
+    # Node
+    - name: Register NodeJS distribution
+      shell: 'curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -'
+      changed_when: false
+
+    - name: Install NodeJS
+      become: true
+      apt:
+        name: nodejs
+        state: latest
+        update_cache: yes
+
+    # Yarn
+    - name: Add Yarn APT key
+      become: true
+      apt_key:
+        url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
+        state: present
+
+    - name: Add Yarn to the source lists
+      become: true
+      lineinfile:
+        path: '/etc/apt/sources.list.d/yarn.list'
+        regexp: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        line: 'deb https://dl.yarnpkg.com/debian/ stable main'
+        create: yes
+
+    - name: Install Yarn package manager
+      become: true
+      apt:
+        name: yarn
+        state: latest
+        update_cache: yes
+
   post_tasks:
     - name: Upgrade installed packages
       become: true
