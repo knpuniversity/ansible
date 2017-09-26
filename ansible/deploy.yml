@@ -2,7 +2,9 @@
 - hosts: aws
 
   vars_files:
+    - ./vars/deploy_vault.yml
     - ./vars/vars.yml
+    - ./vars/deploy_vars.yml
 
   vars_prompt:
     - name: git_branch
