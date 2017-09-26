@@ -148,6 +148,8 @@
         state: directory
         mode: 0777
         recurse: yes
+      tags:
+        - permissions
 
     # Symfony console commands
     - name: Create DB if not exists
