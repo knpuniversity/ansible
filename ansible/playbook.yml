@@ -64,6 +64,7 @@
         - php7.1-fpm
         - php7.1-intl
         - php7.1-mysql
+        - php7.1-xml
 
     - name: Set date.timezone for CLI
       become: true
