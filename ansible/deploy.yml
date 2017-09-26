@@ -21,6 +21,7 @@
 
     # Ansistrano vars
     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
+    ansistrano_keep_releases: 3 # Releases to keep after a new deployment. See "Pruning old releases".
 
     # Arrays of directories and files to be shared.
     # The following arrays of directories and files will be symlinked to the current release directory after the 'update-code' step and its callbacks
