@@ -23,12 +23,6 @@
       tags:
         - always
 
-  roles:
-    - nginx
-
-  tasks:
-    - ping: ~
-
     - name: Update APT package manager repositories cache
       become: true
       apt:
@@ -38,6 +32,12 @@
       become: true
       apt:
         upgrade: safe
+
+  roles:
+    - nginx
+
+  tasks:
+    - ping: ~
 
     - name: Install cowsay - it's probably important
       become: true
