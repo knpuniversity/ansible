@@ -176,6 +176,8 @@
       composer:
         working_dir: "{{ symfony_root_dir }}"
         command: self-update
+      register: composer_self_update
+      changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
       tags:
         - deploy
 
