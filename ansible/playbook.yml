@@ -5,26 +5,12 @@
     - ./vars/vault.yml
     - ./vars/vars.yml
 
-  vars_prompt:
-    - name: symfony_env
-      prompt: "Enter the environment for your Symfony app (prod|dev|test)"
-      default: prod
-      private: no
-
-  environment:
-    SYMFONY_ENV: "{{ symfony_env|lower }}"
-
   pre_tasks:
-    - name: Convert entered Symfony environment to lowercase
-      set_fact:
-        symfony_env: "{{ symfony_env|lower }}"
-      tags:
-        - always
-
     - name: Update APT package manager repositories cache
       become: true
       apt:
         update_cache: yes
+        cache_valid_time: 3600
 
     - name: Install aptitude
       become: true
@@ -103,30 +89,6 @@
         line: "date.timezone = UTC"
       notify: Restart PHP-FPM
 
-    - name: Create project directory and set its permissions
-      become: true
-      file:
-        path: "{{ symfony_root_dir }}"
-        state: directory
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-        recurse: yes
-      tags:
-        - deploy
-
-    - name: Checkout Git repository
-      git:
-        repo: https://github.com/knpuniversity/ansible.git
-        dest: "{{ symfony_root_dir }}"
-        force: yes
-      register: repo_code
-      tags:
-        - deploy
-
-    - name: Register code_changed variable
-      set_fact:
-        code_changed: repo_code.changed
-
     - name: Check for Composer
       stat:
         path: /usr/local/bin/composer
@@ -157,15 +119,12 @@
 
     - name: Make sure composer is at its latest version
       composer:
-        working_dir: "{{ symfony_root_dir }}"
+        working_dir: "/home/{{ ansible_user }}"
         command: self-update
       register: composer_self_update
       changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
       tags:
         - deploy
-
-    # Bootstrap Symfony app
-    - include: ./includes/symfony-bootstrap.yml
 
   handlers:
     - name: Restart PHP-FPM
