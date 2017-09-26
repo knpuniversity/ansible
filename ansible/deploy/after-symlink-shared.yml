@@ -3,3 +3,8 @@
   template:
     src: '{{ playbook_dir }}/templates/parameters.yml.dist'
     dest: '{{ ansistrano_release_path.stdout }}/app/config/parameters.yml'
+
+- name: Install Composer dependencies
+  composer:
+    command: install
+    working_dir: '{{ ansistrano_release_path.stdout }}'
