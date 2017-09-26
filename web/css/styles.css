@@ -59,22 +59,39 @@ nav > ul {
     border: 1px solid #C3272B;
     margin-left: 10px;
 }
+.btn-explore {
+    display: inline-block;
+    background: #4bc32d;
+    border: 1px solid #60a050;
+    padding: 15px 25px;
+    margin: 50px 0;
+}
 
 .btn-login:hover {
     background: #4B77BE;
     border: 1px solid lightblue;
 }
-
-
 .btn-upload:hover {
     background: #CF000F;
     border: 1px solid #C3272B;
     margin-left: 10px;
 }
+.btn-explore:hover {
+    background: #45af2c;
+    border: 1px solid #609b51;
+}
 
-.btn > a {
+.btn > a, .btn {
     color: #fff;
     text-decoration: none;
+}
+
+.btn-lg {
+    font-size: 1.5em;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .headline {
