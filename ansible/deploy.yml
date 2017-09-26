@@ -30,6 +30,7 @@
 
     # Hooks: custom tasks if you need them
     ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"
+    ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/deploy/before-symlink.yml"
 
   environment:
     SYMFONY_ENV: prod
