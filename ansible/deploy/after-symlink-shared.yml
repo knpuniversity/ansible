@@ -15,6 +15,15 @@
 - name: Warm up the cache
   command: '{{ release_console_path }} cache:warmup --env=prod'
 
+- name: Setup files ownder and group in var/ dir
+  become: true
+  file:
+    path: '{{ release_var_path }}'
+    state: directory
+    owner: '{{ ansible_user }}'
+    group: www-data
+    recurse: yes
+
 - name: Setup directories permissions in var/ dir
   become: true
   command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
