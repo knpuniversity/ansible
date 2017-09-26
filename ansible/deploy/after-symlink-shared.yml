@@ -35,3 +35,7 @@
 - name: Setup directories permissions in logs/ dir
   become: true
   command: 'find {{ release_logs_path }} -type d -exec chmod 0775 {} \;'
+
+- name: Setup directories permissions in sessions/ dir
+  become: true
+  command: 'find {{ release_sessions_path }} -type d -exec chmod 0775 {} \;'
