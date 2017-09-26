@@ -4,6 +4,11 @@
   vars:
     # Ansistrano vars
     ansistrano_deploy_to: "/var/www/project" # Base path to deploy to.
+    ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
+
+    # Variables used in the Git deployment strategy
+    ansistrano_git_repo: "https://github.com/knpuniversity/ansible.git" # Location of the git repository
+    ansistrano_git_branch: master # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 
   roles:
     - carlosbuenosvinos.ansistrano-deploy
