@@ -5,7 +5,7 @@ the latest *fad* in cow fitness. There's just one more problem to solve, before
 cattle start signing up in herds: the site *only* lives on my local computer! It's
 time to release it to the cow masses. Yep, it's time to deploy!
 
-But... how! There are probably 50 good ways to deploy! Bah! And these days, you
+But... how? There are probably 50 good ways to deploy! Bah! And these days, you
 can even deploy with a Platform as a Service: something like Platform.sh or Heroku.
 These take care of almost *everything* for you. I love these, and we use Platform.sh
 for part of KnpUniversity. They *do* have some limitations, but they are the *fastest*
@@ -13,9 +13,9 @@ way to get your app to production.
 
 In this tutorial, we're going to talk about one, *really* nice deployment tool:
 Ansistrano. It's built on top of Ansible... so if you watched our
-[Ansible tutorial](https://knpuniversity.com/screencast/ansible), you're going to
-*love* it! And if you haven't, what are you waiting for!? Well actually,
-I'll give you all the details you need, regardless.
+[Ansible tutorial][ansible_tutorial], you're going to *love* it! And if you haven't,
+what are you waiting for!? Well actually, I'll give you all the details you need,
+regardless.
 
 ## Download the Project
 
@@ -57,9 +57,13 @@ The password is `beefpass`.
 
 These access keys are mine... and as much fun as it would be for me to pay for your
 servers... these keys won't work anymore. Sorry! Replace them with your own. Second,
-in `aws.yml`, see that `key_name`? You'll need to create your own "Key Pair" in
-the EC2 management console, and put its name here. The key pair will give you the
-private key needed to SSH onto the new server.
+in `aws.yml`, see that `key_name`?
+
+[[[ code('7658399133') ]]]
+
+You'll need to create your own "Key Pair" in the EC2 management console, and put
+its name here. The key pair will give you the private key needed to SSH onto the
+new server.
 
 ## Server Provisioning
 
@@ -73,13 +77,16 @@ Ansistrano.
 
 But since we already have a working provision playbook, let's use it! First, I'll
 find the public IP address to my new server. Open `ansible/hosts.ini` and put this
-under the `aws` group. If you're still new to Ansible, we'll talk more about this file
-once we start to deploy.
+under the `aws` group:
+
+[[[ code('b880c0a656') ]]]
+
+If you're still new to Ansible, we'll talk more about this file once we start to deploy.
 
 Now, run Ansible:
 
 ```terminal
- ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -l aws
+ansible-playbook ansible/playbook.yml -i ansible/hosts.ini -l aws
 ```
 
 Go Ansible go! See that `-l aws` at the end? Well, the provision playbook - `playbook.yml` -
@@ -90,7 +97,10 @@ The `-l` tells Ansible to only provisioning the AWS server right now.
 
 Behind the scenes, Ansible is SSH'ing onto the server and running commands. But...
 how does authentication to the server work? In our case, it's with the private key
-from the "Key Pair" that we used to boot the server. Open `ansible/group_vars/aws.yml`.
+from the "Key Pair" that we used to boot the server. Open `ansible/group_vars/aws.yml`:
+
+[[[ code('13fab203aa') ]]]
+
 Because we're using the `aws` group, this file is automatically loaded. It sets
 two important variables: `ansible_user` and `ansible_ssh_private_key_file`.
 
@@ -127,3 +137,6 @@ at `/var/www/project/web`. Right now, there *is* a `/var/www/project` directory.
 but it's empty. Putting code there? Yea, that's the job of this tutorial.
 
 Let's go!
+
+
+[ansible_tutorial]: https://knpuniversity.com/screencast/ansible

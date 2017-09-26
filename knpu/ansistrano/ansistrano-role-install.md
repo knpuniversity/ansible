@@ -13,8 +13,8 @@ except for `deploy.yml`. If you *do* need any other files, we will talk about th
 
 To help us deploy with Ansible, we're going to - of course - use Ansistrano! Open
 up ansistrano.com in your browser. It has some cool deployment stats... but the
-most important thing is the [ansistrano.deploy](https://github.com/ansistrano/deploy)
-link that goes to the GitHub page and their docs.
+most important thing is the [ansistrano.deploy][ansistrano_deploy] link that goes
+to the GitHub page and their docs.
 
 Ansistrano is an Ansible role... which basically means it gives us free Ansible
 tasks! That's like getting a free puppy... but without all that responsibility and
@@ -25,16 +25,25 @@ carpet peeing!
 The docs show an `ansible-galaxy` command that will install the role. Don't do it!
 There's a better way!
 
-Open `ansible/requirements.yml`. You *can* use `ansible-galaxy` to install whatever
-random Ansible role you want. *Or*, you can describe the roles you need in a YAML
-file and tell galaxy to install everything you need at once. This is just a nicer
-way to keep track of what roles we need.
+Open `ansible/requirements.yml`:
 
-Add another `src:` line. Then, go copy the role name - just the deploy role. We'll
-talk about rollback later. Paste that and add `version`. So... what's the latest
-version of this role? Let's find out! On the GitHub page, srcoll up and click "Releases".
+[[[ code('bfd1cdae8c') ]]]
+
+You *can* use `ansible-galaxy` to install whatever random Ansible role you want.
+*Or*, you can describe the roles you need in a YAML file and tell galaxy to install
+everything you need at once. This is just a nicer way to keep track of what roles
+we need.
+
+Add another `src:` line. Then, go copy the role name - just the deploy role:
+
+[[[ code('526bf1cc75') ]]]
+
+We'll talk about rollback later. Paste that and add `version`. So... what's the latest
+version of this role? Let's find out! On the GitHub page, scroll up and click "Releases".
 But be careful! There are actually newer tags. Ok, so right now, the latest version
-is 2.7.0. Add that to `requirements.yml`.
+is 2.7.0. Add that to `requirements.yml`:
+
+[[[ code('dc2d5293fb') ]]]
 
 Great! To make sure all of the roles are installed, run:
 
@@ -47,21 +56,30 @@ And now it downloads `ansistrano-deploy` to some `/usr/local/etc` directory. Per
 
 ## Configuring the Hosts
 
-In our `deploy.yml`, start with the meaningles, but ceremonial three dashes. Then,
-below that, add `hosts` set to `aws`.
+In our `deploy.yml`, start with the meaningless, but ceremonial three dashes. Then,
+below that, add `hosts` set to `aws`:
+
+[[[ code('74e809bda3') ]]]
 
 This is important: if you're *only* using Ansible for deployment, then you don't
 need *any* of these other files in the `ansible/` directory... except for `hosts.ini`.
 You *do* need this file. It doesn't need to be as complex as mine. You just need
-to have one host group with at least one IP address below it. In our case, we have
-a host group called `aws` with the IP address to one server below it.
+to have one host group with at least one IP address below it:
+
+[[[ code('00806505b3') ]]]
+
+In our case, we have a host group called `aws` with the IP address to one server
+below it.
 
 ## Using the Role
 
 Back in `deploy.yml`, let's import the role! Add `roles:`, copy the name of the role,
-and then paste it here: `carlosbuenosvinos.ansistrano-deploy`. If you went through
-our Ansible tutorial, then you know that a role magically gives our playbook new
-tasks! Plus, a few other things, like variables and handlers.
+and then paste it here: `carlosbuenosvinos.ansistrano-deploy`:
+
+[[[ code('606dd846c1') ]]]
+
+If you went through our Ansible tutorial, then you know that a role magically
+gives our playbook new tasks! Plus, a few other things, like variables and handlers.
 
 So... what new tasks did this add? Let's find out! Run:
 
@@ -72,9 +90,12 @@ ansible-playbook -i ansible/hosts.ini ansible/deploy.yml --list-tasks
 Thanks to the `--list-tasks` flag, this won't *execute* our playbook, it will just
 tell us what tasks it *would* run. Try it!
 
-Not all of this will make sense yet... but you can see things like
-"Ensure deployment base path exists". And later, it creates something called a
-"current folder" and performs some cleanup.
+Not all of this will make sense yet... but you can see things like "Ensure deployment
+base path exists". And later, it creates something called a "current folder" and
+performs some cleanup.
 
 What does this all mean? It's time to learn *exactly* how Ansistrano works and
 run our first deploy. That's next!
+
+
+[ansistrano_deploy]: https://github.com/ansistrano/deploy
