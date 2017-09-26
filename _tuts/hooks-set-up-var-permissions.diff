@@ -1,17 +1,24 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 1a0f6ac..03b79b6 100644
+index 1a0f6ac..8790b78 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
-@@ -15,9 +15,10 @@
+@@ -15,9 +15,19 @@
  - name: Warm up the cache
    command: '{{ release_console_path }} cache:warmup --env=prod'
  
 -- name: Setup directory permissions for var/
--  file:
++- name: Setup owner and group of files in var/ dir
++  become: true
+   file:
 -    path: "{{ release_var_path }}"
--    state: directory
++    path: '{{ release_var_path }}'
+     state: directory
 -    mode: 0777
 -    recurse: true
++    owner: '{{ ansible_user }}'
++    group: www-data
++    recurse: yes
++
 +- name: Setup directories permissions in var/ dir
 +  become: true
 +  command: 'find {{ release_var_path }} -type d -exec chmod 0555 {} \;'
@@ -38,3 +45,42 @@ index 67e2eaa..f7d956a 100644
      - name: Check for Composer
        stat:
          path: /usr/local/bin/composer
+diff --git a/bin/console b/bin/console
+index 855c82e..be66ccc 100755
+--- a/bin/console
++++ b/bin/console
+@@ -7,7 +7,7 @@ use Symfony\Component\Debug\Debug;
+ 
+ // if you don't want to setup permissions the proper way, just uncomment the following PHP line
+ // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
+-umask(0000);
++//umask(0000);
+ 
+ set_time_limit(0);
+ 
+diff --git a/web/app.php b/web/app.php
+index a1d2bdf..5d2e252 100644
+--- a/web/app.php
++++ b/web/app.php
+@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
+ // If you don't want to setup permissions the proper way, just uncomment the following PHP line
+ // read http://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
+ // for more information
+-umask(0000);
++//umask(0000);
+ 
+ require __DIR__.'/../vendor/autoload.php';
+ if (PHP_VERSION_ID < 70000) {
+diff --git a/web/app_dev.php b/web/app_dev.php
+index 5430a84..07dedfd 100644
+--- a/web/app_dev.php
++++ b/web/app_dev.php
+@@ -6,7 +6,7 @@ use Symfony\Component\Debug\Debug;
+ // If you don't want to setup permissions the proper way, just uncomment the following PHP line
+ // read http://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
+ // for more information
+-umask(0000);
++//umask(0000);
+ 
+ // This check prevents access to debug front controllers that are deployed by accident to production servers.
+ // Feel free to remove this, extend it, or make something more sophisticated.
