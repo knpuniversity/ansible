@@ -1,5 +1,5 @@
 ---
-- hosts: vb
+- hosts: aws
 
   vars_files:
     - ./vars/deploy_vault.yml
