@@ -17,6 +17,12 @@
 
 - name: Create DB if not exists
   command: '{{ release_console_path }} doctrine:database:create --if-not-exists --env=prod'
+  register: db_create_output
+  changed_when: not db_create_output.stdout|search('already exists. Skipped')
+
+- name: Create schema if DB was just created
+  command: '{{ release_console_path }} doctrine:schema:create --env=prod'
+  when: db_create_output|changed
 
 - name: Install bundle assets
   command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
