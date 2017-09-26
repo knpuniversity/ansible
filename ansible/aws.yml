@@ -1,0 +1,30 @@
+---
+- hosts: local
+  gather_facts: False
+
+  vars_files:
+    - ./vars/vault.yml
+    - ./vars/vars.yml
+
+  environment:
+    AWS_ACCESS_KEY: "{{ aws_access_key }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
+    # or use aws_access_key/aws_secret_key parameters on ec2 module instead
+
+  tasks:
+    - name: Create an instance
+      ec2:
+        instance_type: t1.micro
+        image: ami-a15e0db6
+        wait: yes
+        group: web_access
+        count: 1
+        key_name: KnpU-Tutorial
+        region: us-east-1
+        instance_tags:
+          Name: MooTube instance
+      # Could be useful further to get Public IP, DNS, etc.
+      register: ec2
+
+    # debug the output to see what AWS returns back
+    - debug: var=ec2
