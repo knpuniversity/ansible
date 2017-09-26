@@ -3,8 +3,8 @@
   gather_facts: False
 
   vars_files:
-    - ./vars/vault.yml
-    - ./vars/vars.yml
+    - ./vars/aws_vault.yml
+    - ./vars/aws_vars.yml
 
   environment:
     AWS_ACCESS_KEY: "{{ aws_access_key }}"
