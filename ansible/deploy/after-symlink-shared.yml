@@ -15,6 +15,9 @@
 - name: Warm up the cache
   command: '{{ release_console_path }} cache:warmup --env=prod'
 
+- name: Create DB if not exists
+  command: '{{ release_console_path }} doctrine:database:create --if-not-exists --env=prod'
+
 - name: Install bundle assets
   command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
 
