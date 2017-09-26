@@ -144,6 +144,18 @@
       tags:
         - deploy
 
+    - name: Check for Composer
+      stat:
+        path: /usr/local/bin/composer
+      register: composer_stat
+      tags:
+        - deploy
+
+    - debug:
+        var: composer_stat
+      tags:
+        - deploy
+
     - name: Download Composer
       script: scripts/install_composer.sh
       tags:
