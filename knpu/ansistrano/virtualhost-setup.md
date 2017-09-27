@@ -1,4 +1,4 @@
-## VirtualHost Setup
+## Virtual Host Setup
 
 There is one more immediate problem: the document root of the project is
 `/var/www/project/current/web`. But... you might rememeber that our Nginx virtual
