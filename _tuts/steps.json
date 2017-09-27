@@ -511,8 +511,18 @@
             "description": null
         },
         {
-            "id": "db-safe-migrations-todo",
-            "name": "DB: Safe migrations TODO",
+            "id": "db-create-migration-to-rename-column",
+            "name": "DB: Create migration to rename column",
+            "description": null
+        },
+        {
+            "id": "db-change-migration-to-safe",
+            "name": "DB: Change migration to safe",
+            "description": null
+        },
+        {
+            "id": "db-create-migration-to-drop-unused-column",
+            "name": "DB: Create migration to drop unused column",
             "description": null
         },
         {
@@ -541,5 +551,5 @@
             "description": null
         }
     ],
-    "sha": "f85703ccc4332dcc0f01c1808ed3180b5ea96749"
+    "sha": "b3a2e781f742916b2d47a26144ef99417dce1f3b"
 }

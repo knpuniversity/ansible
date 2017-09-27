@@ -1,0 +1,40 @@
+diff --git a/app/DoctrineMigrations/Version20170927102503.php b/app/DoctrineMigrations/Version20170927102503.php
+new file mode 100644
+index 0000000..870d285
+--- /dev/null
++++ b/app/DoctrineMigrations/Version20170927102503.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Application\Migrations;
++
++use Doctrine\DBAL\Migrations\AbstractMigration;
++use Doctrine\DBAL\Schema\Schema;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++class Version20170927102503 extends AbstractMigration
++{
++    /**
++     * @param Schema $schema
++     */
++    public function up(Schema $schema)
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
++
++        $this->addSql('ALTER TABLE video DROP image');
++    }
++
++    /**
++     * @param Schema $schema
++     */
++    public function down(Schema $schema)
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
++
++        $this->addSql('ALTER TABLE video ADD image VARCHAR(255) NOT NULL');
++    }
++}

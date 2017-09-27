@@ -1,0 +1,25 @@
+diff --git a/app/DoctrineMigrations/Version20170927100553.php b/app/DoctrineMigrations/Version20170927100553.php
+index 7d3b6d5..746d57e 100644
+--- a/app/DoctrineMigrations/Version20170927100553.php
++++ b/app/DoctrineMigrations/Version20170927100553.php
+@@ -18,7 +18,9 @@ class Version20170927100553 extends AbstractMigration
+         // this up() migration is auto-generated, please modify it to your needs
+         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+ 
+-        $this->addSql('ALTER TABLE video CHANGE image poster VARCHAR(255) NOT NULL');
++        //$this->addSql('ALTER TABLE video CHANGE image poster VARCHAR(255) NOT NULL');
++        $this->addSql('ALTER TABLE video ADD poster VARCHAR(255) NOT NULL');
++        $this->addSql('UPDATE video SET poster = image');
+     }
+ 
+     /**
+@@ -29,6 +31,8 @@ class Version20170927100553 extends AbstractMigration
+         // this down() migration is auto-generated, please modify it to your needs
+         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+ 
+-        $this->addSql('ALTER TABLE video CHANGE poster image VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci');
++        //$this->addSql('ALTER TABLE video CHANGE poster image VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci');
++        $this->addSql('UPDATE video SET image = poster');
++        $this->addSql('ALTER TABLE video DROP poster');
+     }
+ }

@@ -1,0 +1,130 @@
+diff --git a/app/DoctrineMigrations/Version20170927100553.php b/app/DoctrineMigrations/Version20170927100553.php
+new file mode 100644
+index 0000000..7d3b6d5
+--- /dev/null
++++ b/app/DoctrineMigrations/Version20170927100553.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Application\Migrations;
++
++use Doctrine\DBAL\Migrations\AbstractMigration;
++use Doctrine\DBAL\Schema\Schema;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++class Version20170927100553 extends AbstractMigration
++{
++    /**
++     * @param Schema $schema
++     */
++    public function up(Schema $schema)
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
++
++        $this->addSql('ALTER TABLE video CHANGE image poster VARCHAR(255) NOT NULL');
++    }
++
++    /**
++     * @param Schema $schema
++     */
++    public function down(Schema $schema)
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
++
++        $this->addSql('ALTER TABLE video CHANGE poster image VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci');
++    }
++}
+diff --git a/app/Resources/views/default/index.html.twig b/app/Resources/views/default/index.html.twig
+index b4b5bdf..f72e942 100644
+--- a/app/Resources/views/default/index.html.twig
++++ b/app/Resources/views/default/index.html.twig
+@@ -29,7 +29,7 @@
+                 {% for video in videos %}
+                     <a href="#video-{{ video.id }}">
+                         <div class="video-container">
+-                            <img class="video-image" src="{{ asset(video.image) }}">
++                            <img class="video-image" src="{{ asset(video.poster) }}">
+                             <div class="video-title">
+                                 <i class="fa fa-play-circle-o"></i>
+                                 {{ video.title }}
+diff --git a/src/AppBundle/DataFixtures/ORM/video.yml b/src/AppBundle/DataFixtures/ORM/video.yml
+index 48fb2b7..58ff067 100644
+--- a/src/AppBundle/DataFixtures/ORM/video.yml
++++ b/src/AppBundle/DataFixtures/ORM/video.yml
+@@ -1,31 +1,31 @@
+ AppBundle\Entity\Video:
+     video_1:
+         title: Calf Stretches
+-        image: images/cowbell.png
++        poster: images/cowbell.png
+         tags:
+             - Cardio
+             - Accessories
+     video_2:
+         title: 3 Best Dandelion Recipes
+-        image: images/dandelion.png
++        poster: images/dandelion.png
+         tags:
+             - Milk Production
+             - Strength
+     video_3:
+         title: Beef Tender Loins
+-        image: images/bovine1.png
++        poster: images/bovine1.png
+         tags:
+             - Diet
+             - Strength
+     video_4:
+         title: Moooove it yoga
+-        image: images/bovine2.png
++        poster: images/bovine2.png
+         tags:
+             - Cardio
+             - Flexibility
+     video_5:
+         title: Milking it! 5 minute workout
+-        image: images/milkjug.png
++        poster: images/milkjug.png
+         tags:
+             - Milk Production
+             - Speed
+diff --git a/src/AppBundle/Entity/Video.php b/src/AppBundle/Entity/Video.php
+index 41c2071..3a83477 100644
+--- a/src/AppBundle/Entity/Video.php
++++ b/src/AppBundle/Entity/Video.php
+@@ -31,7 +31,7 @@ class Video
+      *
+      * @ORM\Column(type="string", length=255)
+      */
+-    private $image;
++    private $poster;
+ 
+     /**
+      * @var array
+@@ -67,17 +67,17 @@ class Video
+     /**
+      * @return string
+      */
+-    public function getImage()
++    public function getPoster()
+     {
+-        return $this->image;
++        return $this->poster;
+     }
+ 
+     /**
+-     * @param string $image
++     * @param string $poster
+      */
+-    public function setImage($image)
++    public function setPoster($poster)
+     {
+-        $this->image = $image;
++        $this->poster = $poster;
+     }
+ 
+     /**
