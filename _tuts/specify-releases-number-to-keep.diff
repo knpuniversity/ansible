@@ -10,3 +10,16 @@ index a7cb65b..76a3d81 100644
  
      # Arrays of directories and files to be shared.
      # The following arrays of directories and files will be symlinked to the current release directory after the 'update-code' step and its callbacks
+diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
+index 71ed1d2..3f439fa 100644
+--- a/ansible/deploy/after-symlink-shared.yml
++++ b/ansible/deploy/after-symlink-shared.yml
+@@ -64,7 +64,7 @@
+ 
+ - name: Setup directories permissions in var/ dir
+   become: true
+-  command: 'find -L {{ release_var_path }} -type d -exec chmod 0555 {} \;'
++  command: 'find -L {{ release_var_path }} -type d -exec chmod 0755 {} \;'
+ 
+ - name: Setup files permissions in var/ dir
+   become: true
