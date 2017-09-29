@@ -1,7 +1,7 @@
 ## Virtual Host Setup
 
 There is one more immediate problem: the document root of the project is
-`/var/www/project/current/web`. But... you might rememeber that our Nginx virtual
+`/var/www/project/current/web`. But... you might remember that our Nginx virtual
 host points to  `/var/www/project/web`. This needs to change to
 `/var/www/project/current/web`.
 
@@ -11,14 +11,22 @@ we feel super cool and responsible.
 
 ## Sharing Provision Variables
 
-First, in `deploy.yml`, add a new `vars_files` key. Load a file called `vars/vars.yml`.
-This *very* small file holds two variables that point to where the project lives.
+First, in `deploy.yml`, add a new `vars_files` key. Load a file called `vars/vars.yml`:
+
+[[[ code('0f7a406324') ]]]
+
+This *very* small file holds two variables that point to where the project lives:
+
+[[[ code('1f2ee8b11f') ]]]
+
 These are used by the provision playbook: `playbook.yml`. The first tells it where
 to create the directory. And the second - `server_document_root` - is used to set
 the document `root` in the Nginx virtual host!
 
 Before we change that variable, go back to `deploy.yml`. Now that we're including
-`vars.yml` here, we can use the `project_deploy_dir` variable.
+`vars.yml` here, we can use the `project_deploy_dir` variable:
+
+[[[ code('b690bc4715') ]]]
 
 This doesn't change anything: it just kills some duplication.
 
@@ -27,9 +35,14 @@ This doesn't change anything: it just kills some duplication.
 Back in `vars.yml`, we need to change `server_document_root`. But hold on! Let's
 get fancy! Ansistrano has a variable called `ansistrano_current_dir`. This is the
 *name* of the symlinked directory and - as we know - it defaults to `current`. Put
-this inside `vars.yml` and set it to `current`. This won't change how Ansistrano works.
-But now, we can safely *use* that variable here. Set `server_document_root` to
-`"{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"`.
+this inside `vars.yml` and set it to `current`:
+
+[[[ code('fbfe0224b8') ]]]
+
+This won't change how Ansistrano works. But now, we can safely *use* that variable
+here. Set `server_document_root` to `"{{ project_deploy_dir }}/{{ ansistrano_current_dir }}/web"`:
+
+[[[ code('c7ca9a2b66') ]]]
 
 I love it! After all these changes, well, we didn't *actually* change our deploy
 playbook at all. But we *did* change the provision playbook.
@@ -50,7 +63,16 @@ Done! Move back to your server and open the Nginx config!
 sudo vim /etc/nginx/sites-available/mootube.example.com.conf
 ```
 
-Got it! The `root` is set to the correct spot.
+Got it! The `root` is set to the correct spot:
+
+```
+# /etc/nginx/sites-available/mootube.example.com.conf
+server {
+    // ...
+    root /var/www/project/current/web;
+    // ...
+}
+```
 
 ## Try out the Site
 
@@ -65,7 +87,13 @@ sudo vim /etc/hosts
 ```
 
 Near the bottom, put the IP address to our server - I'll copy it from `hosts.ini` -
-and point this to `mootube.example.com`.
+and point this to `mootube.example.com`:
+
+```ini
+# /etc/hosts
+# ...
+54.162.54.206 mootube.example.com
+```
 
 At this point, our code is on the server and the Nginx virtual host is pointing
 to it. We have the absolute basics finished! Find your browser, and try the
@@ -75,8 +103,18 @@ It works! I'm just kidding - it's totally a 500 error: we're still missing a few
 
 To see what the exact error is, go to the server and check the logs. In the virtual
 host, you can see that the `error_log` config is set to
-`/var/log/nginx/mootube.example.com_error.log`. Tail that file: `sudo tail` and
-then the path:
+`/var/log/nginx/mootube.example.com_error.log`:
+
+```
+# /etc/nginx/sites-available/mootube.example.com.conf
+server {
+    # ...
+    error_log /var/log/nginx/mootube.example.com_error.log;
+    access_log /var/log/nginx/mootube.example.com_access.log;
+}
+```
+
+Tail that file: `sudo tail` and then the path:
 
 ```terminal-silent
 sudo tail /var/log/nginx/mootube.example.com_error.log
@@ -84,13 +122,13 @@ sudo tail /var/log/nginx/mootube.example.com_error.log
 
 Ah! Look closely:
 
-> Failed opening required vendor/autoload.php
+> Failed opening required `vendor/autoload.php`
 
 Of course! We have not run `composer install` yet. In fact, we also haven't configured
 our database credentials or any file permissions. All we've done is put our code
 on the server. But... that *is* pretty awesome: we already have a system that deploys
-in a very cool way: creating a new `releases` directory and symlinking that to
-`current`. Our deploy is missing some steps, but it's already pretty awesome.
+in a very cool way: creating a new `releases/` directory and symlinking that to
+`current/`. Our deploy is missing some steps, but it's already pretty awesome.
 
 But before we finish it, let's talk about deploy keys so that we can deploy *private*
 repositories.
