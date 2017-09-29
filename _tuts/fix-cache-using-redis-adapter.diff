@@ -1,0 +1,15 @@
+diff --git a/app/config/config_prod.yml b/app/config/config_prod.yml
+index b639096..20bba16 100644
+--- a/app/config/config_prod.yml
++++ b/app/config/config_prod.yml
+@@ -1,6 +1,10 @@
+ imports:
+     - { resource: config.yml }
+ 
++framework:
++    cache:
++        app: cache.adapter.redis
++
+ doctrine:
+     orm:
+         metadata_cache_driver: apcu

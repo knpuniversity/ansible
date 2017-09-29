@@ -526,6 +526,11 @@
             "description": null
         },
         {
+            "id": "fix-cache-using-redis-adapter",
+            "name": "Fix cache using Redis adapter",
+            "description": null
+        },
+        {
             "id": "hooks-clean-the-web-dir-from-sensitive-scripts",
             "name": "Hooks: Clean the web\/ dir from sensitive scripts",
             "description": null
@@ -551,5 +556,5 @@
             "description": null
         }
     ],
-    "sha": "cc1edcbdb4b14865d2b192918b4604bb9ceb1b74"
+    "sha": "5d49385ed3d63f2e46fde89e328c3c3c4659475b"
 }
