@@ -501,28 +501,28 @@
             "description": null
         },
         {
-            "id": "hooks-remove-making-var-writeable",
-            "name": "Hooks: Remove making var writeable",
+            "id": "cache-blank-step",
+            "name": "Cache: Blank step",
             "description": null
         },
         {
-            "id": "hooks-set-up-logs-permissions",
-            "name": "Hooks: Set up logs permissions",
+            "id": "cache-only-make-logs-writeable",
+            "name": "Cache: Only make logs writeable",
             "description": null
         },
         {
-            "id": "hooks-set-up-sessions-permissions",
-            "name": "Hooks: Set up sessions permissions",
+            "id": "cache-move-sessions-to-php",
+            "name": "Cache: Move sessions to php",
             "description": null
         },
         {
-            "id": "hooks-use-apcu-for-doctrine-metadata-cache",
-            "name": "Hooks: Use APCu for Doctrine metadata cache",
+            "id": "cache-install-apcu-use-for-doctrine-metadata",
+            "name": "Cache: Install apcu + use for Doctrine metadata",
             "description": null
         },
         {
-            "id": "hooks-remove-umask",
-            "name": "Hooks: Remove umask",
+            "id": "cache-remove-umask",
+            "name": "Cache: Remove umask",
             "description": null
         },
         {
@@ -556,5 +556,5 @@
             "description": null
         }
     ],
-    "sha": "5c435c77b135fea124a2ac51c5aa57a167c63742"
+    "sha": "f09780478ce42726633537248937b47e63ee3cca"
 }
