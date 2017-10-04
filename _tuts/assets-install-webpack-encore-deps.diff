@@ -1,10 +1,10 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index c54c3aa..6b1d546 100644
+index ebb3dae..80d2637 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
-@@ -25,6 +25,11 @@
-   register: yarn_install_output
-   changed_when: not yarn_install_output.stdout|search("Already up-to-date")
+@@ -23,6 +23,11 @@
+   args:
+     chdir: '{{ ansistrano_release_path.stdout }}'
  
 +- name: Install Webpack Encore assets
 +  command: './node_modules/.bin/encore production'

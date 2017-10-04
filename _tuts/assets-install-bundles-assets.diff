@@ -1,17 +1,5 @@
-diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index ee8d184..d195321 100644
---- a/ansible/deploy.yml
-+++ b/ansible/deploy.yml
-@@ -15,6 +15,7 @@
-   vars:
-     release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
-     release_var_path: "{{ ansistrano_release_path.stdout }}/var"
-+    release_web_path: "{{ ansistrano_release_path.stdout }}/web"
- 
-     # Ansistrano vars
-     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 1a0f6ac..46143ae 100644
+index 1a0f6ac..1007c08 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -15,6 +15,9 @@
@@ -19,7 +7,7 @@ index 1a0f6ac..46143ae 100644
    command: '{{ release_console_path }} cache:warmup --env=prod'
  
 +- name: Install bundle assets
-+  command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
++  command: '{{ release_console_path }} assets:install --symlink --env=prod'
 +
  - name: Setup directory permissions for var/
    file:

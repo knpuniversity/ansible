@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index c08c8af..6576d40 100644
+index fc6e305..9426c2a 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,6 +2,8 @@
@@ -32,7 +32,7 @@ index c08c8af..6576d40 100644
 +
      # Node
      - name: Register NodeJS distribution
-       shell: 'curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -'
+       shell: 'curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -'
 diff --git a/ansible/templates/auth.json b/ansible/templates/auth.json
 new file mode 100644
 index 0000000..228b251

@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index e2e19ff..7252fac 100644
+index 75e5bbc..78e62f4 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -20,6 +20,24 @@
+@@ -19,6 +19,24 @@
  
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
@@ -28,10 +28,10 @@ index e2e19ff..7252fac 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 29787d5..eeb43a4 100644
+index 85bbb6f..75266a0 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
-@@ -57,3 +57,5 @@
+@@ -44,3 +44,5 @@
      state: directory
      mode: 0777
      recurse: true
