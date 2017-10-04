@@ -476,11 +476,6 @@
             "description": null
         },
         {
-            "id": "aws-update-credentials-dns-name-and-public-ip",
-            "name": "AWS: Update credentials, DNS name and public IP",
-            "description": null
-        },
-        {
             "id": "assets-install-bundles-assets",
             "name": "Assets: Install bundles assets",
             "description": null
