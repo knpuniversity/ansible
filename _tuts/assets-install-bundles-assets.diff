@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 838c9b8..916f92e 100644
+index bedfb10..3c5d3c6 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -15,6 +15,7 @@
@@ -8,10 +8,10 @@ index 838c9b8..916f92e 100644
      release_var_path: "{{ ansistrano_release_path.stdout }}/var"
 +    release_web_path: "{{ ansistrano_release_path.stdout }}/web"
      release_logs_path: "{{ release_var_path }}/logs"
-     release_sessions_path: "{{ release_var_path }}/sessions"
  
+     # Ansistrano vars
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index f19b078..2bf4f7d 100644
+index 9e95e50..039ec06 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -15,6 +15,9 @@
@@ -21,6 +21,6 @@ index f19b078..2bf4f7d 100644
 +- name: Install bundle assets
 +  command: '{{ release_console_path }} assets:install {{ release_web_path }} --symlink --no-debug --env=prod'
 +
- - name: Setup owner and group of files in var/ dir
-   become: true
+ - name: Setup directories permissions in logs/ dir
    file:
+     path: '{{ release_logs_path }}'

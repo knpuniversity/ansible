@@ -17,11 +17,10 @@ diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Cont
 index dce6b78..dcc68fc 100644
 --- a/src/AppBundle/Controller/DefaultController.php
 +++ b/src/AppBundle/Controller/DefaultController.php
-@@ -46,6 +46,16 @@ class DefaultController extends Controller
-         ]);
+@@ -47,6 +47,16 @@ class DefaultController extends Controller
      }
  
-+    /**
+     /**
 +     * NOTE: This page should not query the DB!
 +     *
 +     * @Route("/about", name="about")
@@ -31,9 +30,10 @@ index dce6b78..dcc68fc 100644
 +        return $this->render('default/about.html.twig');
 +    }
 +
-     /**
++    /**
       * @param Video[] $videos
       *
+      * @return array
 diff --git a/web/css/styles.css b/web/css/styles.css
 index bed9dcf..573fd9c 100644
 --- a/web/css/styles.css

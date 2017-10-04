@@ -1,24 +1,28 @@
-diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index bedfb10..838c9b8 100644
---- a/ansible/deploy.yml
-+++ b/ansible/deploy.yml
-@@ -16,6 +16,7 @@
-     release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
-     release_var_path: "{{ ansistrano_release_path.stdout }}/var"
-     release_logs_path: "{{ release_var_path }}/logs"
-+    release_sessions_path: "{{ release_var_path }}/sessions"
- 
-     # Ansistrano vars
-     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index fc676fd..f19b078 100644
+index 4a907e9..9e95e50 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
-@@ -35,3 +35,7 @@
- - name: Setup directories permissions in logs/ dir
-   become: true
-   command: 'find {{ release_logs_path }} -type d -exec chmod 0775 {} \;'
-+
-+- name: Setup directories permissions in sessions/ dir
-+  become: true
-+  command: 'find {{ release_sessions_path }} -type d -exec chmod 0775 {} \;'
+@@ -19,4 +19,4 @@
+   file:
+     path: '{{ release_logs_path }}'
+     state: directory
+-    mode: 0777
++    mode: 0777
+\ No newline at end of file
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 2be6446..0dda290 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -24,10 +24,8 @@ framework:
+     default_locale:  "%locale%"
+     trusted_hosts:   ~
+     trusted_proxies: ~
+-    session:
+-        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+-        handler_id:  session.handler.native_file
+-        save_path:   '%kernel.project_dir%/var/sessions/%kernel.environment%'
++    # use the default PHP session handler
++    session: ~
+     fragments:       ~
+     http_method_override: true
+     assets: ~

@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 2bf4f7d..2eb7c6f 100644
+index 039ec06..6774ab8 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -18,6 +18,13 @@
@@ -13,14 +13,14 @@ index 2bf4f7d..2eb7c6f 100644
 +  register: yarn_install_output
 +  changed_when: not yarn_install_output.stdout|search("Already up-to-date")
 +
- - name: Setup owner and group of files in var/ dir
-   become: true
+ - name: Setup directories permissions in logs/ dir
    file:
+     path: '{{ release_logs_path }}'
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 21672cf..5a58cf4 100644
+index 140d74d..c08c8af 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -141,6 +141,40 @@
+@@ -133,6 +133,40 @@
        tags:
          - deploy
  

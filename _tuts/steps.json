@@ -456,8 +456,8 @@
             "description": null
         },
         {
-            "id": "hooks-set-up-var-permissions",
-            "name": "Hooks: Set up var permissions",
+            "id": "hooks-remove-making-var-writeable",
+            "name": "Hooks: Remove making var writeable",
             "description": null
         },
         {
@@ -556,5 +556,5 @@
             "description": null
         }
     ],
-    "sha": "5d49385ed3d63f2e46fde89e328c3c3c4659475b"
+    "sha": "c24bb80bf212469690417453bea2d7a37dae2256"
 }
