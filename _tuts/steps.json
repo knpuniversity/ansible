@@ -456,31 +456,6 @@
             "description": null
         },
         {
-            "id": "hooks-remove-making-var-writeable",
-            "name": "Hooks: Remove making var writeable",
-            "description": null
-        },
-        {
-            "id": "hooks-set-up-logs-permissions",
-            "name": "Hooks: Set up logs permissions",
-            "description": null
-        },
-        {
-            "id": "hooks-set-up-sessions-permissions",
-            "name": "Hooks: Set up sessions permissions",
-            "description": null
-        },
-        {
-            "id": "hooks-use-apcu-for-doctrine-metadata-cache",
-            "name": "Hooks: Use APCu for Doctrine metadata cache",
-            "description": null
-        },
-        {
-            "id": "hooks-remove-umask",
-            "name": "Hooks: Remove umask",
-            "description": null
-        },
-        {
             "id": "assets-install-bundles-assets",
             "name": "Assets: Install bundles assets",
             "description": null
@@ -523,6 +498,31 @@
         {
             "id": "db-create-migration-to-drop-unused-column",
             "name": "DB: Create migration to drop unused column",
+            "description": null
+        },
+        {
+            "id": "hooks-remove-making-var-writeable",
+            "name": "Hooks: Remove making var writeable",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-logs-permissions",
+            "name": "Hooks: Set up logs permissions",
+            "description": null
+        },
+        {
+            "id": "hooks-set-up-sessions-permissions",
+            "name": "Hooks: Set up sessions permissions",
+            "description": null
+        },
+        {
+            "id": "hooks-use-apcu-for-doctrine-metadata-cache",
+            "name": "Hooks: Use APCu for Doctrine metadata cache",
+            "description": null
+        },
+        {
+            "id": "hooks-remove-umask",
+            "name": "Hooks: Remove umask",
             "description": null
         },
         {
