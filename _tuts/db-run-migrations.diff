@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index dacadf9..e06b9c6 100644
+index 4ec9c84..4a5dab7 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -22,8 +22,20 @@

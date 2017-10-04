@@ -28,7 +28,7 @@ index e2e19ff..7252fac 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index e06b9c6..9943729 100644
+index 4a5dab7..6ce6acd 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -55,4 +55,6 @@

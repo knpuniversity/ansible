@@ -476,6 +476,11 @@
             "description": null
         },
         {
+            "id": "hooks-remove-umask",
+            "name": "Hooks: Remove umask",
+            "description": null
+        },
+        {
             "id": "assets-install-bundles-assets",
             "name": "Assets: Install bundles assets",
             "description": null
@@ -551,5 +556,5 @@
             "description": null
         }
     ],
-    "sha": "c24bb80bf212469690417453bea2d7a37dae2256"
+    "sha": "c78168245ce8fb7339fef9662367dc2906f6d03e"
 }

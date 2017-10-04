@@ -11,7 +11,7 @@ index ee8d184..bedfb10 100644
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index cd2dc82..4a907e9 100644
+index cd2dc82..ff5f218 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -14,3 +14,9 @@
@@ -19,7 +19,7 @@ index cd2dc82..4a907e9 100644
  - name: Warm up the cache
    command: '{{ release_console_path }} cache:warmup --env=prod'
 +
-+- name: Setup directories permissions in logs/ dir
++- name: Setup directory permissions in var/logs
 +  file:
 +    path: '{{ release_logs_path }}'
 +    state: directory
