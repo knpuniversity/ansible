@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index e2e19ff..7252fac 100644
+index e086a70..7d2576a 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -20,6 +20,24 @@
+@@ -19,6 +19,24 @@
  
      # Ansistrano vars
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
@@ -28,15 +28,12 @@ index e2e19ff..7252fac 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 4a5dab7..6ce6acd 100644
+index 684486b..53afd3e 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
-@@ -55,4 +55,6 @@
-   file:
-     path: '{{ release_logs_path }}'
+@@ -57,3 +57,5 @@
      state: directory
--    mode: 0777
-\ No newline at end of file
-+    mode: 0777
+     mode: 0777
+     recurse: true
 +    # We need it because logs are symlinks now
 +    follow: yes

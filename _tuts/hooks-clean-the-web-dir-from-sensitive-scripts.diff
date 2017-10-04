@@ -1,8 +1,8 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 3c5d3c6..e2e19ff 100644
+index d195321..e086a70 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -29,6 +29,7 @@
+@@ -28,6 +28,7 @@
  
      # Hooks: custom tasks if you need them
      ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"

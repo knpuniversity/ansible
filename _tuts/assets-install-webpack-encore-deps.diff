@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 236d853..a90c1e3 100644
+index c54c3aa..6b1d546 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -25,6 +25,11 @@
@@ -11,6 +11,6 @@ index 236d853..a90c1e3 100644
 +  args:
 +    chdir: '{{ ansistrano_release_path.stdout }}'
 +
- - name: Setup directory permissions in var/logs
+ - name: Setup directory permissions for var/
    file:
-     path: '{{ release_logs_path }}'
+     path: "{{ release_var_path }}"
