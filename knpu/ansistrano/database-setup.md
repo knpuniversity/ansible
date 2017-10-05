@@ -67,13 +67,13 @@ After a bunch of setup tasks... if you watch closely... yea! The migrations ran
 successfully! We *should* have a database full of tables.
 
 Go back to the site and refresh! It works! Of course... there's no *data*, but it
-works yo!
+works!
 
 ## Why dev Commands Don't Work
 
 To help bootstrap my data, *just* this once, I'm going to load my fixtures on production.
 I'm obviously *not* going to make this part of my deploy: you won't make any friends
-if you constantly empty the production database.
+if you constantly empty the production database. Believe me.
 
 Find the terminal that is SSH'ed to the server. Move out of the `current` directory
 and then back in. First, try running `bin/console` *without* `--env=prod`:
@@ -88,7 +88,7 @@ So, these do *not* exist inside `vendor/` right now!
 
 *That* is why you *must* run all commands with `--env=prod`. But, of course, the
 fixtures bundle is *only* available in the `dev` environment. So, *just* this one
-time... manually... let's install the dev assets with:
+time... manually... let's install the dev dependencies with:
 
 ```terminal
 composer install
@@ -102,5 +102,5 @@ bin/console hautelook_alice:doctrine:fixtures:load
 
 Beautiful! And *now*, we've got some great data to get us started. Next, let's
 talk more about migrations... because if you're not careful, you may temporarily
-take down your site! That's not as bad as emptying the production database, but
+take your site down! That's not as bad as emptying the production database, but
 it still ain't great.

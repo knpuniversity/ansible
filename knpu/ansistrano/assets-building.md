@@ -77,7 +77,7 @@ Cool! Check it out! Yes! We still have `styles.css`, and it's beautifully minifi
 
 ## Where to Build the Assets?
 
-So can we do this during deploy? Well... we have a few options. First, you *could*
+So how can we do this during deploy? Well... we have a few options. First, you *could*
 decide to run these commands locally and commit those files to your repository. That
 makes deploying easy... but you need to remember to run this command before each
 deploy. And committing built files to your repo is a bummer. This is an easy, but
@@ -91,7 +91,7 @@ need to install Node on our production server... *just* to build these assets.
 So, if you really don't like the idea of running these commands on production, you
 have a few other options. If you already have a build system of some sort, you could
 build your assets on that machine, upload them to S3 or something similar, then download
-them from during deployment. Or, skip the downloading part, and update your script
+them during deployment. Or, skip the downloading part, and update your script
 and link tags to point to S3 or some CDN.
 
 A second option is to add a  *play* to your deploy playbook that would first build
@@ -132,7 +132,7 @@ Thanks to that, we *should* have Node and yarn up on the server. Let's deploy!
 Same command, but with `deploy.yml`, and we don't need the `-l aws`... this already
 *only* runs against the `aws` host.
 
-```terminal-deploy
+```terminal-silent
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
