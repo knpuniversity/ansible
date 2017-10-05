@@ -9,3 +9,5 @@ chapters:
     - parameters-file
     - secret-config
     - composer-cache-permissions
+    - assets-building
+    - database-setup
