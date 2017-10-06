@@ -6,11 +6,11 @@ things we still need to do, like setting up database credentials in `parameters.
 ## The Ansistrano Deploy Stages
 
 Scroll up to the top of the Ansistrano documentation and find the
-[Main Workflow](https://github.com/ansistrano/deploy#main-workflow) link. When
-we deploy, Ansistrano goes through five stages: Setup, Update Code, Symlink Shared,
-Symlink, and Clean Up. The reason this is *really* interesting is that we can add
-our own custom tasks *before* or *after* any of these stages. For example, we could
-add a hook to run `composer install` or create `parameters.yml`.
+[Main Workflow][deploy_main_workflow] link. When we deploy, Ansistrano goes
+through five stages: Setup, Update Code, Symlink Shared, Symlink, and Clean Up.
+The reason this is *really* interesting is that we can add our own custom tasks
+*before* or *after* any of these stages. For example, we could add a hook to run
+`composer install` or create `parameters.yml`.
 
 The most important stages are "Update Code" - that's when our code is pulled down
 from `git` and put into the new releases directory - and "Symlink", which is when
@@ -40,7 +40,11 @@ should be fully functional.
 ## Creating parameters.yml
 
 Google for "Symfony deployment basics": you should find
-[Symfony's deployment article](https://symfony.com/doc/current/deployment.html).
-It lists the basic things you need to do when deploying a Symfony application, like
-upload the code, install vendor dependencies and create your `app/config/parameters.yml`
-file. Let's handle that next... via an Ansistrano hook!
+[Symfony's deployment article][symfony_deployment]. It lists the basic things
+you need to do when deploying a Symfony application, like upload the code,
+install vendor dependencies and create your `app/config/parameters.yml` file.
+Let's handle that next... via an Ansistrano hook!
+
+
+[deploy_main_workflow]: https://github.com/ansistrano/deploy#main-workflow
+[symfony_deployment]: https://symfony.com/doc/current/deployment.html
