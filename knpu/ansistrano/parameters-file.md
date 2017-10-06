@@ -1,8 +1,8 @@
 # Deploy Hooks & parameters.yml
 
-Go look inside the `current` directory on your server. Guess what? There is *no*
-`parameters.yml` file yet! That's no surprise! This is *not* committed to git, so
-it's not downloaded from git.
+Go look inside the `current/` directory on your server. Guess what? There is *no*
+`parameters.yml` file yet! That's no surprise! This is *not* committed to Git, so
+it's not downloaded from Git.
 
 ## Adding a Hook
 
@@ -18,8 +18,12 @@ differently, at this stage, our site is functional... but it's not live yet. It'
 a great hook spot.
 
 Inside `deploy.yml`, paste that variable and set it to a new file:
-`{{ playbook_dir }}/deploy/after-symlink-shared.yml`. Copy that filename and, inside
-`ansible/`, create that `deploy/` directory and a new file: `after-symlink-shared.yml`.
+`{{ playbook_dir }}/deploy/after-symlink-shared.yml`:
+
+[[[ code('34413b0556') ]]]
+
+Copy that filename and, inside `ansible/`, create that `deploy/` directory and
+a new file: `after-symlink-shared.yml`.
 
 ## Creating parameters.yml
 
@@ -39,9 +43,11 @@ from your project into here. Big picture, here's the plan: we will use the Ansib
 `template` module, to render variables inside this file, and deploy it to the
 server. But... to start, we're going to just use these hardcoded values.
 
-Back in `after-symlink-shared.yml`, add a new task:
-"Setup infrastructure-related parameters". Use the `template` module to, for now,
-copy `{{ playbook_dir }}/templates/parameters.yml.dist` into the new release directory.
+Back in `after-symlink-shared.yml`, add a new task: "Setup infrastructure-related
+parameters". Use the `template` module to, for now, copy
+`{{ playbook_dir }}/templates/parameters.yml.dist` into the new release directory:
+
+[[[ code('138e336636') ]]]
 
 But... um... how do we know what the name of the new release directory is? I mean,
 it's always changing!? And this hook is *before* the `current` symlink is created,
@@ -55,7 +61,9 @@ And yes! The first variable is *exactly* what we need. But don't forget about th
 others: you may need them someday.
 
 Back in `after-symlink-shared.yml`, set the destination to
-`{{ ansistrano_release_path.stdout }}/app/config/parameters.yml`.
+`{{ ansistrano_release_path.stdout }}/app/config/parameters.yml`:
+
+[[[ code('a6c6b2f6e1') ]]]
 
 We're not *customizing* anything in this file yet... but this should be enough to
 get it onto the server. Let's try it: deploy, deploy!
