@@ -8,25 +8,34 @@ need to do some asset processing later.
 
 ## Running composer install
 
-Let's add a new task to run `composer` install. In the hook file, add
-"Install composer deps". Use the `composer` module and tell it to run the `install`
-command. We also need to set the `working_dir`: use `{{ ansistrano_release_path.stdout }}`
+Let's add a new task to run `composer` install. In the hook file, add "Install
+Composer deps". Use the `composer` module and tell it to run the `install` command.
+We also need to set the `working_dir`: use `{{ ansistrano_release_path.stdout }}`:
+
+[[[ code('c129ed192e') ]]]
 
 Perfect! One gotcha with the `composer` module is that, by default, it runs
-`composer install --no-dev`. That means that your `require-dev` dependencies in `composer.json`
-will *not* be downloaded! For production, that's a good thing: it will give you a
-small performance boost. Just make sure that you're not relying on anything in those
-packages!
+`composer install --no-dev`. That means that your `require-dev` dependencies
+in `composer.json` will *not* be downloaded:
+
+[[[ code('0c7b8431ec') ]]]
+
+For production, that's a good thing: it will give you a small performance boost.
+Just make sure that you're not relying on anything in those packages!
 
 Also, in Symfony 3, if you use `--no-dev`, then some of the `post-install` Composer
 tasks will fail, because they *need* those dependencies. To fix that, we need
 to set an environment variable: `SYMFONY_ENV=prod`.
 
 No problem! In `deploy.yml`, add a new key called `environment`. And below,
-`SYMFONY_ENV` set to `prod`. Thanks to this, the Composer post-install tasks will
-*not* explode. And that's good... it's not great when your deployment explodes.
+`SYMFONY_ENV` set to `prod`:
 
-Oh, and important note: for this all to work, composer must be already installed
+[[[ code('ab128d58e1') ]]]
+
+Thanks to this, the Composer post-install tasks will *not* explode. And that's
+good... it's not great when your deployment explodes.
+
+Oh, and important note: for this all to work, Composer must be already installed
 on your server. We did that in our provision playbook.
 
 ## Clearing & Warming Cache
@@ -36,12 +45,16 @@ which basically means running two console commands.
 
 To make this easier, in `deploy.yml`, add a new variable: `release_console_path`.
 Copy the `ansistrano_release_path.stdout` variable and paste it:
-`{{ ansistrano_release_path.stdout }}/bin/console`.
+`{{ ansistrano_release_path.stdout }}/bin/console`:
+
+[[[ code('f8c0707eae') ]]]
 
 Cool! Back in the hook file, add a new task to clear the cache. Use the `command`
-module to simply say
-`{{ release_console_path }} cache:clear --no-warmup --env=prod`. That's basically
-the command that you see in the docs.
+module to simply say `{{ release_console_path }} cache:clear --no-warmup --env=prod`:
+
+[[[ code('ca3b6d162b') ]]]
+
+That's basically the command that you see in the docs.
 
 If you're not familiar with the `--no-warmup` flag, it's important. In Symfony
 4, instead of running `cache:clear` and expecting it to clear your cache *and*
@@ -50,21 +63,25 @@ use `cache:warmup` separately to warm it up. By passing `--no-warmup`, we're imi
 the Symfony 4 behavior so that we're ready.
 
 Add the second task: "Warm up the Cache". Copy the command, but change it to just
-`cache:warmup --env=prod`. Now, technically, since the `cache/` directory is not
-shared between deploys, we don't *really* need to run `cache:clear`: it will always
-be empty at this point! But, I'll keep it.
+`cache:warmup --env=prod`:
+
+[[[ code('b3fc651c29') ]]]
+
+Now, technically, since the `cache/` directory is not shared between deploys,
+we don't *really* need to run `cache:clear`: it will always be empty at this point!
+But, I'll keep it.
 
 Ok! Phew! I think we've done everything. Let's deploy! Find your local terminal
 and run the playbook:
 
 ```terminal-silent
-ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml --ask-vault-pass
 ```
 
 Use `beefpass` as the vault password and deploy to `master`. Then... wait impatiently!
 Someone fast forward, please!
 
-Yes! No errors! On the server, move out of `current` and then back in. Check it
+Yes! No errors! On the server, move out of `current/` and then back in. Check it
 out! Our `vendor/` directory is filled with goodies!
 
 ## Fixing the File Permissions
@@ -87,20 +104,25 @@ complex, but more secure way.
 For now, let's use the simple way: I *really* want our app to work! Add a new task: 
 "Setup directory permissions for var". Use the `file` module. But, quickly, go back
 to `deploy.yml` and make another variable: `release_var_path` set to the same path
-`{{ ansistrano_release_path.stdout }}/var`.
+`{{ ansistrano_release_path.stdout }}/var`:
+
+[[[ code('d6e6ec96f8') ]]]
 
 Now, back in `after-symlink-shared.yml`, set the path to `{{ release_var_path }}`,
-`state` to `directory`, `mode` to `0777` and `recurse: true`. On deploy, this will
-make sure that the directory exists and is set to 777. That's not the *best* option
-for security... but it should get things working!
+`state` to `directory`, `mode` to `0777` and `recurse: true`:
+
+[[[ code('fe7994f9b2') ]]]
+
+On deploy, this will make sure that the directory exists and is set to 777. That's not
+the *best* option for security... but it should get things working!
 
 Deploy one more time:
 
 ```terminal-silent
-ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
+ansible-playbook -i ansible/hosts.ini ansible/deploy.yml --ask-vault-pass
 ```
 
-Type `beefpass`, deploy to master... and watch the magic. I can see the new directory
+Type `beefpass`, deploy to `master`... and watch the magic. I can see the new directory
 permissions task... and it finishes.
 
 Refresh the site! Eureka! Yea, it's *still* a 500 error, but this comes from Symfony!
