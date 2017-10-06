@@ -1,17 +1,26 @@
 # Deploying Keys & Private Repos
 
 I want to show you a quick trick. Right now, we're always deploying the `master`
-branch. That probably make sense. But, sometimes, you might want to deploy a different
-branch, like maybe a feature branch that you're deploying to a beta server. There
-are a few ways to handle this, but one option is to leverage a native Ansible feature:
-`vars_prompt`.
+branch:
+
+[[[ code('05b07dddb8') ]]]
+
+That probably make sense. But, sometimes, you might want to deploy a different branch,
+like maybe a feature branch that you're deploying to a beta server. There are a few
+ways to handle this, but one option is to leverage a native Ansible feature: `vars_prompt`:
+
+[[[ code('b8a46089cb') ]]]
 
 With this, we can just ask the user, well, *us*, which branch we want to deploy.
 Whatever we type will become a new variable called `git_branch`. For the `prompt`,
 say: `Enter a branch to deploy`. Default the value to `master` and set `private`
-to `no`... so we can see what we type: this is not a sensitive password.
+to `no`... so we can see what we type: this is not a sensitive password:
 
-Down below, use the variable: `"{{ git_branch }}"`.
+[[[ code('fa86be4f6c') ]]]
+
+Down below, use the variable: `"{{ git_branch }}"`:
+
+[[[ code('20550140fa') ]]]
 
 This is nothing *super* amazing, but if it's useful, awesome! The downside is that
 it will ask you a question at the beginning of *every* deploy. Try it:
@@ -27,7 +36,9 @@ There's the prompt! I'll stop the deploy.
 Now, to the *real* thing I want to talk about: deploy keys. Right now, the *only*
 reason our deploy works is that... well, our repository is *public*! The server is
 able to access my repo because *anyone* can. Go copy the `ssh` version of the URL
-and use that for `ansistrano_git_repo` instead.
+and use that for `ansistrano_git_repo` instead:
+
+[[[ code('96c31f50de') ]]]
 
 Now try the deploy:
 
@@ -37,9 +48,9 @@ ansible-playbook -i ansible/hosts.ini ansible/deploy.yml
 
 It starts off good... but then... error! It says:
 
-> Permission denied, public key: could not read from remote repository
+> Permission denied (public key). Could not read from remote repository
 
-Woh! When you use the `ssh` protocol for git, you authenticate with an `ssh` key.
+Woh! When you use the `ssh` protocol for Git, you authenticate with an `ssh` key.
 Basically, you generate a private and public key on your machine and then *upload*
 the public key to your GitHub account. Once you do that, each time you communicate
 with GitHub, you send your public key so that GitHub knows who you are and what
@@ -85,7 +96,10 @@ key *somewhere*: it can live on our local machine where we *execute* Ansible - t
 the first variable - or you can put it on the server and use the second variable.
 
 Let's use the first option and store the key locally. Copy the first variable:
-`ansistrano_git_identity_key_path`. Set it to `{{ playbook_dir }}/id_rsa`.
+`ansistrano_git_identity_key_path`. Set it to `{{ playbook_dir }}/id_rsa`:
+
+[[[ code('3bb581f749') ]]]
+
 `playbook_dir` is an Ansible variable, and it points to the `ansible/` directory:
 the directory that holds the playbook file. As *soon* as we do this, Ansistrano will
 use this private key when it talks to GitHub. And because we've added its partner
