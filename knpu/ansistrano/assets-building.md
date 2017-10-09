@@ -1,4 +1,4 @@
-# Building Encore/Webpack Assets
+# Building Webpack Encore Assets
 
 Our site is at *least* functional. Well any page that doesn't use the *database*
 is functional... like the about page. But it *is* super ugly. Oof. Why? It's
