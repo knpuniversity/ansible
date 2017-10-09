@@ -1,0 +1,13 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index cdb1c65..f194481 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -33,3 +33,8 @@ services:
+     # AppBundle\Service\ExampleService:
+     #     arguments:
+     #         $someArgument: 'some_value'
++
++    # Prevents cache.app from being cleared on cache:clear
++    # this bug is fixed in Symfony 3.4
++    cache.app_clearer:
++        class: Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer

@@ -1,8 +1,16 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index c1bac4e..5b7b408 100644
+index c1bac4e..201a4aa 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
-@@ -47,6 +47,7 @@
+@@ -16,6 +16,7 @@
+     release_console_path: "{{ ansistrano_release_path.stdout }}/bin/console"
+     release_var_path: "{{ ansistrano_release_path.stdout }}/var"
+     release_logs_path: "{{ ansistrano_shared_path }}/var/logs"
++    release_web_path: "{{ ansistrano_release_path.stdout }}/web"
+ 
+     # Ansistrano vars
+     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
+@@ -47,6 +48,7 @@
  
      # Hooks: custom tasks if you need them
      ansistrano_after_symlink_shared_tasks_file: "{{ playbook_dir }}/deploy/after-symlink-shared.yml"

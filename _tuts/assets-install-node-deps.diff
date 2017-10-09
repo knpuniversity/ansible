@@ -15,12 +15,12 @@ index 1007c08..ebb3dae 100644
    file:
      path: "{{ release_var_path }}"
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 67e2eaa..05931a9 100644
+index 8077359..abb7b48 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -132,6 +132,40 @@
-       tags:
-         - deploy
+@@ -122,6 +122,40 @@
+       register: composer_self_update
+       changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
  
 +    # Node
 +    - name: Register NodeJS distribution

@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index a254b93..f0ce01b 100644
+index 85684ef..98328fb 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -16,11 +16,16 @@
@@ -50,18 +50,17 @@ index a254b93..f0ce01b 100644
        notify: Restart PHP-FPM
  
      - name: Check for Composer
-@@ -117,7 +124,7 @@
-       tags:
-         - deploy
+@@ -109,13 +116,19 @@
+         path: /usr/local/bin/composer
+         mode: "a+x"
  
 -    - name: Make sure composer is at its latest version
 +    - name: Make sure Composer is at its latest version
        composer:
          working_dir: "/home/{{ ansible_user }}"
          command: self-update
-@@ -126,6 +133,12 @@
-       tags:
-         - deploy
+       register: composer_self_update
+       changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
  
 +  post_tasks:
 +    - name: Upgrade installed packages

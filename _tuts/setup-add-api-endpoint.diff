@@ -1,8 +1,8 @@
 diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
-index 962fdb8..6148d98 100644
+index e77d630..73c58fa 100644
 --- a/src/AppBundle/Controller/DefaultController.php
 +++ b/src/AppBundle/Controller/DefaultController.php
-@@ -58,6 +58,17 @@ class DefaultController extends Controller
+@@ -59,6 +59,17 @@ class DefaultController extends Controller
      }
  
      /**

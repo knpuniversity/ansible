@@ -124,18 +124,21 @@ index 474ecef..8a74821 100644
              "version": "v5.4.8",
              "source": {
 diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
-index dcc68fc..962fdb8 100644
+index dcc68fc..e77d630 100644
 --- a/src/AppBundle/Controller/DefaultController.php
 +++ b/src/AppBundle/Controller/DefaultController.php
-@@ -3,7 +3,6 @@
+@@ -3,9 +3,9 @@
  namespace AppBundle\Controller;
  
  use AppBundle\Entity\Video;
 -use Predis\Connection\ConnectionException;
  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
++use Symfony\Component\Cache\Adapter\AdapterInterface;
  
-@@ -18,25 +17,27 @@ class DefaultController extends Controller
+ class DefaultController extends Controller
+ {
+@@ -18,25 +18,27 @@ class DefaultController extends Controller
              ->findAll();
          $tags = $this->getUniqueOrderedTags($videos);
  
@@ -164,7 +167,7 @@ index dcc68fc..962fdb8 100644
 +            $uploadsItem->expiresAfter(60);
 +            // defer cache item saving
 +            $this->getAppCache()->saveDeferred($uploadsItem);
-+        }
+         }
 +        $totalVideoUploadsCount = $uploadsItem->get();
 +
 +        $viewsItem = $this->getAppCache()->getItem('total_video_views_count');
@@ -173,7 +176,7 @@ index dcc68fc..962fdb8 100644
 +            $viewsItem->expiresAfter(60);
 +            // defer cache item saving
 +            $this->getAppCache()->saveDeferred($viewsItem);
-         }
++        }
 +        $totalVideoViewsCount = $viewsItem->get();
 +
 +        // save all deferred cache items
@@ -181,13 +184,13 @@ index dcc68fc..962fdb8 100644
  
          return $this->render('default/index.html.twig', [
              'videos' => $videos,
-@@ -110,11 +111,8 @@ class DefaultController extends Controller
-         return $this->get('doctrine')->getRepository(Video::class);
+@@ -111,10 +113,10 @@ class DefaultController extends Controller
      }
  
--    /**
+     /**
 -     * @return object|\Predis\Client
--     */
++     * @return AdapterInterface
+      */
 -    private function getRedisClient()
 +    private function getAppCache()
      {

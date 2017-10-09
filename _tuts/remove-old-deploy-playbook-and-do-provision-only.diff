@@ -70,7 +70,7 @@ index f5ddda9..0000000
 -    - deploy
 -  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 769a095..a254b93 100644
+index 769a095..85684ef 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,26 +5,12 @@
@@ -101,7 +101,7 @@ index 769a095..a254b93 100644
  
      - name: Install aptitude
        become: true
-@@ -103,30 +89,6 @@
+@@ -103,69 +89,32 @@
          line: "date.timezone = UTC"
        notify: Restart PHP-FPM
  
@@ -132,7 +132,30 @@ index 769a095..a254b93 100644
      - name: Check for Composer
        stat:
          path: /usr/local/bin/composer
-@@ -157,16 +119,13 @@
+       register: composer_stat
+-      tags:
+-        - deploy
+ 
+     - name: Download Composer
+       script: scripts/install_composer.sh
+       when: not composer_stat.stat.exists
+-      tags:
+-        - deploy
+ 
+     - name: Move Composer globally
+       become: true
+       command: mv composer.phar /usr/local/bin/composer
+       when: not composer_stat.stat.exists
+-      tags:
+-        - deploy
+ 
+     - name: Set permissions on Composer
+       become: true
+       file:
+         path: /usr/local/bin/composer
+         mode: "a+x"
+-      tags:
+-        - deploy
  
      - name: Make sure composer is at its latest version
        composer:
@@ -141,15 +164,14 @@ index 769a095..a254b93 100644
          command: self-update
        register: composer_self_update
        changed_when: "not composer_self_update.stdout|search('You are already using composer version')"
-       tags:
-         - deploy
- 
+-      tags:
+-        - deploy
+-
 -    # Bootstrap Symfony app
 -    - include: ./includes/symfony-bootstrap.yml
--
+ 
    handlers:
      - name: Restart PHP-FPM
-       become: true
 diff --git a/ansible/roles/nginx/templates/symfony.conf b/ansible/roles/nginx/templates/symfony.conf
 index abc2ae3..ece2a87 100644
 --- a/ansible/roles/nginx/templates/symfony.conf

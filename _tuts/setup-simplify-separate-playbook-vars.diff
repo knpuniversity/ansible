@@ -14,7 +14,7 @@ index 9992463..aaefa7f 100644
    environment:
      AWS_ACCESS_KEY: "{{ aws_access_key }}"
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index f0ce01b..67e2eaa 100644
+index 98328fb..8077359 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@

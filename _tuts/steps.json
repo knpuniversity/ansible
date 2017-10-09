@@ -541,8 +541,13 @@
             "description": null
         },
         {
-            "id": "fix-cache-using-redis-adapter",
-            "name": "Fix cache using Redis adapter",
+            "id": "cache-fix-cache-app-to-use-redis",
+            "name": "Cache: Fix cache.app to use redis",
+            "description": null
+        },
+        {
+            "id": "cache-fix-3-3-cache-clear-bug",
+            "name": "Cache: Fix 3.3 cache:clear bug",
             "description": null
         },
         {
@@ -561,5 +566,5 @@
             "description": null
         }
     ],
-    "sha": "17ed6351fa5b7184f17117507db15bb1676c9466"
+    "sha": "9982abe6d10b7d3cd0538ccd71d10e6e7b2c0644"
 }
