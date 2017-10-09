@@ -516,11 +516,6 @@
             "description": null
         },
         {
-            "id": "cache-blank-step",
-            "name": "Cache: Blank step",
-            "description": null
-        },
-        {
             "id": "cache-only-make-logs-writeable",
             "name": "Cache: Only make logs writeable",
             "description": null
@@ -553,16 +548,6 @@
         {
             "id": "make-tiny-change-in-template",
             "name": "Make tiny change in template",
-            "description": null
-        },
-        {
-            "id": "sharing-share-folders-between-deploys",
-            "name": "Sharing: Share folders between deploys",
-            "description": null
-        },
-        {
-            "id": "specify-releases-number-to-keep",
-            "name": "Specify releases number to keep",
             "description": null
         },
         {
