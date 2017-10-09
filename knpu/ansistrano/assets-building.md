@@ -1,4 +1,4 @@
-# Building Encore/Webpack Assets
+# Building Webpack Encore Assets
 
 Our site is at *least* functional. Well any page that doesn't use the *database*
 is functional... like the about page. But it *is* super ugly. Oof. Why? It's
@@ -115,7 +115,7 @@ Use `beefpass` for the password. Go go go!
 
 ## Build the Assets on Deploy
 
-While that's doing its magic, open `deploy.yml`. We need to run 2 commands on
+While that's doing its magic, open `after-symlink-shared.yml`. We need to run 2 commands on
 deploy. Add a new task called "Install Node dependencies". Use `command` set
 to `yarn install`. Oh, and make sure this runs *in* our project directory: add `args`
 then `chdir` set to our handy `ansistrano_release_path.stdout`.
