@@ -541,11 +541,6 @@
             "description": null
         },
         {
-            "id": "cache-remove-umask",
-            "name": "Cache: Remove umask",
-            "description": null
-        },
-        {
             "id": "fix-cache-using-redis-adapter",
             "name": "Fix cache using Redis adapter",
             "description": null
