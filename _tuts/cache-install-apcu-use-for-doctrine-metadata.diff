@@ -11,10 +11,10 @@ index 05931a9..fc6e305 100644
  
      - name: Set date.timezone for CLI
 diff --git a/app/config/config_prod.yml b/app/config/config_prod.yml
-index 8d87873..b639096 100644
+index 8d87873..fee066d 100644
 --- a/app/config/config_prod.yml
 +++ b/app/config/config_prod.yml
-@@ -1,9 +1,9 @@
+@@ -1,11 +1,11 @@
  imports:
      - { resource: config.yml }
  
@@ -25,5 +25,8 @@ index 8d87873..b639096 100644
 +    orm:
 +        metadata_cache_driver: apcu
  #        result_cache_driver: apc
- #        query_cache_driver: apc
+-#        query_cache_driver: apc
++        query_cache_driver: apcu
  
+ monolog:
+     handlers:

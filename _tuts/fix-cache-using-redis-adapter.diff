@@ -1,5 +1,5 @@
 diff --git a/app/config/config_prod.yml b/app/config/config_prod.yml
-index b639096..20bba16 100644
+index fee066d..faea2f3 100644
 --- a/app/config/config_prod.yml
 +++ b/app/config/config_prod.yml
 @@ -1,6 +1,10 @@

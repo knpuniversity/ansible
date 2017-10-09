@@ -396,6 +396,11 @@
             "description": null
         },
         {
+            "id": "setup-add-api-endpoint",
+            "name": "Setup: Add API endpoint",
+            "description": null
+        },
+        {
             "id": "install-ansistrano-deploy-role",
             "name": "Install Ansistrano deploy role",
             "description": null
@@ -526,6 +531,11 @@
             "description": null
         },
         {
+            "id": "cache-remove-umask-calls",
+            "name": "Cache: Remove umask calls",
+            "description": null
+        },
+        {
             "id": "cache-install-apcu-use-for-doctrine-metadata",
             "name": "Cache: Install apcu + use for Doctrine metadata",
             "description": null
@@ -556,5 +566,5 @@
             "description": null
         }
     ],
-    "sha": "4349be55c0c2dcff27b30983f95768674af3a86b"
+    "sha": "17ed6351fa5b7184f17117507db15bb1676c9466"
 }
