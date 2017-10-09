@@ -11,3 +11,5 @@ chapters:
     - composer-cache-permissions
     - assets-building
     - database-setup
+    - safe-migrations
+
