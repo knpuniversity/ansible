@@ -501,6 +501,21 @@
             "description": null
         },
         {
+            "id": "sharing-share-logs",
+            "name": "Sharing: Share logs",
+            "description": null
+        },
+        {
+            "id": "sharing-share-node-modules",
+            "name": "Sharing: Share node_modules",
+            "description": null
+        },
+        {
+            "id": "config-limiting-number-of-releases",
+            "name": "Config: Limiting number of releases",
+            "description": null
+        },
+        {
             "id": "cache-blank-step",
             "name": "Cache: Blank step",
             "description": null
@@ -556,5 +571,5 @@
             "description": null
         }
     ],
-    "sha": "53b13e87574d447175f87b7fefe9127807092713"
+    "sha": "4349be55c0c2dcff27b30983f95768674af3a86b"
 }
