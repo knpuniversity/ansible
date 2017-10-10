@@ -1,0 +1,70 @@
+diff --git a/.circleci/config.yml b/.circleci/config.yml
+index 575aad8..7f6496a 100644
+--- a/.circleci/config.yml
++++ b/.circleci/config.yml
+@@ -1,6 +1,6 @@
+ version: 2
+ jobs:
+-  build:
++  build_and_test:
+     working_directory: ~/mootube
+     docker:
+       - image: php:7.1
+@@ -53,3 +53,44 @@ jobs:
+       - run: ./bin/console lint:yaml app/config
+       - run: ./bin/console lint:twig app/Resources
+       - run: ./vendor/bin/simple-phpunit
++
++  deploy:
++    working_directory: ~/mootube
++    docker:
++      - image: ansible/ansible:ubuntu1604
++        environment:
++          ANSIBLE_HOST_KEY_CHECKING: no
++    steps:
++      # Installation
++      - run:
++          name: Install System Packages
++          command: pip install --upgrade pip && pip install ansible
++
++      # Dependencies
++      - checkout
++      - restore_cache:
++          key: mootube-{{ .Branch }}-{{ checksum "./ansible/requirements.yml" }}-v1
++      - run: ansible-galaxy install -r ansible/requirements.yml
++      - save_cache:
++          key: mootube-{{ .Branch }}-{{ checksum "./ansible/requirements.yml" }}-v1
++          paths:
++            - '/root/.ansible/roles'
++
++      - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
++      # With sed we replace "\n " chars with actual new lines after getting value from CircleCI env variable
++      - run: |
++          echo $ANSIBLE_SSH_PRIVATE_KEY > ~/.ssh/KnpU-Tutorial.pem && \
++          chmod 0600 ~/.ssh/KnpU-Tutorial.pem && \
++          sed -i "s/\\\n /\n/g" ~/.ssh/KnpU-Tutorial.pem
++      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "git_branch=master ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --vault-password-file=./ansible/.vault-pass.txt
++      - run: rm ./ansible/.vault-pass.txt
++      - run: rm ~/.ssh/KnpU-Tutorial.pem
++
++workflows:
++  version: 2
++  build_test_and_deploy:
++    jobs:
++      - build_and_test
++      - deploy:
++          requires:
++            - build_and_test
+diff --git a/ansible/deploy.yml b/ansible/deploy.yml
+index 201a4aa..998e1af 100644
+--- a/ansible/deploy.yml
++++ b/ansible/deploy.yml
+@@ -42,7 +42,7 @@
+     ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
+ 
+     # Variables used in the Git deployment strategy
+-    ansistrano_git_repo: "git@github.com:knpuniversity/ansible.git" # Location of the git repository
++    ansistrano_git_repo: "git@github.com:bocharsky-bw/ansistrano.git" # Location of the git repository
+     ansistrano_git_branch: "{{ git_branch }}" # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+     ansistrano_git_identity_key_path: "{{ playbook_dir }}/id_rsa" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
+ 

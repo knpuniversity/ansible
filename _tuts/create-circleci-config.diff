@@ -1,9 +1,9 @@
 diff --git a/.circleci/config.yml b/.circleci/config.yml
 new file mode 100644
-index 0000000..78c7a2d
+index 0000000..575aad8
 --- /dev/null
 +++ b/.circleci/config.yml
-@@ -0,0 +1,51 @@
+@@ -0,0 +1,55 @@
 +version: 2
 +jobs:
 +  build:
@@ -25,7 +25,7 @@ index 0000000..78c7a2d
 +          name: Install Composer
 +          command: |
 +            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-+            php -r "if (hash_file('SHA384', 'composer-setup.php') === '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
++            php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
 +            php composer-setup.php && \
 +            php -r "unlink('composer-setup.php');" && \
 +            chmod +x ./composer.phar && \
@@ -35,7 +35,7 @@ index 0000000..78c7a2d
 +      - checkout
 +      - restore_cache:
 +          key: mootube-{{ .Branch }}-{{ checksum "./composer.lock" }}-v1
-+      - run: composer install --no-interaction
++      - run: composer install --prefer-dist --no-interaction
 +      # Force pulling Simple PHPUnit dependencies to be able to cache them as well
 +      - run: ./vendor/bin/simple-phpunit --version
 +      - save_cache:
@@ -44,14 +44,18 @@ index 0000000..78c7a2d
 +            - '/root/.composer/cache'
 +            - './vendor'
 +
-+      - run: ./bin/console server:start
-+
 +      # Database
 +      - run: ./bin/console doctrine:database:create --env=test
 +      - run: ./bin/console doctrine:schema:create --env=test
 +      - run: ./bin/console hautelook_alice:doctrine:fixtures:load --no-interaction
 +
-+      # Tests
++      # To use server:start we need to install pcntl extension
++      - run:
++          name: Run web server in background
++          command: ./bin/console server:run
++          background: true
++
++      # Testing
 +      - run: ./bin/console lint:yaml app/config
 +      - run: ./bin/console lint:twig app/Resources
 +      - run: ./vendor/bin/simple-phpunit

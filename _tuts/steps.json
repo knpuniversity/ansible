@@ -564,7 +564,17 @@
             "id": "set-up-github-oauth-token-for-composer",
             "name": "Set up GitHub OAuth token for Composer",
             "description": null
+        },
+        {
+            "id": "serial-provision-serveral-ec2-at-once",
+            "name": "Serial: Provision serveral EC2 at once",
+            "description": null
+        },
+        {
+            "id": "circleci-add-deploy-job-to-the-workflow",
+            "name": "CircleCI: Add deploy job to the workflow",
+            "description": null
         }
     ],
-    "sha": "5785876e9228d4990dd015ab8f2d89b40b4a2d10"
+    "sha": "dd4aeefc16d93f9afa9abcd2fc1b7bc19a924df8"
 }
