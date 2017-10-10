@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index b0a7352..bcb502e 100644
+index b0a73524..bcb502ec 100644
 --- a/README.md
 +++ b/README.md
 @@ -51,6 +51,16 @@ If you get an error that the database exists, that should
@@ -20,7 +20,7 @@ index b0a7352..bcb502e 100644
  
  You can use Nginx or Apache, but the built-in web server works
 diff --git a/app/Resources/views/base.html.twig b/app/Resources/views/base.html.twig
-index 62c845c..c1971c8 100644
+index 62c845c6..c1971c8a 100644
 --- a/app/Resources/views/base.html.twig
 +++ b/app/Resources/views/base.html.twig
 @@ -6,7 +6,7 @@
@@ -34,7 +34,7 @@ index 62c845c..c1971c8 100644
          <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic' rel='stylesheet' type='text/css'>
 diff --git a/assets/css/styles.scss b/assets/css/styles.scss
 new file mode 100644
-index 0000000..2f49f0c
+index 00000000..2f49f0c6
 --- /dev/null
 +++ b/assets/css/styles.scss
 @@ -0,0 +1,195 @@
@@ -235,7 +235,7 @@ index 0000000..2f49f0c
 +}
 diff --git a/package.json b/package.json
 new file mode 100644
-index 0000000..f4f6b4c
+index 00000000..f4f6b4ca
 --- /dev/null
 +++ b/package.json
 @@ -0,0 +1,7 @@
@@ -248,7 +248,7 @@ index 0000000..f4f6b4c
 +}
 diff --git a/webpack.config.js b/webpack.config.js
 new file mode 100644
-index 0000000..39cb3df
+index 00000000..39cb3dfd
 --- /dev/null
 +++ b/webpack.config.js
 @@ -0,0 +1,32 @@
@@ -286,7 +286,7 @@ index 0000000..39cb3df
 +module.exports = Encore.getWebpackConfig();
 diff --git a/yarn.lock b/yarn.lock
 new file mode 100644
-index 0000000..7a65548
+index 00000000..7a65548c
 --- /dev/null
 +++ b/yarn.lock
 @@ -0,0 +1,4686 @@

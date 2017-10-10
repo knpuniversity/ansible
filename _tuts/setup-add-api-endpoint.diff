@@ -1,5 +1,5 @@
 diff --git a/app/config/config.yml b/app/config/config.yml
-index 2be6446..c765f3f 100644
+index 2be6446c..c765f3f1 100644
 --- a/app/config/config.yml
 +++ b/app/config/config.yml
 @@ -18,7 +18,7 @@ framework:
@@ -12,7 +12,7 @@ index 2be6446..c765f3f 100644
          engines: ['twig']
      default_locale:  "%locale%"
 diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
-index e77d630..73c58fa 100644
+index e77d6306..73c58fab 100644
 --- a/src/AppBundle/Controller/DefaultController.php
 +++ b/src/AppBundle/Controller/DefaultController.php
 @@ -58,6 +58,17 @@ class DefaultController extends Controller

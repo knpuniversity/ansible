@@ -1,5 +1,5 @@
 diff --git a/bin/console b/bin/console
-index 855c82e..68d1b52 100755
+index 855c82e4..68d1b525 100755
 --- a/bin/console
 +++ b/bin/console
 @@ -7,7 +7,7 @@ use Symfony\Component\Debug\Debug;
@@ -20,7 +20,7 @@ index 855c82e..68d1b52 100755
  }
  
 diff --git a/web/app.php b/web/app.php
-index a1d2bdf..5d2e252 100644
+index a1d2bdf4..5d2e252d 100644
 --- a/web/app.php
 +++ b/web/app.php
 @@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;

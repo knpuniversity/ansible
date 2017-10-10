@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 904d6de..db0f065 100644
+index 904d6ded..db0f0650 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@
@@ -71,7 +71,7 @@ index 904d6de..db0f065 100644
        service:
 diff --git a/ansible/roles/nginx/handlers/main.yml b/ansible/roles/nginx/handlers/main.yml
 new file mode 100644
-index 0000000..0515ae2
+index 00000000..0515ae26
 --- /dev/null
 +++ b/ansible/roles/nginx/handlers/main.yml
 @@ -0,0 +1,6 @@
@@ -84,7 +84,7 @@ index 0000000..0515ae2
 \ No newline at end of file
 diff --git a/ansible/roles/nginx/tasks/main.yml b/ansible/roles/nginx/tasks/main.yml
 new file mode 100644
-index 0000000..265e891
+index 00000000..265e8911
 --- /dev/null
 +++ b/ansible/roles/nginx/tasks/main.yml
 @@ -0,0 +1,29 @@
@@ -119,7 +119,7 @@ index 0000000..265e891
 +    line: "127.0.0.1 {{ server_name }}"
 diff --git a/ansible/roles/nginx/templates/symfony.conf b/ansible/roles/nginx/templates/symfony.conf
 new file mode 100644
-index 0000000..abc2ae3
+index 00000000..abc2ae3e
 --- /dev/null
 +++ b/ansible/roles/nginx/templates/symfony.conf
 @@ -0,0 +1,54 @@
@@ -179,7 +179,7 @@ index 0000000..abc2ae3
 +}
 diff --git a/ansible/roles/nginx/vars/main.yml b/ansible/roles/nginx/vars/main.yml
 new file mode 100644
-index 0000000..23d40bf
+index 00000000..23d40bfb
 --- /dev/null
 +++ b/ansible/roles/nginx/vars/main.yml
 @@ -0,0 +1,2 @@
