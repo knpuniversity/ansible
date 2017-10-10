@@ -12,4 +12,7 @@ chapters:
     - assets-building
     - database-setup
     - safe-migrations
-
+    - shared-optimizations
+    - logs-sessions-permissions
+    - cache-permission-secrets
+    - cache-optimizations
