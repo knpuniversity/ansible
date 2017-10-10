@@ -41,7 +41,7 @@ like these on your server. Instead of putting uploaded files in `web/uploads`, y
 could store them in a cloud store like S3. If you put *nothing* extra on your server,
 it's *really* easy to destroy your server and launch a new one... without needing
 to worry about copying over a bunch of random, uploaded files. It also makes using
-*multiple* servers possibile.
+*multiple* servers possible.
 
 Ding! Move over to the terminal that's SSH'ed onto the server. Go out of `current/`
 and then back in. Check out `var/logs`: it's now a symlink to `shared/var/logs`.
@@ -52,7 +52,7 @@ show up there.
 
 There's *one* other reason you might want to share some paths: speed! Right now,
 our deploy is slow! You may not have noticed because of the magic of television:
-we've been fast-forarding through the deploys! But, in real life, the
+we've been fast-forwarding through the deploys! But, in real life, the
 `Install Node dependencies` task takes almost 2 minutes to run! Woh!
 
 Why is it so slow? Because it needs to download *all* of the dependencies on *every*
@@ -89,11 +89,11 @@ directory will *start* empty. By the way, the `composer install` command is also
 a little bit slow... but not *nearly* as slow as `yarn install`. Why? Because Composer
 caches the packages behind the scenes. So even though the `vendor/` directory starts
 empty, `composer install` runs *pretty* quickly. We *could* make it faster by sharing
-`vendor/`... but that's a bad idea! If we did that, if a future deploy updated the
+`vendor/`... but that's a bad idea! If we did that, when a future deploy updated the
 vendors, this would affect the *live* site during the deploy! Scary!
 
 Ok, done! I'm deploying to a *tiny*, slow server, so that took 3 and a half minutes.
-Amost half of that was for `yarn install`!
+Almost half of that was for `yarn install`!
 
 Let's deploy again:
 
@@ -107,4 +107,4 @@ In `shared/`, `node_modules/` is populated, thanks to the last deploy.
 When the deploy finishes... awesome! The `yarn install` task was almost *instant*,
 and the deploy was nearly two minutes faster! Zoom!
 
-Next, it's time to demystify and fix our cache file permissions.
+Next, it's time to demystify and fix our cache directory permissions.

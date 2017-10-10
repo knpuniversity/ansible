@@ -7,7 +7,7 @@ To get our site working, we're setting the *entire* `var/` directory to 777. Thi
 includes `cache/`, `logs/` and `sessions/`.
 
 This is a bummer for security. Here's my big question: after we deploy, which files
-*truly* needs to be writable by the web server?
+*truly* need to be writable by the web server?
 
 Let's solve this ancient Symfony mystery. To start, instead of setting the entire
 `var/` directory to 777, let's *just* do this for `var/logs`. This is actually the
@@ -37,7 +37,7 @@ the problem.
 
 ## Using Native PHP Sessions
 
-Back on the server, find the `var/log` directory and tail `prod.log`. Oh!
+Back on the server, find the `var/logs` directory and tail `prod.log`. Oh!
 
 > Unable to create the directory `var/sessions`
 
