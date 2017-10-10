@@ -1,5 +1,5 @@
 diff --git a/.circleci/config.yml b/.circleci/config.yml
-index 575aad8..7f6496a 100644
+index 575aad8f..b196cd11 100644
 --- a/.circleci/config.yml
 +++ b/.circleci/config.yml
 @@ -1,6 +1,6 @@
@@ -10,7 +10,7 @@ index 575aad8..7f6496a 100644
      working_directory: ~/mootube
      docker:
        - image: php:7.1
-@@ -53,3 +53,44 @@ jobs:
+@@ -53,3 +53,46 @@ jobs:
        - run: ./bin/console lint:yaml app/config
        - run: ./bin/console lint:twig app/Resources
        - run: ./vendor/bin/simple-phpunit
@@ -43,7 +43,9 @@ index 575aad8..7f6496a 100644
 +          echo $ANSIBLE_SSH_PRIVATE_KEY > ~/.ssh/KnpU-Tutorial.pem && \
 +          chmod 0600 ~/.ssh/KnpU-Tutorial.pem && \
 +          sed -i "s/\\\n /\n/g" ~/.ssh/KnpU-Tutorial.pem
-+      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "git_branch=master ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --vault-password-file=./ansible/.vault-pass.txt
++      - run:
++          command: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "git_branch=master ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --vault-password-file=./ansible/.vault-pass.txt
++          no_output_timeout: 20m
 +      - run: rm ./ansible/.vault-pass.txt
 +      - run: rm ~/.ssh/KnpU-Tutorial.pem
 +
@@ -56,7 +58,7 @@ index 575aad8..7f6496a 100644
 +          requires:
 +            - build_and_test
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 201a4aa..998e1af 100644
+index 201a4aa9..998e1aff 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -42,7 +42,7 @@

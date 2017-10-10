@@ -1,5 +1,5 @@
 diff --git a/ansible/hosts.ini b/ansible/hosts.ini
-index 297aee5..7c9d45d 100644
+index 297aee52..a74dd138 100644
 --- a/ansible/hosts.ini
 +++ b/ansible/hosts.ini
 @@ -5,7 +5,8 @@
@@ -7,8 +7,8 @@ index 297aee5..7c9d45d 100644
  
  [aws]
 -54.205.128.194
-+54.162.54.206
-+54.162.214.154
++23.20.252.34
++54.81.83.93
  
  [webserver:children]
  vb

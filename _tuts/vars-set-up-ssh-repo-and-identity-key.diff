@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 1a4ad79..58dcb24 100644
+index 1a4ad794..58dcb240 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -16,8 +16,9 @@
@@ -15,7 +15,7 @@ index 1a4ad79..58dcb24 100644
      - carlosbuenosvinos.ansistrano-deploy
 diff --git a/ansible/id_rsa b/ansible/id_rsa
 new file mode 100644
-index 0000000..bec3198
+index 00000000..bec31980
 --- /dev/null
 +++ b/ansible/id_rsa
 @@ -0,0 +1,51 @@

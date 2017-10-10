@@ -1,6 +1,6 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
 new file mode 100644
-index 0000000..ae05bd1
+index 00000000..ae05bd1e
 --- /dev/null
 +++ b/ansible/deploy.yml
 @@ -0,0 +1,5 @@

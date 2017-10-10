@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index ee8d184..065bb93 100644
+index ee8d184e..065bb934 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -18,6 +18,23 @@
@@ -27,7 +27,7 @@ index ee8d184..065bb93 100644
  
      # Variables used in the Git deployment strategy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index 1266296..5255f37 100644
+index 1266296b..5255f370 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -44,3 +44,5 @@
