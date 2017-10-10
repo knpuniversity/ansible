@@ -7,7 +7,7 @@ and everything happens automatically on deploy.
 
 Oooooooh, but there's a catch! Open `src/AppBundle/Entity/Video.php`. This entity
 has a field called `image`. Ya know what? I'd rather call that *poster*, because
-it's the *poster* image for this video. Let's refactor and rename it.
+it's the *poster* image for this video.
 
 Because the annotation doesn't have a `name` option, renaming the property means
 that the column will be renamed in the database. And that means... drum roll...
