@@ -1,17 +1,16 @@
 diff --git a/app/config/config.yml b/app/config/config.yml
-index 2be6446..0dda290 100644
+index c765f3f..c2c1c73 100644
 --- a/app/config/config.yml
 +++ b/app/config/config.yml
-@@ -24,10 +24,8 @@ framework:
-     default_locale:  "%locale%"
+@@ -25,9 +25,8 @@ framework:
      trusted_hosts:   ~
      trusted_proxies: ~
--    session:
+     session:
 -        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
 -        handler_id:  session.handler.native_file
 -        save_path:   '%kernel.project_dir%/var/sessions/%kernel.environment%'
-+    # use the default PHP session handler
-+    session: ~
++        # use the default PHP session handler
++        handler_id: ~
      fragments:       ~
      http_method_override: true
      assets: ~

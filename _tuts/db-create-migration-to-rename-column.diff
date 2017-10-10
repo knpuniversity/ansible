@@ -39,7 +39,7 @@ index 0000000..7d3b6d5
 +    }
 +}
 diff --git a/app/Resources/views/default/index.html.twig b/app/Resources/views/default/index.html.twig
-index b4b5bdf..f72e942 100644
+index 57c598c..59caa6b 100644
 --- a/app/Resources/views/default/index.html.twig
 +++ b/app/Resources/views/default/index.html.twig
 @@ -29,7 +29,7 @@
