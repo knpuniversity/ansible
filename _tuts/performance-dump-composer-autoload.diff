@@ -1,0 +1,17 @@
+diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
+index 76e9a81d..ceeb9417 100644
+--- a/ansible/deploy/after-symlink-shared.yml
++++ b/ansible/deploy/after-symlink-shared.yml
+@@ -9,6 +9,12 @@
+     command: install
+     working_dir: '{{ ansistrano_release_path.stdout }}'
+ 
++- name: Dump Composer autoload to use class map functionality
++  composer:
++    command: dump-autoload
++    arguments: --optimize --classmap-authoritative
++    working_dir: '{{ ansistrano_release_path.stdout }}'
++
+ - name: Clear the cache
+   command: '{{ release_console_path }} cache:clear --no-warmup --env=prod'
+ 

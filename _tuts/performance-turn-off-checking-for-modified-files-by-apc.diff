@@ -1,0 +1,20 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 7b339524..4f8ee0cf 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -99,6 +99,15 @@
+         value: UTC
+       notify: Restart PHP-FPM
+ 
++    - name: Turn off checking for modified files by APC
++      become: true
++      ini_file:
++        path: /etc/php/7.1/fpm/php.ini
++        section: apc
++        option: apc.stat
++        value: 0
++      notify: Restart PHP-FPM
++
+     - name: Check for Composer
+       stat:
+         path: /usr/local/bin/composer

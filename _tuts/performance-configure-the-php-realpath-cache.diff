@@ -1,0 +1,23 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 6c0be27d..5b8a3828 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -117,6 +117,18 @@
+         value: 20000
+       notify: Restart PHP-FPM
+ 
++    - name: Configure the PHP realpath cache
++      become: true
++      ini_file:
++        path: /etc/php/7.1/fpm/php.ini
++        section: PHP
++        option: '{{ item.option }}'
++        value: '{{ item.value }}'
++      notify: Restart PHP-FPM
++      with_items:
++        - { option: 'realpath_cache_size', value: '4096K' }
++        - { option: 'realpath_cache_ttl', value: '600' }
++
+     - name: Check for Composer
+       stat:
+         path: /usr/local/bin/composer
