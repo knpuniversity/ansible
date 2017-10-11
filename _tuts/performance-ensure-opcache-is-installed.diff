@@ -1,0 +1,12 @@
+diff --git a/ansible/playbook.yml b/ansible/playbook.yml
+index 17f88056..7b339524 100644
+--- a/ansible/playbook.yml
++++ b/ansible/playbook.yml
+@@ -77,6 +77,7 @@
+         - php7.1-fpm
+         - php7.1-intl
+         - php7.1-mysql
++        - php7.1-opcache
+         - php7.1-xml
+         - php-apcu
+       notify: Restart PHP-FPM

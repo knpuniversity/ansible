@@ -579,7 +579,37 @@
             "id": "circleci-add-deploy-job-to-the-workflow",
             "name": "CircleCI: Add deploy job to the workflow",
             "description": null
+        },
+        {
+            "id": "performance-dump-composer-autoload",
+            "name": "Performance: Dump Composer autoload",
+            "description": null
+        },
+        {
+            "id": "performance-ensure-opcache-is-installed",
+            "name": "Performance: Ensure OPcache is installed",
+            "description": null
+        },
+        {
+            "id": "performance-turn-off-checking-for-modified-files-by-apc",
+            "name": "Performance: Turn off checking for modified files by APC",
+            "description": null
+        },
+        {
+            "id": "performance-increase-opcache-limit-of-accelerated-files",
+            "name": "Performance: Increase OPcache limit of accelerated files",
+            "description": null
+        },
+        {
+            "id": "performance-configure-the-php-realpath-cache",
+            "name": "Performance: Configure the PHP realpath cache",
+            "description": null
+        },
+        {
+            "id": "performance-use-apcu-to-cache-found-not-found-classes",
+            "name": "Performance: Use APCu to cache found\/not-found classes",
+            "description": null
         }
     ],
-    "sha": "35cfd32187bce16d9dc9766c66ee50f41b69a00b"
+    "sha": "a3fd8f860dc9aac5fb9be909ecc1b3bb20ab77c1"
 }

@@ -1,0 +1,12 @@
+diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
+index ceeb9417..b7896edc 100644
+--- a/ansible/deploy/after-symlink-shared.yml
++++ b/ansible/deploy/after-symlink-shared.yml
+@@ -7,6 +7,7 @@
+ - name: Install Composer dependencies
+   composer:
+     command: install
++    arguments: --apcu-autoloader
+     working_dir: '{{ ansistrano_release_path.stdout }}'
+ 
+ - name: Dump Composer autoload to use class map functionality
