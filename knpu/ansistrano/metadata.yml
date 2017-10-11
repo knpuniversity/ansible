@@ -16,3 +16,5 @@ chapters:
     - logs-sessions-permissions
     - cache-permission-secrets
     - cache-optimizations
+    - app-cache
+    - scripts-cleanup-github-token

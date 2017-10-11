@@ -40,7 +40,7 @@ When provisioning finishes, commit the new config changes. Push them!
 Now, deploy the site:
 
 ```terminal-silent
-ansible-playbook ansible/playbook.yml -i ansible/hosts.ini --ask-vault-pass -l aws
+ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
 While we're waiting, find the server again and run:
