@@ -46,7 +46,7 @@ This will clear and warm up the `dev` cache. Then, run:
 sudo chmod -R 000 var/cache/dev/pools
 ```
 
-Now, our *local* site should won't be able to cache either.
+Now, our *local* site won't be able to cache either.
 
 Let's see what happens. Refresh! Huh... the site works... but it's *slow*. And
 the web debug toolbar is reporting a few warnings. Click to see those.
