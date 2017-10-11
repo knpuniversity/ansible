@@ -571,10 +571,15 @@
             "description": null
         },
         {
+            "id": "serial-set-up-trusted-proxies-for-aws-elb",
+            "name": "Serial: Set up trusted proxies for AWS ELB",
+            "description": null
+        },
+        {
             "id": "circleci-add-deploy-job-to-the-workflow",
             "name": "CircleCI: Add deploy job to the workflow",
             "description": null
         }
     ],
-    "sha": "547a37e07e0b17f01d31d8a66a08bcc17497777a"
+    "sha": "35cfd32187bce16d9dc9766c66ee50f41b69a00b"
 }

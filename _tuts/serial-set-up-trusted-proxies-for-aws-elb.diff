@@ -1,0 +1,21 @@
+diff --git a/web/app.php b/web/app.php
+index 5d2e252d..a30b870c 100644
+--- a/web/app.php
++++ b/web/app.php
+@@ -21,6 +21,16 @@ if (PHP_VERSION_ID < 70000) {
+ // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
+ //Request::enableHttpMethodParameterOverride();
+ $request = Request::createFromGlobals();
++
++// Real client IP is under HTTP_X_FORWARDED_FOR for requests through AWS ELB,
++// i.e. REMOTE_ADDR holds AWS ELB IP instead
++Request::setTrustedProxies(
++    // trust *all* requests
++    ['127.0.0.1', $request->server->get('REMOTE_ADDR')],
++    // if you're using ELB, otherwise see https://symfony.com/doc/current/request/load_balancer_reverse_proxy.html
++    Request::HEADER_X_FORWARDED_AWS_ELB
++);
++
+ $response = $kernel->handle($request);
+ $response->send();
+ $kernel->terminate($request, $response);
