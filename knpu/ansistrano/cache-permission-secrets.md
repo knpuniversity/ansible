@@ -43,7 +43,7 @@ How is this possible? How can the site work if our Symfony app can't write to th
 `cache/` directory? The key is the `cache:warmup` task.
 
 I'm going to tell you a *small* lie first. The `cache:warmup` command creates
-*every* single cache file that your application will *every* need. Thanks to this,
+*every* single cache file that your application will *ever* need. Thanks to this,
 the `cache` directory can *totally* be read-only after running this command.
 
 ## Some Cache Cannot be Warmed Up

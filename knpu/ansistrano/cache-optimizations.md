@@ -1,7 +1,7 @@
 # Optimizing with Cache
 
 Yay! The `var/cache` directory does *not* need to be writable and our life is simple
-and all our cache dreams are fulfilled. Well actually, we can more with caching to
+and all our cache dreams are fulfilled. Well actually, we can do more with caching to
 make our site *screaming* fast. Zoom!
 
 ## APCu for Better Performance
