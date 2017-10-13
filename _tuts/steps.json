@@ -604,11 +604,6 @@
             "id": "performance-configure-the-php-realpath-cache",
             "name": "Performance: Configure the PHP realpath cache",
             "description": null
-        },
-        {
-            "id": "performance-use-apcu-to-cache-found-not-found-classes",
-            "name": "Performance: Use APCu to cache found\/not-found classes",
-            "description": null
         }
     ],
     "sha": "116db3418e7116a764aeeba1915a5a2b35a4af53"
