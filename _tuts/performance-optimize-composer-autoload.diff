@@ -1,0 +1,13 @@
+diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
+index 76e9a81d..5bf6deb6 100644
+--- a/ansible/deploy/after-symlink-shared.yml
++++ b/ansible/deploy/after-symlink-shared.yml
+@@ -7,6 +7,8 @@
+ - name: Install Composer dependencies
+   composer:
+     command: install
++    arguments: --classmap-authoritative --apcu-autoloader
++    optimize_autoloader: yes
+     working_dir: '{{ ansistrano_release_path.stdout }}'
+ 
+ - name: Clear the cache

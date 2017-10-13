@@ -581,8 +581,8 @@
             "description": null
         },
         {
-            "id": "performance-dump-composer-autoload",
-            "name": "Performance: Dump Composer autoload",
+            "id": "performance-optimize-composer-autoload",
+            "name": "Performance: Optimize Composer autoload",
             "description": null
         },
         {
@@ -611,5 +611,5 @@
             "description": null
         }
     ],
-    "sha": "28983ee995143a6a28bff933e4f6684f770a8bc0"
+    "sha": "116db3418e7116a764aeeba1915a5a2b35a4af53"
 }
