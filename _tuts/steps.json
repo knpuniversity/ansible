@@ -591,11 +591,6 @@
             "description": null
         },
         {
-            "id": "performance-turn-off-checking-for-modified-files-by-apc",
-            "name": "Performance: Turn off checking for modified files by APC",
-            "description": null
-        },
-        {
             "id": "performance-increase-opcache-limit-of-accelerated-files",
             "name": "Performance: Increase OPcache limit of accelerated files",
             "description": null
