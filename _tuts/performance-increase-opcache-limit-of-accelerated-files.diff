@@ -1,9 +1,9 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 4f8ee0cf..6c0be27d 100644
+index 7b339524..daea241c 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
-@@ -108,6 +108,15 @@
-         value: 0
+@@ -99,6 +99,15 @@
+         value: UTC
        notify: Restart PHP-FPM
  
 +    - name: Increase OPcache limit of accelerated files
