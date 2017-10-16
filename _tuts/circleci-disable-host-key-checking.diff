@@ -1,0 +1,13 @@
+diff --git a/.circleci/config.yml b/.circleci/config.yml
+index 52aa6b47..fcc0e812 100644
+--- a/.circleci/config.yml
++++ b/.circleci/config.yml
+@@ -58,6 +58,8 @@ jobs:
+     working_directory: ~/mootube
+     docker:
+       - image: ansible/ansible:ubuntu1604
++        environment:
++          ANSIBLE_HOST_KEY_CHECKING: no
+     steps:
+       # Installation
+       - run:

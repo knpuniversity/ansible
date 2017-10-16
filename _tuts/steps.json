@@ -576,8 +576,33 @@
             "description": null
         },
         {
-            "id": "circleci-add-deploy-job-to-the-workflow",
-            "name": "CircleCI: Add deploy job to the workflow",
+            "id": "circleci-copy-base-config-from-template",
+            "name": "CircleCI: Copy base config from template",
+            "description": null
+        },
+        {
+            "id": "circleci-use-deploy-command-as-in-console",
+            "name": "CircleCI: Use deploy command as in console",
+            "description": null
+        },
+        {
+            "id": "circleci-use-a-separate-file-to-store-ansible-vault-password",
+            "name": "CircleCI: Use a separate file to store Ansible Vault password",
+            "description": null
+        },
+        {
+            "id": "circleci-specify-git-branch-prompt-var-in-command",
+            "name": "CircleCI: Specify Git branch prompt var in command",
+            "description": null
+        },
+        {
+            "id": "circleci-disable-host-key-checking",
+            "name": "CircleCI: Disable host key checking",
+            "description": null
+        },
+        {
+            "id": "circleci-increase-default-no-output-timeout",
+            "name": "CircleCI: Increase default no output timeout",
             "description": null
         },
         {
@@ -601,5 +626,5 @@
             "description": null
         }
     ],
-    "sha": "e2aa6486f4a5cf96bd2138d465c2db3bb09a23ca"
+    "sha": "0017bf20064a5743911e583f7199f7bea6d96c22"
 }
