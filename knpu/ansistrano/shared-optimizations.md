@@ -1,7 +1,7 @@
 # Faster Deploy with Shared Files
 
 So far, each release is independent. And sometimes, that sucks! Each release has
-its *own* logs files. There's nothing in `logs/` right now, but usually you'll find
+its *own* log files. There's nothing in `logs/` right now, but usually you'll find
 a `prod.log` file. The problem is that if you need to go look inside to debug an
 issue, you might have to look through 10 separate `prod.log` files across 10 separate
 deploys!
@@ -11,16 +11,24 @@ deploys!
 This is a perfect example of a file that we want to share *between* deployments.
 Fortunately - as I mentioned earlier - Ansistrano has us covered. Check out the
 Ansistrano documentation. Ah yes, we need this `ansistrano_shared_paths` variable!
-Copy it! Then, in `deploy.yml`, add it near the top.
+Copy it! Then, in `deploy.yml`, add it near the top:
 
-It's simple, we want to share `var/logs`: that entire directory.
+[[[ code('b17288eb72') ]]]
+
+It's simple, we want to share `var/logs`: that entire directory:
+
+[[[ code('a4786eb9da') ]]]
 
 Oh, and now that `var/logs` will be a symlink, in `after-symlink-shared.yml`, under
 the permissions task, we need to add `follow: true` so that the permissions change
-*follows* the symlink.
+*follows* the symlink:
+
+[[[ code('292a6e0c74') ]]]
 
 And back in `deploy.yml`... yea...my variable didn't paste well. Make sure your
 indentation is correct!
+
+[[[ code('6e84585f2d') ]]]
 
 Now! Find your local terminal and deploy!
 
@@ -30,7 +38,7 @@ ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
 
 ## Shared Paths & Avoiding Server Storage
 
-Use `beefpass` and deploy to master. Make sure you think about what other directories
+Use `beefpass` and deploy to `master`. Make sure you think about what other directories
 or files you might need to share between deploys, like `web/uploads` if you store
 uploaded files on your server. Or, `web/imagine` if you use LiipImagineBundle.
 Otherwise, all the thumbnails will need to be re-created after each deploy. That's
@@ -38,15 +46,27 @@ lame!
 
 But also keep in mind that there are some big advantages to *not* storing files
 like these on your server. Instead of putting uploaded files in `web/uploads`, you
-could store them in a cloud store like S3. If you put *nothing* extra on your server,
+could store them in a cloud store, like S3. If you put *nothing* extra on your server,
 it's *really* easy to destroy your server and launch a new one... without needing
 to worry about copying over a bunch of random, uploaded files. It also makes using
 *multiple* servers possible.
 
 Ding! Move over to the terminal that's SSH'ed onto the server. Go out of `current/`
-and then back in. Check out `var/logs`: it's now a symlink to `shared/var/logs`.
-That directory is empty, but as soon as we log something, a `prod.log` file will
-show up there.
+and then back in:
+
+```terminal-silent
+cd ..
+cd current/
+```
+
+Check out `var/logs`:
+
+```terminal-silent
+ls -la var/
+```
+
+it's now a symlink to `shared/var/logs`. That directory is empty, but as soon
+as we log something, a `prod.log` file will show up there.
 
 ## Sharing Files for Performance
 
@@ -60,7 +80,9 @@ single deploy. But if we *shared* the `node_modules/` directory, then `yarn inst
 would start with a *full* directory. It would only need to download any *changes*
 since the last deploy! This is an easy win!
 
-Add `node_modules` to the shared paths.
+Add `node_modules` to the shared paths:
+
+[[[ code('cd38579056') ]]]
 
 ## Cleaning up old Releases
 
@@ -68,14 +90,16 @@ Oh, and before we deploy, it's time to fix one other thing. Back on the server,
 go into the `releases/` directory:
 
 ```terminal-silent
-cd releases
-ls
+cd releases/
+ls -la
 ```
 
 Ok! It's getting crowded in here! Each deploy creates a new directory... and this
 will gone on forever and ever until we run out of disk space. Fun! Go back to the
 Ansistrano docs and find the `ansistrano_keep_releases` variable. This is the key.
-In `deploy.yml`, paste that and set it to 3.
+In `deploy.yml`, paste that and set it to 3:
+
+[[[ code('859d580afd') ]]]
 
 Ok, let's try it! Find your local terminal and deploy:
 
@@ -83,7 +107,7 @@ Ok, let's try it! Find your local terminal and deploy:
 ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
-Use `beefpass` and deploy to master. I'll fast-forward... but I'll tell you how long
+Use `beefpass` and deploy to `master`. I'll fast-forward... but I'll tell you how long
 the deploy *really* took. This *first* deploy will still be slow: the `node_modules/`
 directory will *start* empty. By the way, the `composer install` command is also
 a little bit slow... but not *nearly* as slow as `yarn install`. Why? Because Composer
@@ -101,8 +125,21 @@ Let's deploy again:
 ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
-While we're waiting, go back into the server. Yes! There are only 3 releases.
-In `shared/`, `node_modules/` is populated, thanks to the last deploy.
+While we're waiting, go back into the server:
+
+```terminal-silent
+cd releases/
+ls -la
+```
+
+Yes! There are only 3 releases. In `shared/`, `node_modules/` is populated, thanks
+to the last deploy:
+
+```terminal-silent
+cd ..
+cd shared/
+ls -la node_modules/
+```
 
 When the deploy finishes... awesome! The `yarn install` task was almost *instant*,
 and the deploy was nearly two minutes faster! Zoom!
