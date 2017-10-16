@@ -366,8 +366,8 @@
             "description": null
         },
         {
-            "id": "create-circleci-config",
-            "name": "Create CircleCI config",
+            "id": "create-template-of-circleci-config",
+            "name": "Create template of CircleCI config",
             "description": null
         },
         {
@@ -601,5 +601,5 @@
             "description": null
         }
     ],
-    "sha": "5332c67b229095e550b0a95dcd4fe1b2dcc2b98e"
+    "sha": "e2aa6486f4a5cf96bd2138d465c2db3bb09a23ca"
 }
