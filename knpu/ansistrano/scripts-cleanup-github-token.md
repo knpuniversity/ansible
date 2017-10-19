@@ -58,7 +58,7 @@ ansible-vault create ansible/vars/provision_vault.yml
 ```
 
 Use the normal `beefpass` as the password. And then, add just one variable:
-`vault_github_access_token` set to the new access token.
+`vault_github_oauth_token` set to the new access token.
 
 Save and close! Whenever I have a vault, I also like to create a simple variables
 file. Create `provision_vars.yml`. And inside, set `github_access_token` to `vault_github_access_token`.
