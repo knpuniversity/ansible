@@ -61,16 +61,16 @@ Use the normal `beefpass` as the password. And then, add just one variable:
 `vault_github_oauth_token` set to the new access token.
 
 Save and close! Whenever I have a vault, I also like to create a simple variables
-file. Create `provision_vars.yml`. And inside, set `github_access_token` to `vault_github_access_token`.
+file. Create `provision_vars.yml`. And inside, set `github_oauth_token` to `vault_github_oauth_token`.
 
 Finally, in `playbook.yml`, let's include these! Include `./vars/provision_vault.yml`
-and then `./vars/provision_vars.yml`. We now have access to the `github_access_token`
+and then `./vars/provision_vars.yml`. We now have access to the `github_oauth_token`
 variable.
 
 We have a few tasks that install the Composer executable. After those, create a new
 one: "Set GitHub OAuth token for Composer". Use the `composer` module and set `command`
 to `config`. The docs show the full command we need. Copy the arguments and set
-`arguments` to that string. Replace the `<oauthtoken>` part with `{{ github_access_token }}`.
+`arguments` to that string. Replace the `<oauthtoken>` part with `{{ github_oauth_token }}`.
 
 Also set `working_dir` to `/home/{{ ansible_user }}`... the `composer` module requires
 this to be set. And at the end, add a tag: `github_oauth`.
