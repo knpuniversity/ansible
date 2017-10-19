@@ -8,7 +8,11 @@ make our site *screaming* fast. Zoom!
 
 First, let's install `apcu` - this should be a bit faster than OpCache. I'll do
 this during provision. Open up `playbook.yml`. Down a bit, yep! Add a new package:
-`php-apcu`. This package is named a bit different than the others.
+`php-apcu`:
+
+[[[ code('b52dc0ac21') ]]]
+
+This package is named a bit different than the others.
 
 Let's get the provision started - use `playbook.yml` and add `-l aws` to only provision
 the aws host:
@@ -21,9 +25,14 @@ Use `beefpass` for the password.
 
 ## Doctrine Metadata and Query Caching
 
-There's one other way we can boost performance. Open `app/config/config_prod.yml`.
+There's one other way we can boost performance. Open `app/config/config_prod.yml`:
+
+[[[ code('35256b38b5') ]]]
+
 See those Doctrine caches? Uncomment the first and third, and change them to `apcu`,
 which our server will *now* have! Woo!
+
+[[[ code('aca3545453') ]]]
 
 The `metadata_cache_driver` caches the Doctrine annotations or YAML mapping... this
 is not stuff we need to be parse on every request. The `query_cache_driver` is used
@@ -35,7 +44,18 @@ on each deploy? Nope! Internally, Symfony uses a cache *namespace* for Doctrine
 that includes the *directory* of our project. Since Ansistrano always deploys into
 a new `releases/` directory, each deploy has its own, unique namespace.
 
-When provisioning finishes, commit the new config changes. Push them!
+When provisioning finishes, commit the new config changes:
+
+```terminal-silent
+git add -u
+git commit -m "Doctrine caching"
+```
+
+Push them!
+
+```terminal-silent
+git push origin master
+```
 
 Now, deploy the site:
 
