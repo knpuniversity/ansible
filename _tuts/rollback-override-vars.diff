@@ -1,0 +1,17 @@
+diff --git a/ansible/rollback.yml b/ansible/rollback.yml
+index 6164a8f2..56c0ccee 100644
+--- a/ansible/rollback.yml
++++ b/ansible/rollback.yml
+@@ -1,5 +1,12 @@
+ ---
+ - hosts: aws
+ 
++  vars_files:
++    - ./vars/vars.yml
++
++  vars:
++    # Ansistrano vars
++    ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
++
+   roles:
+     - carlosbuenosvinos.ansistrano-rollback

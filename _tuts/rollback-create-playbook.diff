@@ -1,0 +1,11 @@
+diff --git a/ansible/rollback.yml b/ansible/rollback.yml
+new file mode 100644
+index 00000000..6164a8f2
+--- /dev/null
++++ b/ansible/rollback.yml
+@@ -0,0 +1,5 @@
++---
++- hosts: aws
++
++  roles:
++    - carlosbuenosvinos.ansistrano-rollback

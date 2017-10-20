@@ -1,0 +1,20 @@
+diff --git a/ansible/rollback.yml b/ansible/rollback.yml
+index 5690b24d..26c54970 100644
+--- a/ansible/rollback.yml
++++ b/ansible/rollback.yml
+@@ -4,9 +4,15 @@
+   vars_files:
+     - ./vars/vars.yml
+ 
++  vars_prompt:
++    - name: rollback_to_release
++      prompt: 'Enter a release version you want to rollback to (skip to rollback to the previous one)'
++      private: no
++
+   vars:
+     # Ansistrano vars
+     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
++    ansistrano_rollback_to_release: "{{ rollback_to_release }}" # If specified, the application will be rolled back to this release version; previous release otherwise.
+ 
+     # Hooks: custom tasks if you need them
+     ansistrano_before_symlink_tasks_file: '{{ playbook_dir }}/rollback/before-symlink.yml'

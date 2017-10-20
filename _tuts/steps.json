@@ -624,7 +624,32 @@
             "id": "performance-configure-the-php-realpath-cache",
             "name": "Performance: Configure the PHP realpath cache",
             "description": null
+        },
+        {
+            "id": "rollback-install-role",
+            "name": "Rollback: Install role",
+            "description": null
+        },
+        {
+            "id": "rollback-create-playbook",
+            "name": "Rollback: Create playbook",
+            "description": null
+        },
+        {
+            "id": "rollback-override-vars",
+            "name": "Rollback: Override vars",
+            "description": null
+        },
+        {
+            "id": "rollback-add-hooks",
+            "name": "Rollback: Add hooks",
+            "description": null
+        },
+        {
+            "id": "rollback-prompt-release-version",
+            "name": "Rollback: Prompt release version",
+            "description": null
         }
     ],
-    "sha": "a13943f90f356667b4eaf1723e0c5d4d3309de10"
+    "sha": "481f9490fd3d418599168db9085bfd1094fcb41b"
 }
