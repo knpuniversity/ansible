@@ -2,22 +2,46 @@
 
 Why are the `cache` files writable by everyone? The answer is inside our code.
 
-Open up `bin/console`. In my project, I uncommented a `umask(0000)` line. I also
-added this in `web/app.php`. Thanks to this, whenever Symfony creates a file -
-like cache files - the permissions default to be writable by everyone.
+Open up `bin/console`. In my project, I uncommented a `umask(0000)` line:
+
+[[[ code('0cb2002122') ]]]
+
+I also added this in `web/app.php`:
+
+[[[ code('9fd456d2b7') ]]]
+
+Thanks to this, whenever Symfony creates a file - like cache files - the permissions
+default to be writable by everyone.
 
 ## No umask: Making Cache not Writable
 
 I added these *precisely* to avoid permissions problems. But it's time to fix them
-properly. In `app.php`, comment that out. In `console`, comment it out... but
-also copy it and move it inside the debug if statement.
+properly. In `app.php`, comment that out:
+
+[[[ code('14ea9b908f') ]]]
+
+In `console`, comment it out... but also copy it and move it inside the debug
+if statement:
+
+[[[ code('802a7133e6') ]]]
 
 During development, `umask()` makes our life really easy... cache files can be created
 and re-created by everyone. So I want to keep it. In fact, in `web/app_dev.php`,
-we also have a `umask()` call. Again, this matches how Symfony 4 will work, out
-of the box.
+we also have a `umask()` call:
 
-Find your local terminal, commit those changes and push them. Deploy!
+[[[ code('2465357882') ]]]
+
+Again, this matches how Symfony 4 will work, out of the box.
+
+Find your local terminal, commit those changes and push them:
+
+```terminal-silent
+git add -u
+git commit -m "no writable in prod mode"
+git push origin master
+```
+
+Deploy!
 
 ```terminal-silent
 ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
@@ -27,7 +51,7 @@ Ok! Let's see what happens without `umask` on production. When it finishes, find
 your server terminal, move out of `current/` and then back in. Check the permissions:
 
 ```terminal
-ls -l var/cache/prod
+ls -la var/cache/prod
 ```
 
 There it is! The files are writable by the user and group, but *not* by everyone.
@@ -40,7 +64,9 @@ work! Woh! This is huge!
 ## The Magical cache:warmup
 
 How is this possible? How can the site work if our Symfony app can't write to the
-`cache/` directory? The key is the `cache:warmup` task.
+`cache/` directory? The key is the `cache:warmup` task:
+
+[[[ code('9b021a8fe3') ]]]
 
 I'm going to tell you a *small* lie first. The `cache:warmup` command creates
 *every* single cache file that your application will *ever* need. Thanks to this,
@@ -50,7 +76,7 @@ the `cache` directory can *totally* be read-only after running this command.
 
 Great, right? Now, here is the *true* story. The `cache:warmup` task creates *almost*
 all of the cache files that you will ever need. But, there are a few types of things
-that simply *can't* be cached during warmup: they *must* be cached at the moment
+that simply *can't* be cached during warm up: they *must* be cached at the moment
 they're needed. These include the serializer and validation cache, for example.
 
 Knowing this, our site works now, but it *should* break as soon as we try to use
@@ -64,10 +90,21 @@ is going on?
 ## The Dynamic cache.system Service
 
 Here is the secret: whenever Symfony needs to cache something *after* `cache:warmup`,
-it uses a service called `cache.system` to do this. This is not a service you should
-use directly, but it's *critically* important. This service is special because
-it automatically tries *several* ways of caching. First, if APCu is available, it
-uses that. On the server, check for it:
+it uses a service called `cache.system` to do this:
+
+```terminal-silent
+./bin/console debug:container cache.system
+```
+
+This is not a service you should use directly, but it's *critically* important.
+
+***TIP
+Actually, you can use this service, but only to cache things that are needed to make
+your app work (e.g. config). It's cleared on each deploy
+***
+
+This service is special because it automatically tries *several* ways of caching.
+First, if APCu is available, it uses that. On the server, check for it:
 
 ```terminal
 php -i | grep apcu

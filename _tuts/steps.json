@@ -366,8 +366,8 @@
             "description": null
         },
         {
-            "id": "create-circleci-config",
-            "name": "Create CircleCI config",
+            "id": "create-template-of-circleci-config",
+            "name": "Create template of CircleCI config",
             "description": null
         },
         {
@@ -576,23 +576,43 @@
             "description": null
         },
         {
-            "id": "circleci-add-deploy-job-to-the-workflow",
-            "name": "CircleCI: Add deploy job to the workflow",
+            "id": "circleci-copy-base-config-from-template",
+            "name": "CircleCI: Copy base config from template",
             "description": null
         },
         {
-            "id": "performance-dump-composer-autoload",
-            "name": "Performance: Dump Composer autoload",
+            "id": "circleci-use-deploy-command-as-in-console",
+            "name": "CircleCI: Use deploy command as in console",
+            "description": null
+        },
+        {
+            "id": "circleci-use-a-separate-file-to-store-ansible-vault-password",
+            "name": "CircleCI: Use a separate file to store Ansible Vault password",
+            "description": null
+        },
+        {
+            "id": "circleci-specify-git-branch-prompt-var-in-command",
+            "name": "CircleCI: Specify Git branch prompt var in command",
+            "description": null
+        },
+        {
+            "id": "circleci-disable-host-key-checking",
+            "name": "CircleCI: Disable host key checking",
+            "description": null
+        },
+        {
+            "id": "circleci-increase-default-no-output-timeout",
+            "name": "CircleCI: Increase default no output timeout",
+            "description": null
+        },
+        {
+            "id": "performance-optimize-composer-autoload",
+            "name": "Performance: Optimize Composer autoload",
             "description": null
         },
         {
             "id": "performance-ensure-opcache-is-installed",
             "name": "Performance: Ensure OPcache is installed",
-            "description": null
-        },
-        {
-            "id": "performance-turn-off-checking-for-modified-files-by-apc",
-            "name": "Performance: Turn off checking for modified files by APC",
             "description": null
         },
         {
@@ -606,10 +626,30 @@
             "description": null
         },
         {
-            "id": "performance-use-apcu-to-cache-found-not-found-classes",
-            "name": "Performance: Use APCu to cache found\/not-found classes",
+            "id": "rollback-install-role",
+            "name": "Rollback: Install role",
+            "description": null
+        },
+        {
+            "id": "rollback-create-playbook",
+            "name": "Rollback: Create playbook",
+            "description": null
+        },
+        {
+            "id": "rollback-override-vars",
+            "name": "Rollback: Override vars",
+            "description": null
+        },
+        {
+            "id": "rollback-add-hooks",
+            "name": "Rollback: Add hooks",
+            "description": null
+        },
+        {
+            "id": "rollback-prompt-release-version",
+            "name": "Rollback: Prompt release version",
             "description": null
         }
     ],
-    "sha": "28983ee995143a6a28bff933e4f6684f770a8bc0"
+    "sha": "481f9490fd3d418599168db9085bfd1094fcb41b"
 }

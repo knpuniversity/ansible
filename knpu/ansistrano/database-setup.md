@@ -1,10 +1,23 @@
 # Database Setup
 
-Our homepage is *busted*. Find your terminal and SSH onto the server. Let's find
-out what the problem is. I recognize the error page as one that comes from *Symfony*...
-which means Symfony *is* running, and the error will live in *its* logs.
+Our homepage is *busted*. Find your terminal and SSH onto the server:
 
-Check out the `var/logs/prod.log` file. Ah, no surprise!
+```terminal-silent
+ssh -i ~/.ssh/KnpU-Tutorial.pem ubuntu@54.XXX.XX.XXX
+```
+
+Let's find out what the problem is. I recognize the error page as one that comes
+from *Symfony*... which means Symfony *is* running, and the error will live in *its*
+logs.
+
+Check out the `var/logs/prod.log` file:
+
+```terminal-silent
+cd /var/www/project/current
+tail vars/logs/prod.log
+```
+
+Ah, no surprise!
 
 > Unknown database "mootube"
 
@@ -15,11 +28,15 @@ and setup it up manually. That's super fine.
 ## Creating the Database
 
 I'm going to do it in Ansible! Add a new task... but move it above the cache tasks,
-in case the database is needed during cache warmup. Name it: "Create DB if not exists".
+in case the database is needed during cache warm up. Name it: "Create DB if not exists":
+
+[[[ code('eaff766703') ]]]
 
 We can use the `doctrine:database:create` command. So, use the `command` module...
 and I'll copy one of our other commands. Change it to `doctrine:database:create`
-then `--if-not-exists` so it won't explode if the database already exists.
+then `--if-not-exists` so it won't explode if the database already exists:
+
+[[[ code('f2fb6ac677') ]]]
 
 If you run this command locally... well... we *do* have a database already.
 So it says:
@@ -29,7 +46,9 @@ So it says:
 Copy that text. This last part is optional: we're going to configure this task
 to know when it was, or was not *changed*. Register a variable called `create_db_output`.
 Then, add `changed_when` set to `not create_db_output.stdout|search()` and
-paste that text.
+paste that text:
+
+[[[ code('4682f8c9b1') ]]]
 
 ## Migrating / Creating the Schema
 
@@ -44,18 +63,27 @@ we just need to run our migrations.
 
 Create a new task: "Run migrations". Then cheat and copy the previous task. This
 is simple enough: run `doctrine:migrations:migrate` with `--no-interaction`, so
-that it won't interactively ask us to confirm before running the migrations. Interactive
-prompts are *no* fun for an automated deploy.
+that it won't interactively ask us to confirm before running the migrations.
+Interactive prompts are *no* fun for an automated deploy:
 
-Register another variable - `run_migrations_output` - and use that below. If
-you try to migrate and you are already fully migrated, it says:
+[[[ code('c70c9029b7') ]]]
 
-> No migrations to execute
+Register another variable - `run_migrations_output` - and use that below:
 
-Let's search for that text: "No migrations to execute".
+[[[ code('853a4274c2') ]]]
+
+If you try to migrate and you are already fully migrated, it says:
+
+> No migrations to execute.
+
+Let's search for that text: "No migrations to execute":
+
+[[[ code('8f8cc932bd') ]]]
 
 Oh, before we try this, make sure you don't have any typos: the variable is
-`create_db_output`.
+`create_db_output`:
+
+[[[ code('56f548dd61') ]]]
 
 Ok, try it!
 
@@ -75,8 +103,15 @@ To help bootstrap my data, *just* this once, I'm going to load my fixtures on pr
 I'm obviously *not* going to make this part of my deploy: you won't make any friends
 if you constantly empty the production database. Believe me.
 
-Find the terminal that is SSH'ed to the server. Move out of the `current` directory
-and then back in. First, try running `bin/console` *without* `--env=prod`:
+Find the terminal that is SSH'ed to the server. Move out of the `current/` directory
+and then back in:
+
+```terminal-silent
+cd ..
+cd current/
+```
+
+First, try running `bin/console` *without* `--env=prod`:
 
 ```terminal-silent
 bin/console
@@ -97,7 +132,7 @@ composer install
 *Now* we can load our fixtures:
 
 ```terminal
-bin/console hautelook_alice:doctrine:fixtures:load
+./bin/console hautelook_alice:doctrine:fixtures:load
 ```
 
 Beautiful! And *now*, we've got some great data to get us started. Next, let's

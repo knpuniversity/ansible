@@ -6,20 +6,33 @@ and everything happens automatically on deploy.
 ## Making a Schema Change
 
 Oooooooh, but there's a catch! Open `src/AppBundle/Entity/Video.php`. This entity
-has a field called `image`. Ya know what? I'd rather call that *poster*, because
-it's the *poster* image for this video.
+has a field called `image`:
+
+[[[ code('7df22a134c') ]]]
+
+Ya know what? I'd rather call that *poster*, because it's the *poster* image for
+this video.
 
 Because the annotation doesn't have a `name` option, renaming the property means
 that the column will be renamed in the database. And that means... drum roll...
 we need a migration!
 
 But first, we also need to update a few parts of our code, like our fixtures. I'll
-search for `image:` and replace it with `poster:`. Then, open a template:
-`app/Resources/views/default/index.html.twig`. Search for `.image`. Ah, yes! Change
-that to `.poster`.
+search for `image:` and replace it with `poster:`:
+
+[[[ code('2d0ce904a4') ]]]
+
+Then, open a template: `app/Resources/views/default/index.html.twig`. Search for
+`.image`:
+
+[[[ code('ab1c5dd0be') ]]]
+
+Ah, yes! Change that to `.poster`:
+
+[[[ code('01c8d53953') ]]]
 
 Brilliant! All we need to do now is write a migration to rename that column. Easy!
-Switch to your local terminal and run
+Switch to your local terminal and run:
 
 ```terminal
 ./bin/console doctrine:migrations:diff
@@ -27,7 +40,9 @@ Switch to your local terminal and run
 
 Go check it out in `app/DoctrineMigrations`. Wow... it's actually perfect:
 
-	ALTER TABLE video CHANGE image (to) poster...
+> ALTER TABLE video CHANGE image (to) poster...
+
+[[[ code('569e66bfd0') ]]]
 
 Doctrine is smart enough to know that we should *rename* the column instead of
 dropping the old column and adding a new one.
@@ -48,13 +63,20 @@ things... unless that thing is not being used at *all* by the live site.
 ## Writing Safe Migrations
 
 This creates a *slightly* different workflow... with *two* deploys. For the first
-deploy, change the migration: `ALTER TABLE video ADD poster`. We're not going to
-remove the `image` column yet. But now, we *do* need to migrate the data:
-`UPDATE video SET poster = image`.
+deploy, change the migration: `ALTER TABLE video ADD poster`:
+
+[[[ code('d823893940') ]]]
+
+We're not going to remove the `image` column yet. But now, we *do* need to migrate
+the data: `UPDATE video SET poster = image`:
+
+[[[ code('5c3bb7f461') ]]]
 
 Honestly, I usually don't worry about the `down()`... I've actually never rolled
 back a deploy before. But, let's update it to be safe: `SET image = poster`, and
-then `ALTER TABLE` to drop `poster`.
+then `ALTER TABLE` to drop `poster`:
+
+[[[ code('d4034882ec') ]]]
 
 *This* is a safe migration. First, try it locally:
 
@@ -80,7 +102,7 @@ git push origin master
 ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
 ```
 
-Type in `beefpass` and deploy to master. If you watch closely, the migration task
+Type in `beefpass` and deploy to `master`. If you watch closely, the migration task
 should show as *changed*... because it *is* running one migration.
 
 The site still works with *no* downtime. 
@@ -95,9 +117,15 @@ Run:
 ./bin/console doctrine:migrations:diff
 ```
 
-This time it perfectly sees the DROP. Commit this new file and push:
+This time it perfectly sees the DROP:
+
+[[[ code('f044cd84b6') ]]]
+
+Commit this new file and push:
 
 ```terminal-silent
+git add .
+git commit -m "Removing unused column"
 git push origin master
 ```
 
@@ -112,18 +140,21 @@ not using it.
 
 ## The Edge Case: Updated Data
 
-There *is* still one edge-case problem. On the first deploy, we used an UPDATE
-statement to set `poster = image`. That makes those columns identical. But, for
-then next few seconds, the production code is *still* using the old `image` column.
-That's fine... unless people are making *changes* to its data! Any changes made to
-`image` during this period will be *lost* when the *new* production code stops reading
-that column.
+There *is* still one edge-case problem. On the first deploy, we used an `UPDATE`
+statement to set `poster = image`. That makes those columns identical:
+
+[[[ code('380101cf24') ]]]
+
+But, for then next few seconds, the production code is *still* using the old `image`
+column. That's fine... unless people are making *changes* to its data! Any changes
+made to `image` during this period will be *lost* when the *new* production code
+stops reading that column.
 
 If you have this problem, you're going to need to be a little bit more intelligent,
-and potentially run another UPDATE statement immediately after the new code becomes
+and potentially run another `UPDATE` statement immediately after the new code becomes
 live.
 
 Ok! Our final migration ran, the deploy finished and the site still works... with no
 downtime.
 
-Next! Let's share files... and make our deploy faster!
+Next! Let's _share_ files... and make our deploy faster!

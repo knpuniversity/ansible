@@ -1,0 +1,13 @@
+diff --git a/.circleci/config.yml b/.circleci/config.yml
+index 47f2f98c..52aa6b47 100644
+--- a/.circleci/config.yml
++++ b/.circleci/config.yml
+@@ -76,7 +76,7 @@ jobs:
+ 
+       # Deploy
+       - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
+-      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --vault-password-file=./ansible/.vault-pass.txt
++      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "git_branch=master ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --vault-password-file=./ansible/.vault-pass.txt
+       - run: rm ./ansible/.vault-pass.txt
+ 
+ workflows:

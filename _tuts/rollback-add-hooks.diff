@@ -1,0 +1,23 @@
+diff --git a/ansible/rollback.yml b/ansible/rollback.yml
+index 56c0ccee..5690b24d 100644
+--- a/ansible/rollback.yml
++++ b/ansible/rollback.yml
+@@ -8,5 +8,8 @@
+     # Ansistrano vars
+     ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
+ 
++    # Hooks: custom tasks if you need them
++    ansistrano_before_symlink_tasks_file: '{{ playbook_dir }}/rollback/before-symlink.yml'
++
+   roles:
+     - carlosbuenosvinos.ansistrano-rollback
+diff --git a/ansible/rollback/before-symlink.yml b/ansible/rollback/before-symlink.yml
+new file mode 100644
+index 00000000..3f192163
+--- /dev/null
++++ b/ansible/rollback/before-symlink.yml
+@@ -0,0 +1,4 @@
++---
++- name: Pause to run migrations manually down
++  pause:
++    prompt: "Please, run 'bin/console doctrine:migrations:execute YYYYMMDDHHMMSS --down' manually in '{{ ansistrano_release_path.stdout }}' if you needed before symlink and press enter to continue"
