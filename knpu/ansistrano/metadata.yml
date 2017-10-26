@@ -18,3 +18,8 @@ chapters:
     - cache-optimizations
     - app-cache
     - scripts-cleanup-github-token
+    - multiple-servers
+    - load-balancer-proxy
+    - ci-auto-deploy
+    - performance
+    - rollback
