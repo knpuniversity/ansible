@@ -51,11 +51,10 @@ index 474ecefe..8a748211 100644
      "packages": [
          {
              "name": "composer/ca-bundle",
-@@ -1768,71 +1768,6 @@
-             "description": "A security checker for your composer.lock",
+@@ -1769,71 +1769,6 @@
              "time": "2017-07-24T11:42:56+00:00"
          },
--        {
+         {
 -            "name": "snc/redis-bundle",
 -            "version": "2.0.2",
 -            "source": {
@@ -120,9 +119,10 @@ index 474ecefe..8a748211 100644
 -            ],
 -            "time": "2017-06-15T08:51:06+00:00"
 -        },
-         {
+-        {
              "name": "swiftmailer/swiftmailer",
              "version": "v5.4.8",
+             "source": {
 diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
 index dcc68fce..e77d6306 100644
 --- a/src/AppBundle/Controller/DefaultController.php

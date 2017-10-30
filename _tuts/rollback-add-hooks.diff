@@ -13,11 +13,11 @@ index 56c0ccee..5690b24d 100644
      - carlosbuenosvinos.ansistrano-rollback
 diff --git a/ansible/rollback/before-symlink.yml b/ansible/rollback/before-symlink.yml
 new file mode 100644
-index 00000000..3f192163
+index 00000000..7cae876a
 --- /dev/null
 +++ b/ansible/rollback/before-symlink.yml
 @@ -0,0 +1,4 @@
 +---
 +- name: Pause to run migrations manually down
 +  pause:
-+    prompt: "Please, run 'bin/console doctrine:migrations:execute YYYYMMDDHHMMSS --down' manually in '{{ ansistrano_release_path.stdout }}' if you needed before symlink and press enter to continue"
++    prompt: "Please, run 'bin/console doctrine:migrations:execute YYYYMMDDHHMMSS --down' manually in '{{ ansistrano_release_path.stdout }}' if needed and press enter to continue"

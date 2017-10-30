@@ -1,5 +1,5 @@
 diff --git a/.circleci/config.yml b/.circleci/config.yml
-index 25096895..1ce67f68 100644
+index 25096895..d5547acc 100644
 --- a/.circleci/config.yml
 +++ b/.circleci/config.yml
 @@ -74,7 +74,8 @@ jobs:
@@ -8,7 +8,7 @@ index 25096895..1ce67f68 100644
  
 -      # @TODO Deploy to AWS here...
 +      # Deploy
-+      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini -e "ansistrano_release_version=`date -u +%Y%m%d%H%M%SZ`" --ask-vault-pass
++      - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass
  
  workflows:
    version: 2
