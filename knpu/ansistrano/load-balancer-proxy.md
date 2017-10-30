@@ -1,4 +1,4 @@
-## Load Balancer & Reverse Proxy Setup
+# Load Balancer & Reverse Proxy Setup
 
 We have 2 servers! Yay! So... how do we configure things so that our users hit each
 server randomly? Why, a load balancer of course! Setting up a load balancer has
