@@ -59,7 +59,7 @@ on the DNS name, but not the IP address.
 Since this is a fake site... we can't setup the DNS properly. So, to test this,
 we're going to cheat! Go to your terminal and ping the DNS name:
 
-```terminal
+```terminal-silent
 ping MooTube-ELB-Practice-21925007.us-east-1.elb.amazonaws.com
 ```
 
@@ -68,7 +68,7 @@ I said, do *not* rely on this in real life. But for temporary testing, it's fine
 Edit your `/etc/hosts` file, and point this IP address to `mootube.example.com`.
 
 Ok, let's try it! Open a new Incognito window and go to `http://mootube.example.com`.
-Ha! It works! With no videos, this must be the new server! Refresh a few more times.
+Yes! It works! With no videos, this must be the new server! Refresh a few more times.
 I *love* it: you can see the load balancer is randomly sending us to one of the two
 servers.
 
@@ -86,16 +86,22 @@ even the host might be wrong!
 This is a *classic* problem when you're behind a proxy, like a load balancer. When
 the load balancer sends the request back to our server, it *changes* a few things:
 the `REMOTE_ADDR` header is changed to be the *load balancer's* IP address. And
-if the original request as an `https` connection on port 443, the new request will
+if the original request was an `https` connection on port 443, the new request will
 *appear* insecure on port 80. That's because the load balancer handled the SSL stuff.
 
 To help us, the load balancer sets the *original* information on a few headers:
 `X-Forwarded-For` holds the original IP address and `X-Forwarded-Proto` will be
 set to `http` or `https`.
 
+***TIP
+There are some standards, but the exact headers used can vary from proxy to proxy.
+***
+
 This means that our app needs to be smart enough to read *these* headers, instead
 of the normal ones. Symfony doesn't do this automatically, because it could be a
 security risk. You need to configure it explicitly.
+
+## Setting Trusted Proxies
 
 Google for "Symfony reverse proxy". Ok! In our front controller - so `app.php`
 in Symfony 3, we need to call `setTrustedProxies()` and pass it all possible IP
@@ -117,4 +123,4 @@ done this, then it *is* safe to trust *all* requests, because your load balancer
 is the *only* thing who can access your server.
 
 Next! Let's get crazy, setup continuous integration, and auto-deploy our code after
-the tests pass!
+the tests pass! Nice!

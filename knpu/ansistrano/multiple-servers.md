@@ -11,7 +11,7 @@ And guess what? We've already done most of the hard work to do this! Congrats!
 Ready to make it happen? First, find your local terminal and use the `aws.yml`
 playbook to create a new EC2 instance:
 
-```terminal
+```terminal-silent
 ansible-playbook ./ansible/aws.yml -i ./ansible/hosts.ini --ask-vault-pass
 ```
 
@@ -28,12 +28,18 @@ paste the new IP.
 Now, provision *both* servers by using the `playbook.yml` file. Add `-l aws` so
 we *only* provision those hosts:
 
-```terminal
+```terminal-silent
 ansible-playbook ./ansible/playbook.yml -i ./ansible/hosts.ini -l aws --ask-vault-pass
 ```
 
 This won't make many changes to our existing server, but it *will* do *everything*
 to the new one. Translation... this may take awhile...
+
+***TIP
+To speed things up, you could use your playbook to provision a server, and then
+create a custom image (AMI). For new servers, you can then boot from this image,
+to nearly-instantly get a provisioned server.
+***
 
 ## Dynamic Inventory
 
@@ -44,7 +50,7 @@ all EC2 instances with a specific *tag*.
 
 Once the provision... finally... finishes.... let's deploy! Use `deploy.yml`:
 
-```terminal
+```terminal-silent
 ansible-playbook ./ansible/deploy.yml -i ./ansible/hosts.ini --ask-vault-pass
 ```
 
@@ -65,7 +71,7 @@ You guys already know that each release is in a timestamped directory. In a seri
 deploy, that timestamp will be different on earlier servers versus later servers.
 For our app, that's no problem! But, if you used the directory name as part of some
 cache keys - like many apps do - then this *would* be a problem: different servers
-would using different cache keys to get the same data.
+would be using different cache keys to get the same data.
 
 In the Ansistrano docs, if you search for "serial", they mention this. By setting
 a variable, you can control the release directory name and make sure it's the same
@@ -77,7 +83,7 @@ Look back at the deploy. The database migrations *just* ran: for the first serve
 it reported "OK", because there were no migrations to run. But the second server
 *did* have migrations to run.
 
-Wait... that's kinda weird... shouldn't they all servers use the same database? Yep!
+Wait... that's kinda weird... shouldn't all servers use the same database? Yep!
 There are a few things you need to do in order to be ready for multiple servers.
 The most obvious is that all your servers need to use the *same* database, or database
 cluster. For MooTube.com, each app is using their own *local* database. We're not
