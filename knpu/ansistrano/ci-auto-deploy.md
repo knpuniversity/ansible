@@ -120,7 +120,7 @@ tasks... woh! It fails! Ah:
 
 Of course! CircleCI is trying to SSH onto our servers, but it does not have access.
 This works on our local machine because, when we deploy to the `aws` hosts, the
-`group_vars/aws.yml` file is loaded. This tells Ansistrano to look for the SSH
+`group_vars/aws.yml` file is loaded. This tells Ansible to look for the SSH
 key at `~/.ssh/KnpU-Tutorial.pem`. That path does *not* exist in CircleCI.
 
 So... hmmm... We *could* leverage environment variables to create this file... but
@@ -129,7 +129,7 @@ its contents. Then, in CircleCI, configure the project and look for "SSH Permiss
 Add a new one: paste the key, but leave the host name empty. This will tell CircleCI
 to use this key for all hosts.
 
-We areready! In CircleCI, I'll just click rebuild. It skips straight to the `deploy`
+We are ready! In CircleCI, I'll just click rebuild. It skips straight to the `deploy`
 job and starts setting up the environment. Then... yes! It's running our playbook!
 OMG, go tell your co-workers! The machines are deploying the site to the other machines!
 It takes a minute or two... but it *finishes*! CircleCI *just* deployed our site
@@ -137,4 +137,5 @@ automatically.
 
 There's no visible difference, but we are setup!
 
-Next, let's talk about some performance optimizations we should make to our deploy.
+Next, let's talk about some performance optimizations that we need to make to our
+deploy.
