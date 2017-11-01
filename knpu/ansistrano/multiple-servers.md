@@ -23,13 +23,15 @@ become available. Perfect!
 So why is it so easy to deploy to multiple servers? Because we've done *everything*
 via playbooks, and Ansible is *built* to work on many servers. Copy the public IP
 of the new server and open your `ansible/hosts.ini` file. Under the `aws` group,
-paste the new IP.
+paste the new IP:
+
+[[[ code('a6798655ea') ]]]
 
 Now, provision *both* servers by using the `playbook.yml` file. Add `-l aws` so
 we *only* provision those hosts:
 
 ```terminal-silent
-ansible-playbook ./ansible/playbook.yml -i ./ansible/hosts.ini -l aws --ask-vault-pass
+ansible-playbook ./ansible/playbook.yml -i ./ansible/hosts.ini --ask-vault-pass -l aws
 ```
 
 This won't make many changes to our existing server, but it *will* do *everything*
@@ -43,7 +45,10 @@ to nearly-instantly get a provisioned server.
 
 ## Dynamic Inventory
 
-Oh, and you may have noticed that I hardcoded the IP address in my `hosts.ini` file.
+Oh, and you may have noticed that I hardcoded the IP address in my `hosts.ini` file:
+
+[[[ code('3adfa427e0') ]]]
+
 For a *truly* scalable architecture, you can use Ansible's Dynamic inventory, which
 works *extremely* well with EC2. You could, for example, use it to automatically use
 all EC2 instances with a specific *tag*.
@@ -104,7 +109,14 @@ pretty simple: if this is set, the task only runs on one server.
 
 Ok! We are now deployed to *both* servers. Right now, `mootube.example.com` points
 directly to the *original* server. Copy the IP address to the new server. Then,
-open `/etc/hosts` and change `mootube.example.com` to point to that.
+open `/etc/hosts` and change `mootube.example.com` to point to that:
+
+```text
+# /etc/hosts
+# ...
+#54.80.32.36 mootube.example.com
+54.81.150.15 mootube.example.com
+```
 
 To test it, open a new Incognito Window to avoid caching and visit `mootube.example.com`.
 It works! Yes! We did *not* load the fixtures on the new server... which means we

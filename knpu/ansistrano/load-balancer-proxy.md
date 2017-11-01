@@ -6,24 +6,24 @@ nothing to do with Ansible, but let's take a quick tour anyways!
 
 ## Creating an Elastic Load Balancer
 
-I've already loaded up my EC2 Control Panel. Click load balancers on the left to
+I've already loaded up my EC2 Control Panel. Click "Load Balancers" on the left to
 create an "Elastic Load Balancer". To keep things simple, I'll create a "Classic"
 load balancer, but you should use an "Application Loader" balancer. That type is
 better, but a little more complex and beyond what I want to cover in this tutorial.
 
 Give it a name - "MooTube-LoadBalancer" and make it respond only to HTTP traffic.
-You can also configure your load balancer to allow https traffic... which is *amazing*,
+You can also configure your load balancer to allow HTTPS traffic... which is *amazing*,
 because AWS can handle the SSL certificate automatically. Ultimately, the entire
 SSL process is resolved by the load balancer, and *all* requests - including *secure*
-requests - will be forwarded to our servers on port 80, as http. This means we get
-https with basically no setup.
+requests - will be forwarded to our servers on port 80, as HTTP. This means we get
+HTTPS with basically no setup.
 
-For the health check, keep `index.html.twig` - I'll talk about why in a minute.
+For the health check, keep `index.html` - I'll talk about why in a minute.
 I'm going to lower the interval and healthy threshold, but you can keep this: I'm
 only doing this so that the load balancer will see our new servers faster.
 
-Finally, select the 2 running instances: "Mootube Recording" is our original server -
-I renamed it manually - and "Mootube instance" is the new server we just launched.
+Finally, select the 2 running instances: "MooTube recording" is our original server -
+I renamed it manually - and "MooTube instance" is the new server we just launched.
 
 ## Health Checks
 
@@ -65,7 +65,16 @@ ping MooTube-ELB-Practice-21925007.us-east-1.elb.amazonaws.com
 
 The ping will fail, but yes! There is the IP address to the load balancer. Like
 I said, do *not* rely on this in real life. But for temporary testing, it's fine!
-Edit your `/etc/hosts` file, and point this IP address to `mootube.example.com`.
+Edit your `/etc/hosts` file, and point this IP address to `mootube.example.com`:
+
+
+```text
+# /etc/hosts
+# ...
+#54.80.32.36 mootube.example.com
+#54.81.150.15 mootube.example.com
+54.221.225.196 mootube.example.com
+```
 
 Ok, let's try it! Open a new Incognito window and go to `http://mootube.example.com`.
 Yes! It works! With no videos, this must be the new server! Refresh a few more times.
@@ -111,7 +120,9 @@ and will use them automatically.
 
 But... AWS is special... because we do *not* know the IP address of the load balancer!
 It's always changing! In that case, copy the second code block. Open `web/app.php`
-and - right after we create the request - paste it.
+and - right after we create the request - paste it:
+
+[[[ code('0391457293') ]]]
 
 Thanks to this code, we're going to trust *every* request that enters our app.
 Wait, what!? Doesn't that defeat the security mechanism? Yes! I mean... maybe!
