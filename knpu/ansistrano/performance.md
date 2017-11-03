@@ -196,6 +196,8 @@ Search for "real". Ah yes:
 
 ```conf
 # /etc/nginx/sites-available/mootube.example.com.conf
+
+# ...
 location ~ ^/(app_dev|config)\.php(/|$) {
     # ...
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
