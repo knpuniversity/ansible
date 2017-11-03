@@ -18,7 +18,7 @@ At this moment, fate presents you with 3 options:
 
 Other than running out of the building screaming, rolling back is the *fastest*
 way to escape the problem. And fortunately, Ansistrano has a *second* role all
-about... rolling back: [ansistrano-rollback](https://github.com/ansistrano/rollback).
+about... rolling back: [ansistrano-rollback][ansistrano_rollback].
 
 To install it, open the `requirements.yml` file and add an entry. For the version...
 let's see. The latest version right now is `2.0.1`. Let's use that.
@@ -102,3 +102,6 @@ of what we learned is handled for you and you can get started *really* quickly.
 
 Whatever you choose, go forth and build something awesome! Ok guys, I'll seeya next
 time!
+
+
+[ansistrano_rollback]: https://github.com/ansistrano/rollback
