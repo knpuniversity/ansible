@@ -3,7 +3,7 @@
 What about performance? Is our server optimized? Could our deploy somehow make our
 code faster? Why actually... yes!
 
-Google for Symfony performance to find an [article in the docs](https://symfony.com/doc/current/performance.html)
+Google for Symfony performance to find an [article in the docs][symfony_performance]
 *all* about this.
 
 ## Optimized Autoloader
@@ -24,7 +24,9 @@ boost. But hey, I *love* free performance!
 
 Open up `after-symlink-shared.yml` and find the Composer install task. Add `arguments`
 set to `--classmap-authoritative`. I'll also set `optimize_autoloader` to true...
-but that's the default anyways.
+but that's the default anyways:
+
+[[[ code('3a22c37e02') ]]]
 
 Oh, and there *is* one *other* way to optimize the autoloader: with a `--apcu-autoloader`
 flag. This is meant to be used instead of `--classmap-authoritative`... but I'm
@@ -36,7 +38,9 @@ test it, and let me know.
 Back on the performance docs, at the top, the *first* thing it mentions is using
 a byte code cache... so OPcache. If you ignore *everything* else I say, at *least*
 make sure you have this installed. We already do. But, to be sure, we can open `playbook.yml`
-and - under the extensions - add `php7.1-opcache`.
+and - under the extensions - add `php7.1-opcache`:
+
+[[[ code('1caa3e167f') ]]]
 
 ## opcache.max_accelerated_files
 
@@ -44,40 +48,103 @@ Ok, what other performance goodies are there? Ah yes, `opcache.max_accelerated_f
 This defines how many files OPcache will store. Since Symfony uses a lot of files, we
 recommend setting this to a higher value.
 
-On *our* server, the default is 10,000, but the docs recommend 20,000. So let's
-change it!
+On *our* server, the default is 10,000:
 
-We already have some code that changes the `date.timezone` php.ini setting. In
-that case, we modified *both* the cli *and* fpm config files. But because this
-is just for performance, let's only worry about fpm. Copy the previous task and
-create a new one called: `Increase OPcache limit of accelerated files`.
+```terminal-silent
+php -i | grep max_accelerated_files
+```
+
+But the docs recommend 20,000. So let's change it!
+
+We already have some code that changes the `date.timezone` php.ini setting:
+
+[[[ code('7f41c86429') ]]]
+
+In that case, we modified *both* the cli *and* fpm config files. But because this
+is just for performance, let's only worry about FPM. Copy the previous task and
+create a new one called: `Increase OPcache limit of accelerated files`:
+
+[[[ code('a81c22635a') ]]]
 
 The `section` will be `opcache`. Why? On the server, open up the `php.ini` file
-and hit `/` to search for `max_accelerated_files`. This is the setting we want to
-modify. And if you scroll up... yep! It's under a section called `[opcache]`.
+and hit `/` to search for `max_accelerated_files`:
+
+```terminal-silent
+sudo vim /etc/php/7.1/fpm/php.ini
+```
+
+This is the setting we want to modify. And if you scroll up... yep! It's under
+a section called `[opcache]`:
+
+```ini
+# /etc/php/7.1/fpm/php.ini
+
+# ...
+[opcache]
+# ...
+; The maximum number of keys (scripts) in the OPcache hash table.
+; Only numbers between 200 and 1000000 are allowed.
+;opcache.max_accelerated_files=1000
+```
 
 Tell the `ini_file` module to set the `option` `opcache.max_accelerated_files`
-to a value of 20000.
+to a value of 20000:
 
-## The Mysterious realpath_cache_size
+[[[ code('913d806c51') ]]]
+
+## The Mysterious `realpath_cache_size`
 
 There is just *one* last recommendation I want to implement: increasing
 `realpath_cache_size` and `realpath_cache_ttl`. Let's change them first... and
 explain later.
 
 Go back to the `php.ini` file on the server and move *all* the way to the top.
-The standard PHP configuration all lives under a section called `PHP`. If you looked
-closely enough, you would find out that the two "realpath" options *indeed* live
-here.
+The standard PHP configuration all lives under a section called `PHP`:
+
+```ini
+# /etc/php/7.1/fpm/php.ini
+
+[PHP]
+
+;;;;;;;;;;;;;;;;;;;
+; About php.ini   ;
+;;;;;;;;;;;;;;;;;;;
+# ...
+```
+
+If you looked closely enough, you would find out that the two "realpath" options
+*indeed* live here:
+
+```ini
+# /etc/php/7.1/fpm/php.ini
+
+[PHP]
+# ...
+; Determines the size of the realpath cache to be used by PHP. This value should
+; be increased on systems where PHP opens many files to reflect the quantity of
+; the file operations performed.
+; http://php.net/realpath-cache-size
+;realpath_cache_size = 4096k
+
+; Duration of time, in seconds for which to cache realpath information for a given
+; file or directory. For systems with rarely changing files, consider increasing this
+; value.
+; http://php.net/realpath-cache-ttl
+;realpath_cache_ttl = 120
+```
 
 Copy the previous task and paste. Oh, and I'll fix my silly typo. Name the new
 task "Configure the PHP realpath cache". This time, we want to modify *two*
 values. So, for `option`, use the handy `{{ item.option }}`. And for `value`,
-`{{ item.value }}`.
+`{{ item.value }}`:
 
-Hook this up by using `with_items`. Instead of simple strings, set the first option
+[[[ code('88f04167d5') ]]]
+
+Hook this up by using `with_items`. Instead of simple strings, set the first item
 to an array with `option: realpath_cache_size` and `value`, which should be `4096K`.
-Copy that and change the second line: `realpath_cache_ttl` to 600.
+Copy that and change the second line: `realpath_cache_ttl` to 600:
+
+[[[ code('d6e7c3d28b') ]]]
 
 ## All about the realpath_cache
 
@@ -91,17 +158,17 @@ ansible-playbook ansible/playbook.yml -i ansible/hosts.ini --ask-vault-pass -l a
 
 While that works, I want to explain all this `realpath_cache` stuff... because I don't
 think many of us *really* know how it works. Actually, Benjamin Eberlei even wrote
-a [blog post about these settings](https://tideways.io/profiler/blog/how-does-the-php-realpath-cache-work-and-how-to-configure-it).
-Read it to go deeper.
+a [blog post about these settings][realpath_cache]. Read it to go deeper.
 
 But here's the tl;dr: each time you require or include a file - which happens *many*
 times on each request - the "real path" to that file is cached. This is useful for
 symlinks: if a file lives at a symlinked location, then PHP figures out the "real"
 path to that file, then *caches* a map from the original, symlinked path, to the
-final, real path. That's the "realpath cache".
+final, real path. That's the "Real Path Cache".
 
 But even if you're *not* using symlinks, the cache is *great*, because it prevents
-IO operations: PHP does not even need to *check* if the path is a symlink.
+IO operations: PHP does not even need to *check* if the path is a symlink, or get
+other information.
 
 The point is: the realpath cache rocks and makes your site faster. And that's
 *exactly* why we're making sure that the cache is big enough for the number of
@@ -113,7 +180,7 @@ plays *really* poorly with the "realpath cache". Why? Well, just think about: su
 your `web/app.php` file requires `app/AppKernel.php`. Internally. `app.php` will
 ask:
 
-	Hey realpath cache! What is the *real* path to `/var/www/project/current/app/AppKernel.php`?
+> Hey Realpath Cache! What is the *real* path to `/var/www/project/current/app/AppKernel.php`?
 
 If we've recently deployed, then that path *may* already exist in the "realpath cache"...
 but still point to the *old* release directory! In other words, the "realpath cache"
@@ -128,7 +195,12 @@ a problem. On your server, open up `/etc/nginx/sites-available/mootube.example.c
 Search for "real". Ah yes:
 
 ```conf
-fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+# /etc/nginx/sites-available/mootube.example.com.conf
+location ~ ^/(app_dev|config)\.php(/|$) {
+    # ...
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    # ...
+}
 ```
 
 This line helps pass information to PHP. The *key* is the `$realpath_root` part.
@@ -136,7 +208,7 @@ Thanks to this, by the time PHP executes, our code - like `web/app.php` *already
 knows that it is in a `releases` directory. That means that when it tries to require
 a file - like `app/AppKernel.php`, it *actually* says:
 
-	Hey realpath cache! What is the *real* path to `/var/www/project/releases/2017XXXXX/app/AppKernel.php`?
+> Hey Realpath Cache! What is the *real* path to `/var/www/project/releases/2017XXXXX/app/AppKernel.php`?
 
 The *symlink* directory - `current/` is *never* included in the "realpath cache"...
 because our own code thinks that it lives in the resolved, "releases" directory.
@@ -145,8 +217,24 @@ as you have this line.
 
 Check on the provision. Perfect! It just finished updating the `php.ini` file.
 Go check that out on the server and look for the changes. Yep! `max_accelerated_files`
-looks perfect... and so do the `realpath` settings.
+looks perfect... and so do the `realpath` settings:
+
+```ini
+# /etc/php/7.1/fpm/php.ini
+
+# ...
+opcache.max_accelerated_files = 20000
+# ...
+realpath_cache_size = 4096K
+# ...
+realpath_cache_ttl = 600
+# ...
+```
 
 Next! Let's talk about rolling back a deploy. Oh, we of course *never* make mistakes...
 but... ya know... let's talk about rolling back a deploy anyways... in case someone
 *else* messes up.
+
+
+[symfony_performance]: https://symfony.com/doc/current/performance.html
+[realpath_cache]: https://tideways.io/profiler/blog/how-does-the-php-realpath-cache-work-and-how-to-configure-it
