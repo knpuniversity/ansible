@@ -16,7 +16,7 @@ on CircleCI and have CircleCI deploy *for* us, if the tests pass. Woh.
 
 ## CircleCI Setup
 
-In your browser, go to ``http://circleci.com`` and login. I'll make sure I'm under
+In your browser, go to `https://circleci.com` and login. I'll make sure I'm under
 my own personal organization. Then go to projects and add a new project: our's is
 called `ansistrano-deploy`.
 
@@ -32,13 +32,16 @@ file yet, it's not useful.
 Head back to your editor. If you downloaded the "start" code for the course, you
 should have a `tutorial/` directory with a `circleci-config.yml` file inside. To
 make CircleCI use this, create a new `.circleci` directory and paste it there:
-but call it just `config.yml`.
+but call it just `config.yml`:
+
+[[[ code('8bc7399d5d') ]]]
 
 We *will* talk about this file in a minute... but heck! Let's get crazy and just
 try it first! Back on your local terminal, add that directory and commit:
 
 ```terminal-silent
-git commit -m "CircleCI config"
+git add .circleci/
+git commit -m "Adding CircleCI config"
 ```
 
 Push wrecklessly to master! This should create a new build... there it is! It's
@@ -50,15 +53,32 @@ two different builds: `build_and_test` and `deploy`.
 
 ## Builds and Workflows in config.yml
 
-Go back to `config.yml`. Under `jobs`, we have one called `build_and_test`: it sets
-up our environment, installs composer, configures the database and... eventually,
-runs the tests! But we also have a *second* job: `deploy`. The *whole* point of
-this job is to install Ansible and get ready to run our Ansistrano deploy. We're
-*not* actually doing this yet... but the environment should be ready.
+Go back to `config.yml`. Under `jobs`, we have one called `build_and_test`:
 
-The *real* magic is down below under `workflows`: the *one* workflow lists both
-builds. *But*, thanks to the `requires` config, the `deploy` job will *only* run
-if `build_and_test` is successful. That's *super* cool.
+[[[ code('03efa3fe7b') ]]]
+
+It sets up our environment, installs composer, configures the database and...
+eventually, runs the tests!
+
+[[[ code('a3803a4f91') ]]]
+
+But we also have a *second* job: `deploy`:
+
+[[[ code('4ed7d24b94') ]]]
+
+The *whole* point of this job is to install Ansible and get ready to run our
+Ansistrano deploy. We're *not* actually doing this yet... but the environment
+should be ready:
+
+[[[ code('85d9eac76c') ]]]
+
+The *real* magic is down below under `workflows`:
+
+[[[ code('ab0982620a') ]]]
+
+The *one* workflow lists both builds. *But*, thanks to the `requires` config,
+the `deploy` job will *only* run if `build_and_test` is successful. That's
+*super* cool.
 
 Back on CircleCI, that job *did* finish successfully, and `deploy` automatically
 started. This *should* setup our Ansible-friendly environment... but it will *not*
@@ -67,10 +87,12 @@ actually deploy yet.
 ## CircleCI Environment Vars and the Vault Pass
 
 It's time to fix that! In `config.yml`, under `deploy`, run the normal deploy command:
-`ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass`.
+`ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --ask-vault-pass`:
 
-And in theory... that's all we need! But... do you see the problem? Yep: that `--ask-vault-pass`
-option is *not* going to play well with CircleCI.
+[[[ code('412f33fa1e') ]]]
+
+And in theory... that's all we need! But... do you see the problem? Yep: that
+`--ask-vault-pass` option is *not* going to play well with CircleCI.
 
 We need a different solution. Another option you can pass to Ansible is
 `--vault-password-file` that points to a *file* that holds the password. That's
@@ -81,23 +103,36 @@ The answer! Science! Well yes, but more specifically, environment variables!
 
 Back in CircleCI, configure the project. Find "Environment Variables" and add a
 new one called `ANSIBLE_VAULT_PASS` set to `beefpass`. Back in `config.yml`, before
-deploying, we can `echo` that variable into a file: how about `./ansible/.vault-pass.txt`.
+deploying, we can `echo` that variable into a file: how about `./ansible/.vault-pass.txt`:
 
-Use that on the next line: `--vault-password-file=` and then the path. To be extra
-safe, delete it on the next line. And... I'll fix my ugly YAML.
+[[[ code('00e2d47dd6') ]]]
+
+Use that on the next line: `--vault-password-file=` and then the path:
+
+[[[ code('a2d391daae') ]]]
+
+To be extra safe, delete it on the next line:
+
+[[[ code('31d9c5bdb2') ]]]
+
+And... I'll fix my ugly YAML.
 
 ## Setting Ansible Variablews
 
 Ok, problem solved! Time to deploy, right!? Well... remember how we added that
 prompt at the beginning of each deploy? Yep, that's going to break things too!
 No worries: Ansible gives us a way to set variables from the *command* line. When
-we do that, the prompt will *not* appear. How? Add a `-e` option with: `git_branch=master`.
+we do that, the prompt will *not* appear. How? Add a `-e` option with: `git_branch=master`:
+
+[[[ code('f475d179a7') ]]]
 
 ## Disabling Host Key Checking
 
 Ready to deploy... now!? Um... not so fast. Scroll up a little. Under the docker
 image, we need to add one environment variable: `ANSIBLE_HOST_KEY_CHECKING` set to
-no.
+no:
+
+[[[ code('e717b7a7e5') ]]]
 
 Whenever you SSH to a machine for the first time, SSH prompts you to verify the fingerprint
 of that server. This disables that. If you have a highly sensitive environment,
@@ -121,9 +156,13 @@ tasks... woh! It fails! Ah:
 Of course! CircleCI is trying to SSH onto our servers, but it does not have access.
 This works on our local machine because, when we deploy to the `aws` hosts, the
 `group_vars/aws.yml` file is loaded. This tells Ansible to look for the SSH
-key at `~/.ssh/KnpU-Tutorial.pem`. That path does *not* exist in CircleCI.
+key at `~/.ssh/KnpU-Tutorial.pem`:
 
-So... hmmm... We *could* leverage environment variables to create this file... but
+[[[ code('3cb6604a19') ]]]
+
+That path does *not* exist in CircleCI.
+
+So... Hmmm... We *could* leverage environment variables to create this file... but
 great news! CircleCI gives us an easier way. Open up the key file and copy all of
 its contents. Then, in CircleCI, configure the project and look for "SSH Permissions".
 Add a new one: paste the key, but leave the host name empty. This will tell CircleCI
