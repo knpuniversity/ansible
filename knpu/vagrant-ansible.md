@@ -132,7 +132,7 @@ If you're inside the VM, for stepping out of it simply run:
 
 ```terminal-silent
 exit
-\```
+```
 ***
 
 That should take just a minute or two. Perfect! And now we can ping that IP!
