@@ -121,11 +121,19 @@ for us: it has a section about a "private network". Uncomment that!
 
 This will let us talk to the VM via `192.168.33.10`.
 
-For that to take effect, step out of your VM (simply type exit) and run:
+For that to take effect, run:
 
 ```terminal
 vagrant reload
 ```
+
+***TIP
+If you're inside the VM, for stepping out of it simply run:
+
+```terminal-silent
+exit
+\```
+***
 
 That should take just a minute or two. Perfect! And now we can ping that IP!
 
