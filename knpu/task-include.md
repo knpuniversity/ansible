@@ -32,6 +32,11 @@ put a module, say `include: ./includes/symfony-bootstrap.yml`:
 
 [[[ code('8e621b401f') ]]]
 
+***TIP
+`include` module is deprecated since 2.4 and will be removed in version 2.8,
+use `include_tasks` module instead.
+***
+
 The tasks *will* run in a *slightly* different order than they did before, but it
 won't make any difference for us. But, to be sure try the playbook with `-t deploy`:
 
