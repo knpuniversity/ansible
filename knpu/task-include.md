@@ -34,7 +34,7 @@ put a module, say `include: ./includes/symfony-bootstrap.yml`:
 
 ***TIP
 `include` module is deprecated since 2.4 and will be removed in version 2.8,
-use `include_tasks` module instead.
+use `import_tasks` module instead.
 ***
 
 The tasks *will* run in a *slightly* different order than they did before, but it
