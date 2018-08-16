@@ -18,12 +18,17 @@ At this moment, fate presents you with 3 options:
 
 Other than running out of the building screaming, rolling back is the *fastest*
 way to escape the problem. And fortunately, Ansistrano has a *second* role all
-about... rolling back: [ansistrano-rollback][ansistrano_rollback].
+about... rolling back: [ansistrano.rollback][ansistrano_rollback].
 
 To install it, open the `requirements.yml` file and add an entry. For the version...
 let's see. The latest version right now is `2.0.1`. Let's use that:
 
 [[[ code('34b25f23d5') ]]]
+
+***TIP
+Due to the changes in Ansible Galaxy, Ansistrano is installed now via `ansistrano.rollback`
+instead of the old `carlosbuenosvinos.ansistrano-rollback`.
+***
 
 To install the role, on your local terminal, run:
 

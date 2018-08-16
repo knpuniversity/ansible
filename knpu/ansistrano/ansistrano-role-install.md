@@ -38,6 +38,11 @@ Add another `src:` line. Then, go copy the role name - just the deploy role:
 
 [[[ code('526bf1cc75') ]]]
 
+***TIP
+Due to the changes in Ansible Galaxy, Ansistrano is installed now via `ansistrano.deploy`
+instead of the old `carlosbuenosvinos.ansistrano-deploy`.
+***
+
 We'll talk about rollback later. Paste that and add `version`. So... what's the latest
 version of this role? Let's find out! On the GitHub page, scroll up and click "Releases".
 But be careful! There are actually newer tags. Ok, so right now, the latest version
