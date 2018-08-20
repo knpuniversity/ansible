@@ -36,7 +36,7 @@ we need.
 
 Add another `src:` line. Then, go copy the role name - just the deploy role:
 
-[[[ code('526bf1cc75') ]]]
+[[[ code('dccf46acfa') ]]]
 
 ***TIP
 Due to the changes in Ansible Galaxy, Ansistrano is installed now via `ansistrano.deploy`
@@ -48,7 +48,7 @@ version of this role? Let's find out! On the GitHub page, scroll up and click "R
 But be careful! There are actually newer tags. Ok, so right now, the latest version
 is 2.7.0. Add that to `requirements.yml`:
 
-[[[ code('dc2d5293fb') ]]]
+[[[ code('c58ef61f42') ]]]
 
 Great! To make sure all of the roles are installed, run:
 
@@ -81,7 +81,7 @@ below it.
 Back in `deploy.yml`, let's import the role! Add `roles:`, copy the name of the role,
 and then paste it here: `ansistrano.deploy`:
 
-[[[ code('606dd846c1') ]]]
+[[[ code('2d45e4e524') ]]]
 
 If you went through our Ansible tutorial, then you know that a role magically
 gives our playbook new tasks! Plus, a few other things, like variables and handlers.

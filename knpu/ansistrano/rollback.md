@@ -23,7 +23,7 @@ about... rolling back: [ansistrano.rollback][ansistrano_rollback].
 To install it, open the `requirements.yml` file and add an entry. For the version...
 let's see. The latest version right now is `2.0.1`. Let's use that:
 
-[[[ code('34b25f23d5') ]]]
+[[[ code('9bd24b39c7') ]]]
 
 ***TIP
 Due to the changes in Ansible Galaxy, Ansistrano is installed now via `ansistrano.rollback`
@@ -42,7 +42,7 @@ The rollback process will be its own, simple playbook. Create it: `rollback.yml`
 I'll open `deploy.yml` so we can steal things... starting with the host. Then, of
 course, we need to include the new role: `ansistrano.rollback`:
 
-[[[ code('3273574a2c') ]]]
+[[[ code('36272698ea') ]]]
 
 Rolling back is *way* simpler than deploying, but it works in the same way: there
 are a few *stages* and we override variables to control things. The *only* variable
