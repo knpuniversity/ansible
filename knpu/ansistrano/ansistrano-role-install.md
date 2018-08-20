@@ -79,7 +79,7 @@ below it.
 ## Using the Role
 
 Back in `deploy.yml`, let's import the role! Add `roles:`, copy the name of the role,
-and then paste it here: `carlosbuenosvinos.ansistrano-deploy`:
+and then paste it here: `ansistrano.deploy`:
 
 [[[ code('606dd846c1') ]]]
 

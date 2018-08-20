@@ -40,7 +40,7 @@ ansible-galaxy install -r ansible/requirements.yml
 
 The rollback process will be its own, simple playbook. Create it: `rollback.yml`.
 I'll open `deploy.yml` so we can steal things... starting with the host. Then, of
-course, we need to include the new role: `carlosbuenosvinos.ansistrano-rollback`:
+course, we need to include the new role: `ansistrano.rollback`:
 
 [[[ code('3273574a2c') ]]]
 
