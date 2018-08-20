@@ -1,5 +1,5 @@
 diff --git a/ansible/aws.yml b/ansible/aws.yml
-index 99924637..aaefa7f9 100644
+index 9992463..aaefa7f 100644
 --- a/ansible/aws.yml
 +++ b/ansible/aws.yml
 @@ -3,8 +3,8 @@
@@ -14,7 +14,7 @@ index 99924637..aaefa7f9 100644
    environment:
      AWS_ACCESS_KEY: "{{ aws_access_key }}"
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 98328fb0..80773599 100644
+index 98328fb..8077359 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,6 @@
@@ -27,7 +27,7 @@ index 98328fb0..80773599 100644
    pre_tasks:
 diff --git a/ansible/vars/aws_vars.yml b/ansible/vars/aws_vars.yml
 new file mode 100644
-index 00000000..6b226229
+index 0000000..6b22622
 --- /dev/null
 +++ b/ansible/vars/aws_vars.yml
 @@ -0,0 +1,3 @@
@@ -36,7 +36,7 @@ index 00000000..6b226229
 +aws_secret_key: "{{ vault_aws_secret_key }}"
 diff --git a/ansible/vars/aws_vault.yml b/ansible/vars/aws_vault.yml
 new file mode 100644
-index 00000000..eaf666a9
+index 0000000..eaf666a
 --- /dev/null
 +++ b/ansible/vars/aws_vault.yml
 @@ -0,0 +1,10 @@
@@ -51,7 +51,7 @@ index 00000000..eaf666a9
 +36643262636534386566613861666263323639633130386564396561616335313738306434303333
 +39623736663231616138636330393838613965643537626334613138303936363431
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index e67e1be5..63d5e1f9 100644
+index e67e1be..63d5e1f 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
 @@ -1,7 +1,3 @@
@@ -64,7 +64,7 @@ index e67e1be5..63d5e1f9 100644
  server_document_root: /var/www/project/web
 diff --git a/ansible/vars/vault.yml b/ansible/vars/vault.yml
 deleted file mode 100644
-index f7957a19..00000000
+index f7957a1..0000000
 --- a/ansible/vars/vault.yml
 +++ /dev/null
 @@ -1,16 +0,0 @@

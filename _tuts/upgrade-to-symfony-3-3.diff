@@ -1,5 +1,5 @@
 diff --git a/.gitignore b/.gitignore
-index db875582..df374cfd 100644
+index db87558..df374cf 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,3 +1,4 @@
@@ -8,7 +8,7 @@ index db875582..df374cfd 100644
  /build/
  /phpunit.xml
 diff --git a/app/AppKernel.php b/app/AppKernel.php
-index a0023026..dbc85b4f 100644
+index a002302..dbc85b4 100644
 --- a/app/AppKernel.php
 +++ b/app/AppKernel.php
 @@ -25,9 +25,13 @@ class AppKernel extends Kernel
@@ -28,7 +28,7 @@ index a0023026..dbc85b4f 100644
          return $bundles;
 diff --git a/app/autoload.php b/app/autoload.php
 deleted file mode 100644
-index fa582ecd..00000000
+index fa582ec..0000000
 --- a/app/autoload.php
 +++ /dev/null
 @@ -1,13 +0,0 @@
@@ -46,7 +46,7 @@ index fa582ecd..00000000
 -
 -return $loader;
 diff --git a/app/config/config.yml b/app/config/config.yml
-index 8d144620..3274d47d 100644
+index 8d14462..3274d47 100644
 --- a/app/config/config.yml
 +++ b/app/config/config.yml
 @@ -13,7 +13,7 @@ framework:
@@ -82,7 +82,7 @@ index 8d144620..3274d47d 100644
          #   3. Uncomment next line:
          #     path:     "%database_path%"
 diff --git a/app/config/config_dev.yml b/app/config/config_dev.yml
-index 7eb4739c..774c776c 100644
+index 7eb4739..774c776 100644
 --- a/app/config/config_dev.yml
 +++ b/app/config/config_dev.yml
 @@ -3,7 +3,7 @@ imports:
@@ -115,7 +115,7 @@ index 7eb4739c..774c776c 100644
          # you may have to allow bigger header sizes in your Web server configuration
          #firephp:
 diff --git a/app/config/parameters.yml.dist b/app/config/parameters.yml.dist
-index f5b74de7..3d64fe2d 100644
+index f5b74de..3d64fe2 100644
 --- a/app/config/parameters.yml.dist
 +++ b/app/config/parameters.yml.dist
 @@ -8,7 +8,7 @@ parameters:
@@ -128,7 +128,7 @@ index f5b74de7..3d64fe2d 100644
      mailer_transport:  smtp
      mailer_host:       127.0.0.1
 diff --git a/app/config/services.yml b/app/config/services.yml
-index 5c76fc59..cdb1c65a 100644
+index 5c76fc5..cdb1c65 100644
 --- a/app/config/services.yml
 +++ b/app/config/services.yml
 @@ -1,9 +1,35 @@
@@ -173,7 +173,7 @@ index 5c76fc59..cdb1c65a 100644
 +    #     arguments:
 +    #         $someArgument: 'some_value'
 diff --git a/bin/console b/bin/console
-index c371281a..855c82e4 100755
+index c371281..855c82e 100755
 --- a/bin/console
 +++ b/bin/console
 @@ -11,10 +11,7 @@ umask(0000);
@@ -189,7 +189,7 @@ index c371281a..855c82e4 100755
  $input = new ArgvInput();
  $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
 diff --git a/composer.json b/composer.json
-index 21ee32df..a666827e 100644
+index 21ee32d..a666827 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -4,30 +4,26 @@
@@ -263,10 +263,10 @@ index 21ee32df..a666827e 100644
      },
      "config": {
 diff --git a/composer.lock b/composer.lock
-index 024b7dcc..474ecefe 100644
+index 024b7dc..474ecef 100644
 --- a/composer.lock
 +++ b/composer.lock
-@@ -4,10 +4,68 @@
+@@ -4,9 +4,67 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
          "This file is @generated automatically"
      ],
@@ -274,7 +274,7 @@ index 024b7dcc..474ecefe 100644
 -    "content-hash": "e39f9de78a0f0c9f3aee9f8b020f2a49",
 +    "content-hash": "6cb8d8275afb6fafd1f07570eeac4cbb",
      "packages": [
-         {
++        {
 +            "name": "composer/ca-bundle",
 +            "version": "1.0.7",
 +            "source": {
@@ -333,10 +333,9 @@ index 024b7dcc..474ecefe 100644
 +            ],
 +            "time": "2017-03-06T11:59:08+00:00"
 +        },
-+        {
+         {
              "name": "doctrine/annotations",
              "version": "v1.2.7",
-             "source": {
 @@ -73,20 +131,20 @@
                  "docblock",
                  "parser"
@@ -819,8 +818,8 @@ index 024b7dcc..474ecefe 100644
 -            "name": "psr/log",
 +            "name": "psr/container",
              "version": "1.0.0",
-             "source": {
-                 "type": "git",
++            "source": {
++                "type": "git",
 +                "url": "https://github.com/php-fig/container.git",
 +                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
 +            },
@@ -917,8 +916,8 @@ index 024b7dcc..474ecefe 100644
 +        {
 +            "name": "psr/log",
 +            "version": "1.0.2",
-+            "source": {
-+                "type": "git",
+             "source": {
+                 "type": "git",
                  "url": "https://github.com/php-fig/log.git",
 -                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
 +                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
@@ -1824,7 +1823,7 @@ index 024b7dcc..474ecefe 100644
      ],
      "aliases": [],
 diff --git a/phpunit.xml.dist b/phpunit.xml.dist
-index 65e90821..5a12e676 100644
+index 65e9082..5a12e67 100644
 --- a/phpunit.xml.dist
 +++ b/phpunit.xml.dist
 @@ -5,11 +5,11 @@
@@ -1842,22 +1841,22 @@ index 65e90821..5a12e676 100644
  
      <testsuites>
 diff --git a/var/SymfonyRequirements.php b/var/SymfonyRequirements.php
-index 7e7723af..3b14a402 100755
+index 7e7723a..3b14a40 100755
 --- a/var/SymfonyRequirements.php
 +++ b/var/SymfonyRequirements.php
-@@ -634,12 +634,6 @@ class SymfonyRequirements extends RequirementCollection
+@@ -633,12 +633,6 @@ class SymfonyRequirements extends RequirementCollection
+             'Install and enable the <strong>mbstring</strong> extension.'
          );
  
-         $this->addRecommendation(
+-        $this->addRecommendation(
 -            function_exists('iconv'),
 -            'iconv() should be available',
 -            'Install and enable the <strong>iconv</strong> extension.'
 -        );
 -
--        $this->addRecommendation(
+         $this->addRecommendation(
              function_exists('utf8_decode'),
              'utf8_decode() should be available',
-             'Install and enable the <strong>XML</strong> extension.'
 @@ -780,7 +774,11 @@ class SymfonyRequirements extends RequirementCollection
      {
          $size = ini_get('realpath_cache_size');
@@ -1872,7 +1871,7 @@ index 7e7723af..3b14a402 100755
              case 'g':
                  return $size * 1024 * 1024 * 1024;
 diff --git a/web/app.php b/web/app.php
-index 737673b8..a1d2bdf4 100644
+index 737673b..a1d2bdf 100644
 --- a/web/app.php
 +++ b/web/app.php
 @@ -7,14 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
@@ -1898,7 +1897,7 @@ index 737673b8..a1d2bdf4 100644
  
  // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
 diff --git a/web/app_dev.php b/web/app_dev.php
-index d60e8fcc..5430a84d 100644
+index d60e8fc..5430a84 100644
 --- a/web/app_dev.php
 +++ b/web/app_dev.php
 @@ -18,14 +18,13 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
@@ -1921,7 +1920,7 @@ index d60e8fcc..5430a84d 100644
  $response = $kernel->handle($request);
  $response->send();
 diff --git a/web/config.php b/web/config.php
-index 1368c8a4..fd7e17e6 100644
+index 1368c8a..fd7e17e 100644
 --- a/web/config.php
 +++ b/web/config.php
 @@ -11,7 +11,7 @@

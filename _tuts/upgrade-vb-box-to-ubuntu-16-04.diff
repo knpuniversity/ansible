@@ -1,5 +1,5 @@
 diff --git a/Vagrantfile b/Vagrantfile
-index 6ed25185..94f2cc8a 100644
+index 6ed2518..94f2cc8 100644
 --- a/Vagrantfile
 +++ b/Vagrantfile
 @@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
@@ -36,7 +36,7 @@ index 6ed25185..94f2cc8a 100644
    # View the documentation for the provider you are using for more
    # information on available options.
 diff --git a/ansible/group_vars/aws.yml b/ansible/group_vars/aws.yml
-index e6a33e15..1ddb1ef2 100644
+index e6a33e1..1ddb1ef 100644
 --- a/ansible/group_vars/aws.yml
 +++ b/ansible/group_vars/aws.yml
 @@ -1,2 +1,5 @@
@@ -47,7 +47,7 @@ index e6a33e15..1ddb1ef2 100644
  host_server_name: ec2-54-205-128-194.compute-1.amazonaws.com
 diff --git a/ansible/group_vars/vb.yml b/ansible/group_vars/vb.yml
 new file mode 100644
-index 00000000..b65823ff
+index 0000000..b65823f
 --- /dev/null
 +++ b/ansible/group_vars/vb.yml
 @@ -0,0 +1,4 @@
@@ -56,7 +56,7 @@ index 00000000..b65823ff
 +ansible_ssh_private_key_file: ./.vagrant/machines/default/virtualbox/private_key
 +ansible_python_interpreter: /usr/bin/python3
 diff --git a/ansible/hosts.ini b/ansible/hosts.ini
-index 351e5712..297aee52 100644
+index 351e571..297aee5 100644
 --- a/ansible/hosts.ini
 +++ b/ansible/hosts.ini
 @@ -2,10 +2,10 @@
@@ -73,7 +73,7 @@ index 351e5712..297aee52 100644
  [webserver:children]
  vb
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 0d65636e..769a0957 100644
+index 0d65636..769a095 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -26,6 +26,11 @@

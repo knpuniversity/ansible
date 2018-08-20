@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 1a4ad794..58dcb240 100644
+index c815563..17c9d03 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -16,8 +16,9 @@
@@ -12,10 +12,10 @@ index 1a4ad794..58dcb240 100644
 +    ansistrano_git_identity_key_path: "{{ playbook_dir }}/id_rsa" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
  
    roles:
-     - carlosbuenosvinos.ansistrano-deploy
+     - ansistrano.deploy
 diff --git a/ansible/id_rsa b/ansible/id_rsa
 new file mode 100644
-index 00000000..bec31980
+index 0000000..bec3198
 --- /dev/null
 +++ b/ansible/id_rsa
 @@ -0,0 +1,51 @@

@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index ca4822b3..c1e0bc73 100644
+index ca4822b..c1e0bc7 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -53,3 +53,17 @@

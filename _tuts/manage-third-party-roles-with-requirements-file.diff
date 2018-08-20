@@ -1,6 +1,6 @@
 diff --git a/ansible/requirements.yml b/ansible/requirements.yml
 new file mode 100644
-index 00000000..3cf4a679
+index 0000000..3cf4a67
 --- /dev/null
 +++ b/ansible/requirements.yml
 @@ -0,0 +1,2 @@

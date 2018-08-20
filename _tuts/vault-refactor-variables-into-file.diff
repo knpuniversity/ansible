@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index fdc4f1ed..1995a1f6 100644
+index fdc4f1e..1995a1f 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -1,11 +1,8 @@
@@ -18,7 +18,7 @@ index fdc4f1ed..1995a1f6 100644
      - name: symfony_env
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
 new file mode 100644
-index 00000000..2872eb9b
+index 0000000..2872eb9
 --- /dev/null
 +++ b/ansible/vars/vars.yml
 @@ -0,0 +1,5 @@

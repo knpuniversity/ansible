@@ -1,6 +1,6 @@
 diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
 new file mode 100644
-index 00000000..49d8634a
+index 0000000..49d8634
 --- /dev/null
 +++ b/ansible/templates/symfony.conf
 @@ -0,0 +1,54 @@

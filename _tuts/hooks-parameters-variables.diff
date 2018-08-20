@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 08b20ed2..15f9435d 100644
+index 7fbaebf..1096a75 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -2,7 +2,9 @@
@@ -13,7 +13,7 @@ index 08b20ed2..15f9435d 100644
    vars_prompt:
      - name: git_branch
 diff --git a/ansible/templates/parameters.yml.dist b/ansible/templates/parameters.yml.dist
-index 3d64fe2d..a850c7e7 100644
+index 3d64fe2..a850c7e 100644
 --- a/ansible/templates/parameters.yml.dist
 +++ b/ansible/templates/parameters.yml.dist
 @@ -2,11 +2,11 @@
@@ -43,7 +43,7 @@ index 3d64fe2d..a850c7e7 100644
 +    loggly_token:      "{{ loggly_token }}"
 diff --git a/ansible/vars/deploy_vars.yml b/ansible/vars/deploy_vars.yml
 new file mode 100644
-index 00000000..9d2da48e
+index 0000000..9d2da48
 --- /dev/null
 +++ b/ansible/vars/deploy_vars.yml
 @@ -0,0 +1,6 @@
@@ -56,7 +56,7 @@ index 00000000..9d2da48e
 \ No newline at end of file
 diff --git a/ansible/vars/deploy_vault.yml b/ansible/vars/deploy_vault.yml
 new file mode 100644
-index 00000000..27dcf85c
+index 0000000..27dcf85
 --- /dev/null
 +++ b/ansible/vars/deploy_vault.yml
 @@ -0,0 +1,15 @@
@@ -76,7 +76,7 @@ index 00000000..27dcf85c
 +36313232323766663564666638646562366437616233376632323164303635356631346361376633
 +6231386263646661383539313439316663333231643261653834
 diff --git a/app/config/parameters.yml.dist b/app/config/parameters.yml.dist
-index 3d64fe2d..b7385fb8 100644
+index 3d64fe2..b7385fb 100644
 --- a/app/config/parameters.yml.dist
 +++ b/app/config/parameters.yml.dist
 @@ -16,7 +16,7 @@ parameters:

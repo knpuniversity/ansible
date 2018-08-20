@@ -1,5 +1,5 @@
 diff --git a/ansible/hosts.ini b/ansible/hosts.ini
-index 7b9ad531..1add8ff4 100644
+index 7b9ad53..1add8ff 100644
 --- a/ansible/hosts.ini
 +++ b/ansible/hosts.ini
 @@ -1 +1,2 @@

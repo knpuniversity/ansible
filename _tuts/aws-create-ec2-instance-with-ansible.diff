@@ -1,6 +1,6 @@
 diff --git a/ansible/aws.yml b/ansible/aws.yml
 new file mode 100644
-index 00000000..99924637
+index 0000000..9992463
 --- /dev/null
 +++ b/ansible/aws.yml
 @@ -0,0 +1,30 @@
@@ -35,7 +35,7 @@ index 00000000..99924637
 +    # debug the output to see what AWS returns back
 +    - debug: var=ec2
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index 0c60123b..d8faf678 100644
+index 0c60123..d8faf67 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
 @@ -5,3 +5,5 @@ symfony_var_dir: "{{ symfony_root_dir }}/var"
@@ -45,7 +45,7 @@ index 0c60123b..d8faf678 100644
 +aws_access_key: "{{ vault_aws_access_key }}"
 +aws_secret_key: "{{ vault_aws_secret_key }}"
 diff --git a/ansible/vars/vault.yml b/ansible/vars/vault.yml
-index 084ac3d8..f7957a19 100644
+index 084ac3d..f7957a1 100644
 --- a/ansible/vars/vault.yml
 +++ b/ansible/vars/vault.yml
 @@ -1,10 +1,16 @@

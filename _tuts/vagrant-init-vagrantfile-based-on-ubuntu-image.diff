@@ -1,6 +1,6 @@
 diff --git a/Vagrantfile b/Vagrantfile
 new file mode 100644
-index 00000000..35b79089
+index 0000000..35b7908
 --- /dev/null
 +++ b/Vagrantfile
 @@ -0,0 +1,71 @@

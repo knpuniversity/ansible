@@ -1,11 +1,11 @@
 diff --git a/ansible/requirements.yml b/ansible/requirements.yml
-index 96389a88..ee5fb198 100644
+index f7a3b4d..4123001 100644
 --- a/ansible/requirements.yml
 +++ b/ansible/requirements.yml
 @@ -3,3 +3,6 @@
  
- - src: carlosbuenosvinos.ansistrano-deploy
+ - src: ansistrano.deploy
    version: 2.7.0
 +
-+- src: carlosbuenosvinos.ansistrano-rollback
++- src: ansistrano.rollback
 +  version: 2.0.1

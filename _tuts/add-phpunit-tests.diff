@@ -1,5 +1,5 @@
 diff --git a/tests/AppBundle/Controller/DefaultControllerTest.php b/tests/AppBundle/Controller/DefaultControllerTest.php
-index 594803cc..ed4bef91 100644
+index 594803c..ed4bef9 100644
 --- a/tests/AppBundle/Controller/DefaultControllerTest.php
 +++ b/tests/AppBundle/Controller/DefaultControllerTest.php
 @@ -6,13 +6,28 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

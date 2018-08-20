@@ -1,5 +1,5 @@
 diff --git a/ansible/group_vars/aws.yml b/ansible/group_vars/aws.yml
-index 1ddb1ef2..f86de45a 100644
+index 1ddb1ef..f86de45 100644
 --- a/ansible/group_vars/aws.yml
 +++ b/ansible/group_vars/aws.yml
 @@ -2,4 +2,4 @@
