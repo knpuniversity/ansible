@@ -25,6 +25,27 @@ add them:
 
 [[[ code('ca46ddefce') ]]]
 
+***TIP
+Using a loop in `apt` module is deprecated and will be removed in version 2.11.
+Pass an array of values to the `name` option instead of using a loop to supply
+multiple items and specifying `name: {{ item }}` and remove the loop:
+
+```yaml
+tasks:
+    # ...
+    - name: Install PHP packages
+      become: true
+      apt:
+        name:
+          - php7.1-cli
+          - php7.1-curl
+          - php7.1-fpm
+          - php7.1-intl
+          - php7.1-mysql
+        state: latest
+```
+***
+
 Flip over to your terminal and try it!
 
 ```terminal
