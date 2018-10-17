@@ -27,8 +27,8 @@ add them:
 
 ***TIP
 Using a loop in `apt` module is deprecated and will be removed in version 2.11.
-Pass an array of values to the `name` option instead of using a loop to supply
-multiple items and specifying `name: {{ item }}` and remove the loop:
+Instead of using the loop and specifying `name: {{ item }}`, you can pass an array
+to the `name` key and specify the items like this:
 
 ```yaml
 tasks:
