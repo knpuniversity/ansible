@@ -31,7 +31,10 @@ Instead of using the loop and specifying `name: {{ item }}`, you can pass an arr
 to the `name` key and specify the items like this:
 
 ```yaml
-tasks:
+---
+- hosts: vb
+
+  tasks:
     # ...
     - name: Install PHP packages
       become: true
