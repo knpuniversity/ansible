@@ -20,8 +20,7 @@ Then, instead of `php7.1-cli`, add the very cryptic `"{{ item }}"`:
 
 Finish it with a new `with_items` key *after* the `apt` module. This gets a big
 list of the stuff we want: `php7.1-cli`, `php7.1-curl`, ice cream, `php7.1 -fpm`,
-`php7.1-intl`, a pony and `php7.1-mysql`. If we need more goodies later, we can
-add them:
+`php7.1-intl`, a pony and `php7.1-mysql`:
 
 [[[ code('ca46ddefce') ]]]
 
@@ -49,7 +48,7 @@ to the `name` key and specify the items like this:
 ```
 ***
 
-Flip over to your terminal and try it!
+If we need more goodies later, we can add them. Flip over to your terminal and try it!
 
 ```terminal
 ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
