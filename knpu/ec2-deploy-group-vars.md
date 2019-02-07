@@ -52,6 +52,23 @@ put the path to your downloaded private key: `~/.ssh/Ansible_AWS_tmp.pem` for me
 
 [[[ code('76089293e8') ]]]
 
+***TIP
+Depends on your AWS instance, you may need to specify a new path to Python interpreter.
+By default, Ansible uses `/usr/bin/python` but new AWS instances have Python 3 pre-installed
+and the path to it is `/usr/bin/python3`. You can specify the correct Python interpreter path
+explicitly with `ansible_python_interpreter` key in case you got an error from Ansible
+about not found Python:
+
+```ini
+# ansible/hosts.ini
+
+# ...
+
+[aws]
+54.205.128.194 ansible_python_interpreter=/usr/bin/python3 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/KnpU-Tutorial.pem
+```
+***
+
 ## Host Group Children
 
 Here's where things get cool! I want to run our playbook against the virtual machine
