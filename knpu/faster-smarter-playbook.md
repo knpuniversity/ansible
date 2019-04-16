@@ -100,6 +100,9 @@ in `changed_when`. Then, all we need to do is search for `You are already using 
 If that shows up in the command, then we know nothing changed. Paste that into the
 `search` filter.
 
+**TIP**
+In new versions, you can change the `result|search` filter wich is deprecated by : `result is search`.
+
 Test it out!
 
 ```terminal
