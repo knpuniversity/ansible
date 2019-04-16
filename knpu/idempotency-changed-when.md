@@ -110,7 +110,21 @@ through some `search` filter, which comes from Jinja.
 
 ***TIP
 Using tests as filters is deprecated and will be removed in Ansible 2.9, use
-`db_create_result.stdout is not search('already exists. Skipped')` instead.
+`is not search('...')` instead, for example:
+
+```yaml
+# ansible/playbook.yml
+---
+- hosts: vb
+  # ...
+  tasks:
+    # ...
+    # Symfony console commands
+    - name: Create DB if not exists
+      command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+      register: db_create_result
+      changed_when: db_create_result.stdout is not search('already exists. Skipped')
+```
 ***
 
 For the migration task, we can do the same. Register the variable first: `db_migrations_result`.
