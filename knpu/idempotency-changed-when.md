@@ -109,8 +109,9 @@ If you use Twig, this will look familiar: we're reading a variable and piping it
 through some `search` filter, which comes from Jinja.
 
 ***TIP
-Using tests as filters is deprecated and will be removed in Ansible 2.9, use
-`is not search('...')` instead, for example:
+Using tests as filters is deprecated since Ansible v2.5 and will be removed
+in v2.9, use `is %test_name%` or `is not %test_name%` instead where `%test_name%`
+might be any test like `success`, ` failed`, `search`, etc, for example:
 
 ```yaml
 # ansible/playbook.yml
