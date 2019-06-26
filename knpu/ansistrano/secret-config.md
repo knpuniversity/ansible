@@ -67,6 +67,16 @@ basically, a hosted MySQL or PostgreSQL database - so that I don't need to manag
 it on my own. In that case, the database host would be something specific to
 my RDS instance. But, it's the same idea.
 
+***TIP
+If you decided to use Amazon's RDS - basically, you need to perform next steps:
+
+1. Create an RDS instance in Amazon Console by hand;
+2. Put its credentials in the Ansible Vault.
+
+Automate RDS instance creation is overkill - databases are not something that should be
+created/recreated like servers because they hold real user data
+***
+
 Save this file and quit. We now have a new, but encrypted, file with those variables:
 
 [[[ code('5a779a0261') ]]]
