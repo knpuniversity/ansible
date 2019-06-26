@@ -33,35 +33,48 @@ it works really well. You're free to use a different one, but a few commands or 
 and passwords might be different!
 
 ***TIP
-If you want to use the latest Ubuntu 16.04 LTS release, you'll need a few tweaks:
+If you want to use the latest Ubuntu 18.04 LTS release, you'll need a few tweaks:
 
-1) Change the VM box in `Vagrantfile`:
+1) Change the VM box in `Vagrantfile` to:
 
 ```ruby
 # Vagrantfile
 Vagrant.configure("2") do |config|
   # ...
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
   # ...
 ```
 
-2) This version of Ubuntu has a different default username to login via SSH, so you have to
-change it to `ubuntu` and specify the private SSH key file instead of the password - Ansible
-can't log in into the server using just a username and password pair. Also, Ubuntu 16.04 has
-the new pre-installed Python 3, so you have to specify a valid path to the `python3` binary
-file, because Ansible can't find it by itself. You can specify all this information in
-`hosts.ini` file for the VirtualBox host:
+Or `ubuntu/xenial64` in case you're interested in Ubuntu 16.04 LTS release.
+
+2) Ubuntu 18.04/16.04 requires a private SSH key to be specified instead of a simple
+password to login via SSH - Ansible can't log in into the server using just a username and
+password pair. Also, Ansible user should be set to `vagrant`. You can specify all this information
+in `hosts.ini` file for the VirtualBox host:
 
 ```ini
 # ...
 [vb]
-192.168.33.10 ansible_user=ubuntu ansible_ssh_private_key_file=./.vagrant/machines/default/virtualbox/private_key ansible_python_interpreter=/usr/bin/python3
+192.168.33.10 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/default/virtualbox/private_key
 # ...
 ```
 
-3) Ubuntu 16.04 doesn't come with `aptitude` pre-installed, so you need to install it first
-if you want to use the `safe` upgrade option for installed packages. Just add one new task to
-your playbook before upgrading:
+Make sure to uncomment `private_network` configuration as we did below in [this code block](#codeblock-efdace2f14)
+to be able to connect to `192.168.33.10` IP.
+
+3) Notice, that Ubuntu 18.04/16.04 has the new pre-installed Python 3. In case you have an error related
+to Python interpreter, specify the path to its binary explicitly as:
+
+```ini
+# ...
+[vb]
+192.168.33.10 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/default/virtualbox/private_key ansible_python_interpreter=/usr/bin/python3
+# ...
+```
+
+4) Ubuntu 18.04/16.04 doesn't come with `aptitude` pre-installed, so you will need to install it first
+if you want to use the `safe` upgrade option for installed packages - we will talk about it later
+in this course. Just add one new task to your playbook before upgrading:
 
 ```yaml
 # ansible/playbook.yml
@@ -185,6 +198,19 @@ It saves the fingerprint and then asks for a password. The password for the imag
 that we're using is `vagrant`. That's pretty standard, but it might be different
 if you're using a different image.
 
+***TIP
+If you still see an error like:
+
+> vagrant@192.168.33.10: Permission denied (publickey).
+
+It seems like the server requires a private SSH key file to be specified. Try to specify
+it as an identity file:
+
+```terminal-silent
+ssh vagrant@192.168.33.10 -i ./.vagrant/machines/default/virtualbox/private_key
+```
+***
+
 We're inside! So, how can we tell Ansible to SSH with username `vagrant` and password
 `vagrant`? The answer is... not surprising! These are two more variables in your
 hosts inventory file: `ansible_user` set to `vagrant` and `ansible_ssh_pass=vagrant`:
@@ -196,6 +222,24 @@ Try the ping again:
 ```terminal
 ansible vb -m ping -i ansible/hosts.ini
 ```
+
+***TIP
+If you still can't SSH into the Vagrant box with Ansible using a simple username/password pair
+and continue getting an error like:
+
+> 192.168.33.10 | FAILED! => {
+>     "msg": "to use the 'ssh' connection type with passwords, you must install the sshpass program"
+> }
+
+Try to specify the SSH private key instead of password. For this, change the line to:
+
+```ini
+# ...
+[vb]
+192.168.33.10 ansible_user=vagrant ansible_ssh_private_key_file=./.vagrant/machines/default/virtualbox/private_key
+# ...
+```
+***
 
 Eureka! But, quick note about the SSH password. If this weren't just a local VM,
 we might not want to store the password in plain text. Instead, you can use a private
