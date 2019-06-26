@@ -49,8 +49,8 @@ Or `ubuntu/xenial64` in case you're interested in Ubuntu 16.04 LTS release.
 
 2) Ubuntu 18.04/16.04 requires a private SSH key to be specified instead of a simple
 password to login via SSH - Ansible can't log in into the server using just a username and
-password pair. Also, Ansible user should be set to `vagrant`. You can specify all this information
-in `hosts.ini` file for the VirtualBox host:
+password pair. Also, the Ansible user should be set to `vagrant`. You can specify all this
+information in the `hosts.ini` file for the VirtualBox host:
 
 ```ini
 # ...
@@ -60,7 +60,7 @@ in `hosts.ini` file for the VirtualBox host:
 ```
 
 Make sure to uncomment `private_network` configuration as we did below in [this code block](#codeblock-efdace2f14)
-to be able to connect to `192.168.33.10` IP.
+to be able to connect to the `192.168.33.10` IP.
 
 3) Notice, that Ubuntu 18.04/16.04 has the new pre-installed Python 3. In case you have an error related
 to Python interpreter, specify the path to its binary explicitly as:

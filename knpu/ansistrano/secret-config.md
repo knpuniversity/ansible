@@ -68,13 +68,13 @@ it on my own. In that case, the database host would be something specific to
 my RDS instance. But, it's the same idea.
 
 ***TIP
-If you decided to use Amazon's RDS - basically, you need to perform next steps:
+If you decide to use Amazon's RDS - basically, you need to perform the next steps:
 
-1. Create an RDS instance in Amazon Console by hand;
+1. Create an RDS instance. The easiest way to do this is by hand via the AWS web interface;
 2. Put its credentials in the Ansible Vault.
 
-Automate RDS instance creation is overkill - databases are not something that should be
-created/recreated like servers because they hold real user data
+You can automate the creation of the RDS instance, though it’s not as important because
+these instances are not destroyed and recreated in the same way as EC2 instances.
 ***
 
 Save this file and quit. We now have a new, but encrypted, file with those variables:
