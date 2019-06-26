@@ -227,9 +227,11 @@ ansible vb -m ping -i ansible/hosts.ini
 If you still can't SSH into the Vagrant box with Ansible using a simple username/password pair
 and continue getting an error like:
 
-> 192.168.33.10 | FAILED! => {
->     "msg": "to use the 'ssh' connection type with passwords, you must install the sshpass program"
-> }
+```text
+192.168.33.10 | FAILED! => {
+    "msg": "to use the 'ssh' connection type with passwords, you must install the sshpass program"
+}
+```
 
 Try to specify the SSH private key instead of password. For this, change the line to:
 
