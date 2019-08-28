@@ -38,6 +38,7 @@ obviously a boolean value because it just references to another variable called 
 so Ansible requires the `|bool` filter to be added to the `code_changed` in `when` clauses:
 
 ```yaml
+# ansible/playbook.yml
 ---
 - hosts: vb
   # ...
