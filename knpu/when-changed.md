@@ -32,6 +32,23 @@ Down below, under "Install Composer's Dependencies", add `when: code_changed`:
 
 [[[ code('acd4c0ebbd') ]]]
 
+***TIP
+Ansible does not allow evaluating bare variables anymore. The `code_changed` variable is not
+obviously a boolean value because it just references to another variable called `repo_code.changed`,
+so Ansible requires the `|bool` filter to be added to the `code_changed` in `when` clauses:
+
+```yaml
+---
+- hosts: vb
+  # ...
+  tasks:
+    # ...
+    - name: Install Composer's dependencies
+      # ...
+      when: code_changed | bool
+```
+***
+
 Ah, so nice. Copy that and put it anywhere else it makes sense like "Execute migrations"
 and "Clear Cache":
 
