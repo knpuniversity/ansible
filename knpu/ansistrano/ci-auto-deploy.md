@@ -117,7 +117,7 @@ To be extra safe, delete it on the next line:
 
 And... I'll fix my ugly YAML.
 
-## Setting Ansible Variablews
+## Setting Ansible Variables
 
 Ok, problem solved! Time to deploy, right!? Well... remember how we added that
 prompt at the beginning of each deploy? Yep, that's going to break things too!
