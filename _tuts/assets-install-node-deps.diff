@@ -24,7 +24,7 @@ index 8077359..abb7b48 100644
  
 +    # Node
 +    - name: Register NodeJS distribution
-+      shell: 'curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -'
++      shell: 'curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -'
 +      changed_when: false
 +
 +    - name: Install NodeJS
