@@ -27,7 +27,7 @@ index 3274d47..2be6446 100644
 -            alias: default
 -            dsn: "redis://%redis_host%"
 diff --git a/composer.json b/composer.json
-index a666827..d7998b8 100644
+index 2faf18e..4ee29a7 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -26,7 +26,6 @@
@@ -39,19 +39,19 @@ index a666827..d7998b8 100644
      },
      "require-dev": {
 diff --git a/composer.lock b/composer.lock
-index 474ecef..8a74821 100644
+index 4de59ea..e10c890 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
-         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "6cb8d8275afb6fafd1f07570eeac4cbb",
-+    "content-hash": "a28ae7d0f74c14050912cdce9121f254",
+-    "content-hash": "a4c575c68c3edec0d2fe51bcb7c7c3aa",
++    "content-hash": "a07d272cf6fa94a6e5d8eae80a7cb640",
      "packages": [
          {
              "name": "composer/ca-bundle",
-@@ -1768,71 +1768,6 @@
+@@ -2111,71 +2111,6 @@
              "description": "A security checker for your composer.lock",
              "time": "2017-07-24T11:42:56+00:00"
          },
