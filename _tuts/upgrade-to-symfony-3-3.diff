@@ -263,7 +263,7 @@ index 715461e..2faf18e 100644
      },
      "config": {
 diff --git a/composer.lock b/composer.lock
-index 3def66e..4de59ea 100644
+index c8ccd88..3fb48c4 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,67 @@
@@ -633,7 +633,7 @@ index 3def66e..4de59ea 100644
          {
 -            "name": "psr/log",
 +            "name": "psr/container",
-+            "version": "1.0.0",
+             "version": "1.0.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/php-fig/container.git",
@@ -682,7 +682,7 @@ index 3def66e..4de59ea 100644
 +        },
 +        {
 +            "name": "psr/link",
-             "version": "1.0.0",
++            "version": "1.0.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/php-fig/link.git",
@@ -1490,7 +1490,7 @@ index 3def66e..4de59ea 100644
          },
          {
              "name": "zendframework/zend-code",
-@@ -2969,33 +3267,35 @@
+@@ -2970,33 +3268,35 @@
          },
          {
              "name": "sensio/generator-bundle",
@@ -1533,7 +1533,7 @@ index 3def66e..4de59ea 100644
                  }
              },
              "autoload": {
-@@ -3018,32 +3318,39 @@
+@@ -3019,32 +3319,39 @@
              ],
              "description": "This bundle generates code for you",
              "abandoned": "symfony/maker-bundle",
@@ -1579,7 +1579,7 @@ index 3def66e..4de59ea 100644
                  }
              },
              "autoload": {
-@@ -3073,7 +3380,7 @@
+@@ -3074,7 +3381,7 @@
              ],
              "description": "Symfony PHPUnit Bridge",
              "homepage": "https://symfony.com",
