@@ -1,5 +1,5 @@
 diff --git a/.circleci/config.yml b/.circleci/config.yml
-index 7a4970e..016720b 100644
+index 7a4970e6..016720be 100644
 --- a/.circleci/config.yml
 +++ b/.circleci/config.yml
 @@ -58,6 +58,8 @@ jobs:

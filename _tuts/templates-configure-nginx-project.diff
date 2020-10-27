@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 9a1f294..09c314d 100644
+index 9a1f2942..09c314df 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -2,7 +2,9 @@
@@ -40,7 +40,7 @@ index 9a1f294..09c314d 100644
        become: true
        apt:
 diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
-index 49d8634..abc2ae3 100644
+index 49d8634a..abc2ae3e 100644
 --- a/ansible/templates/symfony.conf
 +++ b/ansible/templates/symfony.conf
 @@ -1,6 +1,6 @@

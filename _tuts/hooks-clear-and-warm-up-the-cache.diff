@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 475af1e..3e5814d 100644
+index 475af1e9..3e5814dc 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -13,6 +13,8 @@
@@ -12,7 +12,7 @@ index 475af1e..3e5814d 100644
      ansistrano_deploy_to: "{{ project_deploy_dir }}" # Base path to deploy to.
      ansistrano_deploy_via: git # Method used to deliver the code to the server. Options are copy, rsync, git, svn, s3 or download
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
-index a27a7bf..cd2dc82 100644
+index a27a7bf1..cd2dc82d 100644
 --- a/ansible/deploy/after-symlink-shared.yml
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -8,3 +8,9 @@

@@ -1,5 +1,5 @@
 diff --git a/app/Resources/views/default/index.html.twig b/app/Resources/views/default/index.html.twig
-index 59caa6b..1bf837b 100644
+index 59caa6b9..1bf837b2 100644
 --- a/app/Resources/views/default/index.html.twig
 +++ b/app/Resources/views/default/index.html.twig
 @@ -22,7 +22,7 @@

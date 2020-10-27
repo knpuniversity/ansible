@@ -1,5 +1,5 @@
 diff --git a/ansible/requirements.yml b/ansible/requirements.yml
-index f7a3b4d..4123001 100644
+index f7a3b4df..41230012 100644
 --- a/ansible/requirements.yml
 +++ b/ansible/requirements.yml
 @@ -3,3 +3,6 @@

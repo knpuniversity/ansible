@@ -1,5 +1,5 @@
 diff --git a/ansible/rollback.yml b/ansible/rollback.yml
-index 49cecdb..f306dcf 100644
+index 49cecdbd..f306dcfa 100644
 --- a/ansible/rollback.yml
 +++ b/ansible/rollback.yml
 @@ -4,9 +4,15 @@

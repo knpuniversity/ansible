@@ -1,6 +1,6 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
 new file mode 100644
-index 0000000..b575b76
+index 00000000..b575b769
 --- /dev/null
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -0,0 +1,49 @@
@@ -54,7 +54,7 @@ index 0000000..b575b76
 +    - deploy
 +  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 7e19410..904d6de 100644
+index 7e194108..904d6ded 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -186,54 +186,8 @@

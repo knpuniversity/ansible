@@ -1,5 +1,5 @@
 diff --git a/ansible/rollback.yml b/ansible/rollback.yml
-index 9ba632b..49cecdb 100644
+index 9ba632b8..49cecdbd 100644
 --- a/ansible/rollback.yml
 +++ b/ansible/rollback.yml
 @@ -8,5 +8,8 @@
@@ -13,7 +13,7 @@ index 9ba632b..49cecdb 100644
      - ansistrano.rollback
 diff --git a/ansible/rollback/before-symlink.yml b/ansible/rollback/before-symlink.yml
 new file mode 100644
-index 0000000..7cae876
+index 00000000..7cae876a
 --- /dev/null
 +++ b/ansible/rollback/before-symlink.yml
 @@ -0,0 +1,4 @@

@@ -1,5 +1,5 @@
 diff --git a/ansible/deploy.yml b/ansible/deploy.yml
-index 17c9d03..7fbaebf 100644
+index 17c9d035..7fbaebf2 100644
 --- a/ansible/deploy.yml
 +++ b/ansible/deploy.yml
 @@ -20,5 +20,8 @@
@@ -13,7 +13,7 @@ index 17c9d03..7fbaebf 100644
      - ansistrano.deploy
 diff --git a/ansible/deploy/after-symlink-shared.yml b/ansible/deploy/after-symlink-shared.yml
 new file mode 100644
-index 0000000..065d17b
+index 00000000..065d17b0
 --- /dev/null
 +++ b/ansible/deploy/after-symlink-shared.yml
 @@ -0,0 +1,5 @@
@@ -24,7 +24,7 @@ index 0000000..065d17b
 +    dest: '{{ ansistrano_release_path.stdout }}/app/config/parameters.yml'
 diff --git a/ansible/templates/parameters.yml.dist b/ansible/templates/parameters.yml.dist
 new file mode 100644
-index 0000000..3d64fe2
+index 00000000..3d64fe2d
 --- /dev/null
 +++ b/ansible/templates/parameters.yml.dist
 @@ -0,0 +1,22 @@

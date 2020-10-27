@@ -1,5 +1,5 @@
 diff --git a/app/AppKernel.php b/app/AppKernel.php
-index dbc85b4..9f7d859 100644
+index dbc85b4f..9f7d859b 100644
 --- a/app/AppKernel.php
 +++ b/app/AppKernel.php
 @@ -18,7 +18,6 @@ class AppKernel extends Kernel
@@ -11,7 +11,7 @@ index dbc85b4..9f7d859 100644
  
          if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
 diff --git a/app/config/config.yml b/app/config/config.yml
-index 3274d47..2be6446 100644
+index 3274d47d..2be6446c 100644
 --- a/app/config/config.yml
 +++ b/app/config/config.yml
 @@ -69,11 +69,3 @@ swiftmailer:
@@ -27,7 +27,7 @@ index 3274d47..2be6446 100644
 -            alias: default
 -            dsn: "redis://%redis_host%"
 diff --git a/composer.json b/composer.json
-index 2faf18e..4ee29a7 100644
+index b81c5888..ec2b22a0 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -26,7 +26,6 @@
@@ -35,23 +35,23 @@ index 2faf18e..4ee29a7 100644
  
          "doctrine/doctrine-migrations-bundle": "^1.2",
 -        "snc/redis-bundle": "^2.0",
-         "predis/predis": "^1.1"
+         "predis/predis": "^1.1",
+         "composer/package-versions-deprecated": "^1.11"
      },
-     "require-dev": {
 diff --git a/composer.lock b/composer.lock
-index 3fb48c4..832093f 100644
+index 8e76c192..a886a1d4 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "a4c575c68c3edec0d2fe51bcb7c7c3aa",
-+    "content-hash": "a07d272cf6fa94a6e5d8eae80a7cb640",
+-    "content-hash": "d891b4c0057fd148d032be9f20cbfe3a",
++    "content-hash": "f970f7f51bbdd71618129b39dbf3251e",
      "packages": [
          {
              "name": "composer/ca-bundle",
-@@ -2111,71 +2111,6 @@
+@@ -2134,71 +2134,6 @@
              "description": "A security checker for your composer.lock",
              "time": "2017-07-24T11:42:56+00:00"
          },
@@ -124,7 +124,7 @@ index 3fb48c4..832093f 100644
              "name": "swiftmailer/swiftmailer",
              "version": "v5.4.8",
 diff --git a/src/AppBundle/Controller/DefaultController.php b/src/AppBundle/Controller/DefaultController.php
-index dcc68fc..e77d630 100644
+index dcc68fce..e77d6306 100644
 --- a/src/AppBundle/Controller/DefaultController.php
 +++ b/src/AppBundle/Controller/DefaultController.php
 @@ -3,9 +3,9 @@

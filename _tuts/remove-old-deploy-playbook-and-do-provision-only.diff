@@ -1,6 +1,6 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
 deleted file mode 100644
-index f5ddda9..0000000
+index f5ddda9b..00000000
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ /dev/null
 @@ -1,65 +0,0 @@
@@ -70,7 +70,7 @@ index f5ddda9..0000000
 -    - deploy
 -  when: code_changed
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 769a095..85684ef 100644
+index 769a0957..85684efb 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -5,26 +5,12 @@
@@ -173,7 +173,7 @@ index 769a095..85684ef 100644
    handlers:
      - name: Restart PHP-FPM
 diff --git a/ansible/roles/nginx/templates/symfony.conf b/ansible/roles/nginx/templates/symfony.conf
-index abc2ae3..ece2a87 100644
+index abc2ae3e..ece2a874 100644
 --- a/ansible/roles/nginx/templates/symfony.conf
 +++ b/ansible/roles/nginx/templates/symfony.conf
 @@ -1,6 +1,6 @@
@@ -186,7 +186,7 @@ index abc2ae3..ece2a87 100644
          # try to serve file directly, fallback to app.php
 diff --git a/ansible/templates/symfony.conf b/ansible/templates/symfony.conf
 deleted file mode 100644
-index abc2ae3..0000000
+index abc2ae3e..00000000
 --- a/ansible/templates/symfony.conf
 +++ /dev/null
 @@ -1,54 +0,0 @@
@@ -245,7 +245,7 @@ index abc2ae3..0000000
 -    access_log /var/log/nginx/{{ server_name }}_access.log;
 -}
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index d8faf67..e67e1be 100644
+index d8faf678..e67e1be5 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
 @@ -1,9 +1,7 @@

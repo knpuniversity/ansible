@@ -1,5 +1,5 @@
 diff --git a/web/app.php b/web/app.php
-index 5d2e252..a30b870 100644
+index 5d2e252d..a30b870c 100644
 --- a/web/app.php
 +++ b/web/app.php
 @@ -21,6 +21,16 @@ if (PHP_VERSION_ID < 70000) {

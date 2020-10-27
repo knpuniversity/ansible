@@ -1,5 +1,5 @@
 diff --git a/.gitignore b/.gitignore
-index db87558..df374cf 100644
+index db875582..df374cfd 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -1,3 +1,4 @@
@@ -8,7 +8,7 @@ index db87558..df374cf 100644
  /build/
  /phpunit.xml
 diff --git a/app/AppKernel.php b/app/AppKernel.php
-index a002302..dbc85b4 100644
+index a0023026..dbc85b4f 100644
 --- a/app/AppKernel.php
 +++ b/app/AppKernel.php
 @@ -25,9 +25,13 @@ class AppKernel extends Kernel
@@ -28,7 +28,7 @@ index a002302..dbc85b4 100644
          return $bundles;
 diff --git a/app/autoload.php b/app/autoload.php
 deleted file mode 100644
-index fa582ec..0000000
+index fa582ecd..00000000
 --- a/app/autoload.php
 +++ /dev/null
 @@ -1,13 +0,0 @@
@@ -46,7 +46,7 @@ index fa582ec..0000000
 -
 -return $loader;
 diff --git a/app/config/config.yml b/app/config/config.yml
-index 8d14462..3274d47 100644
+index 8d144620..3274d47d 100644
 --- a/app/config/config.yml
 +++ b/app/config/config.yml
 @@ -13,7 +13,7 @@ framework:
@@ -82,7 +82,7 @@ index 8d14462..3274d47 100644
          #   3. Uncomment next line:
          #     path:     "%database_path%"
 diff --git a/app/config/config_dev.yml b/app/config/config_dev.yml
-index 7eb4739..774c776 100644
+index 7eb4739c..774c776c 100644
 --- a/app/config/config_dev.yml
 +++ b/app/config/config_dev.yml
 @@ -3,7 +3,7 @@ imports:
@@ -115,7 +115,7 @@ index 7eb4739..774c776 100644
          # you may have to allow bigger header sizes in your Web server configuration
          #firephp:
 diff --git a/app/config/parameters.yml.dist b/app/config/parameters.yml.dist
-index f5b74de..3d64fe2 100644
+index f5b74de7..3d64fe2d 100644
 --- a/app/config/parameters.yml.dist
 +++ b/app/config/parameters.yml.dist
 @@ -8,7 +8,7 @@ parameters:
@@ -128,7 +128,7 @@ index f5b74de..3d64fe2 100644
      mailer_transport:  smtp
      mailer_host:       127.0.0.1
 diff --git a/app/config/services.yml b/app/config/services.yml
-index 5c76fc5..cdb1c65 100644
+index 5c76fc59..cdb1c65a 100644
 --- a/app/config/services.yml
 +++ b/app/config/services.yml
 @@ -1,9 +1,35 @@
@@ -173,7 +173,7 @@ index 5c76fc5..cdb1c65 100644
 +    #     arguments:
 +    #         $someArgument: 'some_value'
 diff --git a/bin/console b/bin/console
-index c371281..855c82e 100755
+index c371281a..855c82e4 100755
 --- a/bin/console
 +++ b/bin/console
 @@ -11,10 +11,7 @@ umask(0000);
@@ -189,7 +189,7 @@ index c371281..855c82e 100755
  $input = new ArgvInput();
  $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
 diff --git a/composer.json b/composer.json
-index 715461e..2faf18e 100644
+index bc9c00fa..b81c5888 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -4,30 +4,26 @@
@@ -235,7 +235,7 @@ index 715461e..2faf18e 100644
  
          "doctrine/doctrine-migrations-bundle": "^1.2",
          "snc/redis-bundle": "^2.0",
-@@ -41,7 +37,7 @@
+@@ -42,7 +38,7 @@
          "hautelook/alice-bundle": "^1.3"
      },
      "scripts": {
@@ -244,7 +244,7 @@ index 715461e..2faf18e 100644
              "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
              "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
              "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-@@ -49,13 +45,11 @@
+@@ -50,13 +46,11 @@
              "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
              "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
          ],
@@ -263,15 +263,15 @@ index 715461e..2faf18e 100644
      },
      "config": {
 diff --git a/composer.lock b/composer.lock
-index c8ccd88..3fb48c4 100644
+index 750eee8d..8e76c192 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,67 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "7dd4c0099b36a763c257cb4325eae632",
-+    "content-hash": "a4c575c68c3edec0d2fe51bcb7c7c3aa",
+-    "content-hash": "8538baf975fe14b59bf94a2bddf950e5",
++    "content-hash": "d891b4c0057fd148d032be9f20cbfe3a",
      "packages": [
 +        {
 +            "name": "composer/ca-bundle",
@@ -333,9 +333,9 @@ index c8ccd88..3fb48c4 100644
 +            "time": "2017-03-06T11:59:08+00:00"
 +        },
          {
-             "name": "doctrine/annotations",
-             "version": "v1.8.0",
-@@ -390,37 +449,37 @@
+             "name": "composer/package-versions-deprecated",
+             "version": "1.11.99",
+@@ -463,37 +522,37 @@
          },
          {
              "name": "doctrine/doctrine-bundle",
@@ -389,7 +389,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
-@@ -467,7 +526,7 @@
+@@ -540,7 +599,7 @@
                  "orm",
                  "persistence"
              ],
@@ -398,7 +398,7 @@ index c8ccd88..3fb48c4 100644
          },
          {
              "name": "doctrine/doctrine-cache-bundle",
-@@ -559,16 +618,16 @@
+@@ -632,16 +691,16 @@
          },
          {
              "name": "doctrine/doctrine-migrations-bundle",
@@ -419,7 +419,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -583,7 +642,7 @@
+@@ -656,7 +715,7 @@
              "type": "symfony-bundle",
              "extra": {
                  "branch-alias": {
@@ -428,7 +428,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -616,7 +675,7 @@
+@@ -689,7 +748,7 @@
                  "migrations",
                  "schema"
              ],
@@ -437,7 +437,7 @@ index c8ccd88..3fb48c4 100644
          },
          {
              "name": "doctrine/event-manager",
-@@ -879,16 +938,16 @@
+@@ -952,16 +1011,16 @@
          },
          {
              "name": "doctrine/migrations",
@@ -458,7 +458,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -903,9 +962,10 @@
+@@ -976,9 +1035,10 @@
                  "doctrine/orm": "2.*",
                  "jdorn/sql-formatter": "~1.1",
                  "johnkary/phpunit-speedtrap": "~1.0@dev",
@@ -470,7 +470,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "jdorn/sql-formatter": "Allows to generate formatted SQL with the diff command."
-@@ -916,7 +976,7 @@
+@@ -989,7 +1049,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -479,7 +479,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -948,7 +1008,7 @@
+@@ -1021,7 +1081,7 @@
                  "database",
                  "migrations"
              ],
@@ -488,7 +488,7 @@ index c8ccd88..3fb48c4 100644
          },
          {
              "name": "doctrine/orm",
-@@ -1195,6 +1255,60 @@
+@@ -1268,6 +1328,60 @@
              ],
              "time": "2020-03-21T11:34:59+00:00"
          },
@@ -549,7 +549,7 @@ index c8ccd88..3fb48c4 100644
          {
              "name": "incenteev/composer-parameter-handler",
              "version": "v2.1.2",
-@@ -1298,16 +1412,16 @@
+@@ -1371,16 +1485,16 @@
          },
          {
              "name": "monolog/monolog",
@@ -570,7 +570,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -1318,7 +1432,7 @@
+@@ -1391,7 +1505,7 @@
                  "psr/log-implementation": "1.0.0"
              },
              "require-dev": {
@@ -579,7 +579,7 @@ index c8ccd88..3fb48c4 100644
                  "doctrine/couchdb": "~1.0@dev",
                  "graylog2/gelf-php": "~1.0",
                  "jakub-onderka/php-parallel-lint": "0.9",
-@@ -1328,7 +1442,7 @@
+@@ -1401,7 +1515,7 @@
                  "phpunit/phpunit-mock-objects": "2.3.0",
                  "ruflin/elastica": ">=0.90 <3.0",
                  "sentry/sentry": "^0.13",
@@ -588,7 +588,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-@@ -1372,7 +1486,7 @@
+@@ -1445,7 +1559,7 @@
                  "logging",
                  "psr-3"
              ],
@@ -596,8 +596,8 @@ index c8ccd88..3fb48c4 100644
 +            "time": "2017-06-19T01:22:40+00:00"
          },
          {
-             "name": "ocramius/package-versions",
-@@ -1495,16 +1609,16 @@
+             "name": "ocramius/proxy-manager",
+@@ -1518,16 +1632,16 @@
          },
          {
              "name": "paragonie/random_compat",
@@ -618,7 +618,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -1539,7 +1653,7 @@
+@@ -1562,7 +1676,7 @@
                  "pseudorandom",
                  "random"
              ],
@@ -627,13 +627,13 @@ index c8ccd88..3fb48c4 100644
          },
          {
              "name": "predis/predis",
-@@ -1638,23 +1752,129 @@
+@@ -1661,23 +1775,129 @@
              "time": "2016-08-06T20:24:11+00:00"
          },
          {
 -            "name": "psr/log",
 +            "name": "psr/container",
-             "version": "1.0.0",
++            "version": "1.0.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/php-fig/container.git",
@@ -682,7 +682,7 @@ index c8ccd88..3fb48c4 100644
 +        },
 +        {
 +            "name": "psr/link",
-+            "version": "1.0.0",
+             "version": "1.0.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/php-fig/link.git",
@@ -763,7 +763,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "notification-url": "https://packagist.org/downloads/",
-@@ -1668,30 +1888,79 @@
+@@ -1691,30 +1911,79 @@
                  }
              ],
              "description": "Common interface for logging libraries",
@@ -849,7 +849,7 @@ index c8ccd88..3fb48c4 100644
                  "symfony/class-loader": "~2.3|~3.0",
                  "symfony/config": "~2.3|~3.0",
                  "symfony/dependency-injection": "~2.3|~3.0",
-@@ -1725,20 +1994,20 @@
+@@ -1748,20 +2017,20 @@
                  "configuration",
                  "distribution"
              ],
@@ -875,7 +875,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -1747,14 +2016,22 @@
+@@ -1770,14 +2039,22 @@
                  "symfony/framework-bundle": "~2.3|~3.0"
              },
              "require-dev": {
@@ -900,7 +900,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "symfony/expression-language": "",
-@@ -1787,24 +2064,25 @@
+@@ -1810,24 +2087,25 @@
                  "annotations",
                  "controllers"
              ],
@@ -932,7 +932,7 @@ index c8ccd88..3fb48c4 100644
              },
              "bin": [
                  "security-checker"
-@@ -1812,7 +2090,7 @@
+@@ -1835,7 +2113,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -941,7 +941,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -1831,20 +2109,20 @@
+@@ -1854,20 +2132,20 @@
                  }
              ],
              "description": "A security checker for your composer.lock",
@@ -967,7 +967,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -1896,27 +2174,28 @@
+@@ -1919,27 +2197,28 @@
                  "redis",
                  "symfony"
              ],
@@ -1002,7 +1002,7 @@ index c8ccd88..3fb48c4 100644
              },
              "type": "library",
              "extra": {
-@@ -1949,29 +2228,29 @@
+@@ -1972,29 +2251,29 @@
                  "mail",
                  "mailer"
              ],
@@ -1042,7 +1042,7 @@ index c8ccd88..3fb48c4 100644
              },
              "require-dev": {
                  "phpunit/phpunit": "^4.8",
-@@ -1981,7 +2260,7 @@
+@@ -2004,7 +2283,7 @@
              "type": "symfony-bundle",
              "extra": {
                  "branch-alias": {
@@ -1051,7 +1051,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2009,20 +2288,20 @@
+@@ -2032,20 +2311,20 @@
                  "log",
                  "logging"
              ],
@@ -1077,7 +1077,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -2031,7 +2310,7 @@
+@@ -2054,7 +2333,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1086,7 +1086,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2062,25 +2341,25 @@
+@@ -2085,25 +2364,25 @@
                  "portable",
                  "shim"
              ],
@@ -1118,7 +1118,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "ext-intl": "For best performance"
-@@ -2088,7 +2367,7 @@
+@@ -2111,7 +2390,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1127,7 +1127,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2120,20 +2399,20 @@
+@@ -2143,20 +2422,20 @@
                  "portable",
                  "shim"
              ],
@@ -1153,7 +1153,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -2145,7 +2424,7 @@
+@@ -2168,7 +2447,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1162,7 +1162,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2179,20 +2458,20 @@
+@@ -2202,20 +2481,20 @@
                  "portable",
                  "shim"
              ],
@@ -1188,7 +1188,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -2202,7 +2481,7 @@
+@@ -2225,7 +2504,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1197,7 +1197,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2235,20 +2514,20 @@
+@@ -2258,20 +2537,20 @@
                  "portable",
                  "shim"
              ],
@@ -1223,7 +1223,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -2258,7 +2537,7 @@
+@@ -2281,7 +2560,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1232,7 +1232,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2294,20 +2573,20 @@
+@@ -2317,20 +2596,20 @@
                  "portable",
                  "shim"
              ],
@@ -1258,7 +1258,7 @@ index c8ccd88..3fb48c4 100644
                  "shasum": ""
              },
              "require": {
-@@ -2316,7 +2595,7 @@
+@@ -2339,7 +2618,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -1267,7 +1267,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2346,32 +2625,34 @@
+@@ -2369,32 +2648,34 @@
                  "polyfill",
                  "shim"
              ],
@@ -1313,7 +1313,7 @@ index c8ccd88..3fb48c4 100644
              },
              "suggest": {
                  "psr/log": "Allows logging"
-@@ -2379,7 +2660,7 @@
+@@ -2402,7 +2683,7 @@
              "type": "symfony-bundle",
              "extra": {
                  "branch-alias": {
@@ -1322,7 +1322,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2403,40 +2684,48 @@
+@@ -2426,40 +2707,48 @@
              ],
              "description": "Symfony SwiftmailerBundle",
              "homepage": "http://symfony.com",
@@ -1380,7 +1380,7 @@ index c8ccd88..3fb48c4 100644
              },
              "replace": {
                  "symfony/asset": "self.version",
-@@ -2451,6 +2740,7 @@
+@@ -2474,6 +2763,7 @@
                  "symfony/dependency-injection": "self.version",
                  "symfony/doctrine-bridge": "self.version",
                  "symfony/dom-crawler": "self.version",
@@ -1388,7 +1388,7 @@ index c8ccd88..3fb48c4 100644
                  "symfony/event-dispatcher": "self.version",
                  "symfony/expression-language": "self.version",
                  "symfony/filesystem": "self.version",
-@@ -2483,7 +2773,10 @@
+@@ -2506,7 +2796,10 @@
                  "symfony/twig-bundle": "self.version",
                  "symfony/validator": "self.version",
                  "symfony/var-dumper": "self.version",
@@ -1399,7 +1399,7 @@ index c8ccd88..3fb48c4 100644
                  "symfony/yaml": "self.version"
              },
              "require-dev": {
-@@ -2493,18 +2786,20 @@
+@@ -2516,18 +2809,20 @@
                  "doctrine/dbal": "~2.4",
                  "doctrine/doctrine-bundle": "~1.4",
                  "doctrine/orm": "~2.4,>=2.4.5",
@@ -1422,7 +1422,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -2512,7 +2807,6 @@
+@@ -2535,7 +2830,6 @@
                      "Symfony\\Bridge\\Doctrine\\": "src/Symfony/Bridge/Doctrine/",
                      "Symfony\\Bridge\\Monolog\\": "src/Symfony/Bridge/Monolog/",
                      "Symfony\\Bridge\\ProxyManager\\": "src/Symfony/Bridge/ProxyManager/",
@@ -1430,7 +1430,7 @@ index c8ccd88..3fb48c4 100644
                      "Symfony\\Bridge\\Twig\\": "src/Symfony/Bridge/Twig/",
                      "Symfony\\Bundle\\": "src/Symfony/Bundle/",
                      "Symfony\\Component\\": "src/Symfony/Component/"
-@@ -2543,38 +2837,42 @@
+@@ -2566,38 +2860,42 @@
              "keywords": [
                  "framework"
              ],
@@ -1481,7 +1481,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "notification-url": "https://packagist.org/downloads/",
-@@ -2604,7 +2902,7 @@
+@@ -2627,7 +2925,7 @@
              "keywords": [
                  "templating"
              ],
@@ -1490,7 +1490,7 @@ index c8ccd88..3fb48c4 100644
          },
          {
              "name": "zendframework/zend-code",
-@@ -2970,33 +3268,35 @@
+@@ -2993,33 +3291,35 @@
          },
          {
              "name": "sensio/generator-bundle",
@@ -1533,7 +1533,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -3019,32 +3319,39 @@
+@@ -3042,32 +3342,39 @@
              ],
              "description": "This bundle generates code for you",
              "abandoned": "symfony/maker-bundle",
@@ -1579,7 +1579,7 @@ index c8ccd88..3fb48c4 100644
                  }
              },
              "autoload": {
-@@ -3074,7 +3381,7 @@
+@@ -3097,7 +3404,7 @@
              ],
              "description": "Symfony PHPUnit Bridge",
              "homepage": "https://symfony.com",
@@ -1589,7 +1589,7 @@ index c8ccd88..3fb48c4 100644
      ],
      "aliases": [],
 diff --git a/phpunit.xml.dist b/phpunit.xml.dist
-index 65e9082..5a12e67 100644
+index 65e90821..5a12e676 100644
 --- a/phpunit.xml.dist
 +++ b/phpunit.xml.dist
 @@ -5,11 +5,11 @@
@@ -1607,7 +1607,7 @@ index 65e9082..5a12e67 100644
  
      <testsuites>
 diff --git a/var/SymfonyRequirements.php b/var/SymfonyRequirements.php
-index 7e7723a..3b14a40 100755
+index 7e7723af..3b14a402 100755
 --- a/var/SymfonyRequirements.php
 +++ b/var/SymfonyRequirements.php
 @@ -633,12 +633,6 @@ class SymfonyRequirements extends RequirementCollection
@@ -1637,7 +1637,7 @@ index 7e7723a..3b14a40 100755
              case 'g':
                  return $size * 1024 * 1024 * 1024;
 diff --git a/web/app.php b/web/app.php
-index 737673b..a1d2bdf 100644
+index 737673b8..a1d2bdf4 100644
 --- a/web/app.php
 +++ b/web/app.php
 @@ -7,14 +7,15 @@ use Symfony\Component\HttpFoundation\Request;
@@ -1663,7 +1663,7 @@ index 737673b..a1d2bdf 100644
  
  // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
 diff --git a/web/app_dev.php b/web/app_dev.php
-index d60e8fc..5430a84 100644
+index d60e8fcc..5430a84d 100644
 --- a/web/app_dev.php
 +++ b/web/app_dev.php
 @@ -18,14 +18,13 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
@@ -1686,7 +1686,7 @@ index d60e8fc..5430a84 100644
  $response = $kernel->handle($request);
  $response->send();
 diff --git a/web/config.php b/web/config.php
-index 1368c8a..fd7e17e 100644
+index 1368c8a4..fd7e17e6 100644
 --- a/web/config.php
 +++ b/web/config.php
 @@ -11,7 +11,7 @@

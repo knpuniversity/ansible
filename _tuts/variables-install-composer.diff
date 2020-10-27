@@ -1,5 +1,5 @@
 diff --git a/ansible/playbook.yml b/ansible/playbook.yml
-index 919e7e2..fb38373 100644
+index 919e7e21..fb38373d 100644
 --- a/ansible/playbook.yml
 +++ b/ansible/playbook.yml
 @@ -22,6 +22,14 @@
@@ -36,7 +36,7 @@ index 919e7e2..fb38373 100644
 +        mode: "a+x"
 diff --git a/ansible/scripts/install_composer.sh b/ansible/scripts/install_composer.sh
 new file mode 100644
-index 0000000..219f3c6
+index 00000000..219f3c60
 --- /dev/null
 +++ b/ansible/scripts/install_composer.sh
 @@ -0,0 +1,17 @@

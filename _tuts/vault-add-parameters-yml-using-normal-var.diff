@@ -1,5 +1,5 @@
 diff --git a/ansible/includes/symfony-bootstrap.yml b/ansible/includes/symfony-bootstrap.yml
-index b575b76..455856b 100644
+index b575b769..455856bb 100644
 --- a/ansible/includes/symfony-bootstrap.yml
 +++ b/ansible/includes/symfony-bootstrap.yml
 @@ -18,6 +18,14 @@
@@ -18,7 +18,7 @@ index b575b76..455856b 100644
  - name: Create DB if not exists
    command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
 diff --git a/ansible/vars/vars.yml b/ansible/vars/vars.yml
-index 2872eb9..a761fb5 100644
+index 2872eb9b..a761fb55 100644
 --- a/ansible/vars/vars.yml
 +++ b/ansible/vars/vars.yml
 @@ -3,3 +3,4 @@ symfony_root_dir: /var/www/project
