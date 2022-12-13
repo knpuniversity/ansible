@@ -83,6 +83,11 @@ if you follow our "safe migrations" philosophy, you have nothing to worry about.
 But, if you're a bit more reckless - hey, no judgment - then you may need to manually
 run the *down* direction on some of your migrations after a rollback.
 
+***TIP
+The variable is now called `ansistrano_rollback_before_symlink_tasks_file` instead
+of `ansistrano_before_symlink_tasks_file`.
+***
+
 Let's add a little "opportunity" for us to do that. Let me show you: copy the
 `ansistrano_before_symlink_tasks_file` variable. In `rollback.yml`, paste this
 and set it to a new `rollback/before-symlink.yml`:
