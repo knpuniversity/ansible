@@ -2,6 +2,12 @@
     "name": "victor/moo",
     "license": "proprietary",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/theofidry/AliceBundle"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "": "src/"
